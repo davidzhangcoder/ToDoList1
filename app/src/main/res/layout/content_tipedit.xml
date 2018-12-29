@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/edit_header"
+    tools:showIn="@layout/activity_tipedit"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        >
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/toDoItemName"
+            app:met_floatingLabel="normal"
+            app:met_floatingLabelText="What is going to be Done?"
+            app:met_floatingLabelAlwaysShown="true"
+            app:met_floatingLabelTextSize="25sp"
+            app:met_floatingLabelTextColor="@color/midGrary"
+            app:met_underlineColor="@color/midGrary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter ToDo Task Name"
+            android:text=""
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/dueDateImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom"
+            android:src="@mipmap/deadline"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/dueDate"
+            app:met_floatingLabel="normal"
+            app:met_floatingLabelText="Due Date"
+            app:met_floatingLabelAlwaysShown="true"
+            app:met_floatingLabelTextSize="25sp"
+            app:met_floatingLabelTextColor="@color/midGrary"
+            app:met_underlineColor="@color/midGrary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/dueDateImage"
+            android:hint="Enter Due Date Here"
+            android:text=""
+            />
+
+        <!--<ImageView-->
+            <!--android:id="@+id/dueDateImage"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_margin="16dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:src="@mipmap/deadline"/>-->
+        <!--<cn.droidlover.xdroid.demo.ui.todolist.PopuTextView-->
+            <!--android:id="@+id/dueDate"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:ptv_text="到期日"-->
+            <!--app:ptv_TimeViewType = "y-m-d"-->
+            <!--app:ptv_textSize="@dimen/textsize_normal"/>-->
+    </RelativeLayout>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:paddingLeft="16dp"-->
+        <!--android:paddingRight="16dp">-->
+        <!--<ImageView-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:src="@mipmap/clock"/>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:orientation="vertical">-->
+            <!--<cn.droidlover.xdroid.demo.ui.todolist.PopuTextView-->
+                <!--android:id="@+id/remindDate"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:layout_marginBottom="15dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:ptv_text="提醒"-->
+                <!--app:ptv_TimeViewType = "d-h-min"-->
+                <!--app:ptv_textCheckedColor="@color/remindNumColor"-->
+                <!--app:ptv_textSize="@dimen/textsize_normal"/>-->
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/lightGrary"/>-->
+
+        <!--</LinearLayout>-->
+
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<ImageView-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:src="@mipmap/task"/>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:orientation="vertical">-->
+            <!--<EditText-->
+                <!--android:id="@+id/edit_addchild"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:layout_marginBottom="15dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textColor="@android:color/black"-->
+                <!--android:hint="添加子任务"-->
+                <!--android:cursorVisible="false"-->
+                <!--android:background="@null"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:textSize="@dimen/textsize_normal"-->
+                <!--android:imeOptions="actionDone"-->
+                <!--android:maxLines="5"-->
+                <!--android:inputType="text"-->
+                <!--android:windowSoftInputMode="adjustUnspecified|stateHidden"/>-->
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/lightGrary"/>-->
+        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<ImageView-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginTop="18dp"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:background="@mipmap/addremark"/>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:orientation="vertical">-->
+            <!--<EditText-->
+                <!--android:id="@+id/edit_addremark"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:layout_marginBottom="15dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:minLines="3"-->
+                <!--android:textColor="@android:color/black"-->
+                <!--android:hint="添加备注..."-->
+                <!--android:cursorVisible="false"-->
+                <!--android:background="@null"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:gravity="top"-->
+                <!--android:textSize="@dimen/textsize_normal"-->
+                <!--android:imeOptions="actionDone"-->
+                <!--android:maxLines="1"-->
+                <!--android:inputType="text"-->
+                <!--android:windowSoftInputMode="adjustUnspecified|stateHidden"/>-->
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/lightGrary"/>-->
+        <!--</LinearLayout>-->
+
+    <!--</LinearLayout>-->
+
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<ImageView-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:background="@mipmap/addfile"/>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:orientation="vertical">-->
+            <!--<TextView-->
+                <!--android:id="@+id/edit_addfile"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--android:layout_marginBottom="15dp"-->
+
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="添加一个文件"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:textSize="@dimen/textsize_normal"/>-->
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:background="@color/lightGrary"/>-->
+        <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+
+
+</LinearLayout>

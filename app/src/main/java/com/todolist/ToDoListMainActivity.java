@@ -1,0 +1,130 @@
+package com.todolist;
+
+import android.app.Activity;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
+import com.todolist.event.BusFactory;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+public class ToDoListMainActivity extends AppCompatActivity implements ToDoFragment.OnFragmentInteractionListener , DoneFragment.OnFragmentInteractionListener
+{
+    protected Activity context;
+//    private Unbinder unbinder;
+
+//    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+//    @BindView(R.id.tabLayout)
+    TabLayout tabLayout;
+
+//    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+
+    List<Fragment> fragmentList = new ArrayList<>();
+    String[] titles = {"ToDo", "Done"};
+
+    ToDoFragmentAdapter adapter;
+
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.context = this;
+
+        if (getLayoutId() > 0) {
+            setContentView(getLayoutId());
+        }
+        setListener();
+
+        toolbar = findViewById(R.id.toolbar);
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
+
+        initData(savedInstanceState);
+    }
+
+
+
+    public void initData(Bundle savedInstanceState) {
+        setSupportActionBar(toolbar);
+
+        fragmentList.clear();
+        fragmentList.add(ToDoFragment.newInstance());
+        fragmentList.add(DoneFragment.newInstance());
+
+        if (adapter == null) {
+            adapter = new ToDoFragmentAdapter(getSupportFragmentManager(), fragmentList);
+        }
+        viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
+
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+
+    public int getLayoutId() {
+        return R.layout.activity_to_do_list_main;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void refresh() {
+        fragmentList.clear();
+        fragmentList.add(ToDoFragment.newInstance());
+        fragmentList.add(DoneFragment.newInstance());
+        adapter.updateData( fragmentList );
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (useEventBus()) {
+            BusFactory.getBus().register(this);
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+     }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+
+
+    public boolean useEventBus() {
+        return false;
+    }
+
+
+    public void setListener() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BusFactory.getBus().unregister(this);
+    }
+
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0ba25d</color>
+    <color name="colorPrimaryDark">#098049</color>
+    <color name="colorAccent">#ffffff</color>
+
+    <color name="text_primary">#000000</color>
+    <color name="text_secondary">#87000000</color>
+    <color name="text_disabled">#38000000</color>
+
+    <color name="mainGreen">#ff678764</color>
+    <color name="white">#ffededed</color>
+    <color name="black">#ff333333</color>
+
+    <color name="midGrary">#ff666666</color>
+    <color name="lightGrary">#ffdfdfdf</color>
+
+    <color name="remindNumColor">#c5645f</color>
+
+</resources>
