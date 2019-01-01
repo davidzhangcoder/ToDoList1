@@ -81,6 +81,60 @@
             <!--app:ptv_textSize="@dimen/textsize_normal"/>-->
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/dueTimeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:visibility="gone"
+        >
+
+        <ImageView
+            android:id="@+id/dueTimeImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom"
+            android:src="@mipmap/deadline"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/dueTime"
+            app:met_floatingLabel="normal"
+            app:met_floatingLabelText="Due Time"
+            app:met_floatingLabelAlwaysShown="true"
+            app:met_floatingLabelTextSize="25sp"
+            app:met_floatingLabelTextColor="@color/midGrary"
+            app:met_underlineColor="@color/midGrary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/dueTimeImage"
+            android:hint="Enter Due Time Here"
+            android:text=""
+            />
+
+        <!--<ImageView-->
+        <!--android:id="@+id/dueDateImage"-->
+        <!--android:layout_width="20dp"-->
+        <!--android:layout_height="20dp"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:src="@mipmap/deadline"/>-->
+        <!--<cn.droidlover.xdroid.demo.ui.todolist.PopuTextView-->
+        <!--android:id="@+id/dueDate"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:ptv_text="到期日"-->
+        <!--app:ptv_TimeViewType = "y-m-d"-->
+        <!--app:ptv_textSize="@dimen/textsize_normal"/>-->
+    </RelativeLayout>
+
     <!--<LinearLayout-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->

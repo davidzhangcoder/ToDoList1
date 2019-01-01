@@ -1,17 +1,22 @@
 package com.todolist;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.todolist.db.ToDoItemDao;
 import com.todolist.model.ToDoItem;
 import com.todolist.util.KnifeKit;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
 
@@ -19,7 +24,7 @@ import java.util.Calendar;
 /**
  * Created by santa on 16/7/16.
  */
-public class EditToDoItemActivity extends AppCompatActivity
+public class EditToDoItemActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener , TimePickerDialog.OnTimeSetListener
 {
 
     public static String EDITTODOITEMACTIVITY_TODOITEM = "EDITTODOITEMACTIVITY_TODOITEM";
@@ -36,7 +41,10 @@ public class EditToDoItemActivity extends AppCompatActivity
 //    @BindView(R.id.edit_addremark)
 //    EditText editAddRemark;
 
-    private MaterialEditText materialEditText;
+    private MaterialEditText materialEditTextDueDate;
+    private MaterialEditText materialEditTextDueTime;
+
+    private RelativeLayout dueTimeContainer;
 
     private ToDoItem toDoItem;
 
@@ -49,7 +57,9 @@ public class EditToDoItemActivity extends AppCompatActivity
 
 //        KnifeKit.bind(this);
 
-        materialEditText = (MaterialEditText) findViewById(R.id.dueDate);
+        materialEditTextDueDate = (MaterialEditText) findViewById(R.id.dueDate);
+        materialEditTextDueTime = (MaterialEditText) findViewById(R.id.dueTime);
+        dueTimeContainer = (RelativeLayout) findViewById(R.id.dueTimeContainer);
 
         Intent i = getIntent();
         EditText editText = (EditText) findViewById(R.id.edit_content);
@@ -72,13 +82,14 @@ public class EditToDoItemActivity extends AppCompatActivity
     private void init()
     {
 
-        if( materialEditText != null ) {
-            materialEditText.setOnClickListener(new View.OnClickListener() {
+        if( materialEditTextDueDate != null ) {
+            materialEditTextDueDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     Calendar now = Calendar.getInstance();
                     DatePickerDialog dpd = DatePickerDialog.newInstance(
-                            null,
+                            EditToDoItemActivity.this,
                             now.get(Calendar.YEAR), // Initial year selection
                             now.get(Calendar.MONTH), // Initial month selection
                             now.get(Calendar.DAY_OF_MONTH) // Inital day selection
@@ -86,7 +97,35 @@ public class EditToDoItemActivity extends AppCompatActivity
 // If you're calling this from a support Fragment
 //                    dpd.show(getFragmentManager(), "Datepickerdialog");
 // If you're calling this from an AppCompatActivity
+//                    dpd.setAccentColor(Color.parseColor("#9C27B0"));
+                    dpd.setVersion(DatePickerDialog.Version.VERSION_2);
                     dpd.show(EditToDoItemActivity.this.getFragmentManager(), "Datepickerdialog");
+
+//                    Calendar now = Calendar.getInstance();
+//                    android.app.DatePickerDialog datePickerDialog = new android.app.DatePickerDialog(
+//                            EditToDoItemActivity.this,
+//                            (view1, year, month, dayOfMonth) -> Log.d("Orignal", "Got clicked"),
+//                            now.get(Calendar.YEAR),
+//                            now.get(Calendar.MONTH),
+//                            now.get(Calendar.DAY_OF_MONTH)
+//                    );
+//                    datePickerDialog.show();
+
+                }
+            });
+        }
+
+        if( materialEditTextDueTime != null ) {
+            materialEditTextDueTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Calendar now = Calendar.getInstance();
+                    TimePickerDialog tpd = TimePickerDialog.newInstance(
+                            EditToDoItemActivity.this, false
+                    );
+                    tpd.show(EditToDoItemActivity.this.getFragmentManager(), "Datepickerdialog");
+
                 }
             });
         }
@@ -150,4 +189,16 @@ public class EditToDoItemActivity extends AppCompatActivity
 //        }
 //    };
 
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        dueTimeContainer.setVisibility( View.VISIBLE );
+        String date = dayOfMonth+"/"+(++monthOfYear)+"/"+year;
+        materialEditTextDueDate.setText( date );
+    }
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        String time = "h"+minute+"m"+second;
+        materialEditTextDueTime.setText(time);
+    }
 }
