@@ -107,7 +107,7 @@ public class PopuTextView extends RelativeLayout {
         contentView = LayoutInflater.from(context).inflate(R.layout.popu_timeselector, null);
 
 
-        timeSelectorView = (TimeSelectorView) contentView.findViewById(R.id.timeselector);
+        timeSelectorView = contentView.findViewById(R.id.timeselector);
 
         if (null != timeType && !timeType.equals("")) {
             timeSelectorView.setTimeSelectorType(context, timeType);
@@ -176,7 +176,7 @@ public class PopuTextView extends RelativeLayout {
 
     public interface ActionListener
     {
-        public void doSave(long time);
+        void doSave(long time);
     }
 
 }

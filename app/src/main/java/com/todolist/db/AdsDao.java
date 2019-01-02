@@ -27,7 +27,7 @@ public class AdsDao implements IDatabaseOperate {
         try {
             database = dbHelper.getWritableDatabase();
             id = database.insert(tableName, null, values);
-            flag = (id != -1 ? true : false);
+            flag = (id != -1);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -46,7 +46,7 @@ public class AdsDao implements IDatabaseOperate {
         try {
             database = dbHelper.getWritableDatabase();
             count = database.delete(tableName, whereClause, whereArgs);
-            flag = (count > 0 ? true : false);
+            flag = (count > 0);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -66,7 +66,7 @@ public class AdsDao implements IDatabaseOperate {
         try {
             database = dbHelper.getWritableDatabase();
             count = database.update(tableName, values, whereClause, whereArgs);
-            flag = (count > 0 ? true : false);
+            flag = (count > 0);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

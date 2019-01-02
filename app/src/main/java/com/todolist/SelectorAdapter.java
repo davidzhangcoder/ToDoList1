@@ -42,7 +42,7 @@ public class SelectorAdapter extends BaseAdapter {
         if (null == convertView) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_selector, null);
             selectorHolder = new SelectorHolder();
-            selectorHolder.textView = (TextView) convertView.findViewById(R.id.selector_text);
+            selectorHolder.textView = convertView.findViewById(R.id.selector_text);
             convertView.setTag(selectorHolder);
         } else {
             selectorHolder = (SelectorHolder) convertView.getTag();

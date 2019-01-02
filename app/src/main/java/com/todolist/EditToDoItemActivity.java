@@ -1,16 +1,22 @@
 package com.todolist;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.maltaisn.recurpicker.Recurrence;
+import com.maltaisn.recurpicker.RecurrencePickerDialog;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.todolist.db.ToDoItemDao;
 import com.todolist.model.ToDoItem;
@@ -18,7 +24,10 @@ import com.todolist.util.KnifeKit;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 
 /**
@@ -44,6 +53,8 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     private MaterialEditText materialEditTextDueDate;
     private MaterialEditText materialEditTextDueTime;
 
+    private TextView repeat;
+
     private RelativeLayout dueTimeContainer;
 
     private ToDoItem toDoItem;
@@ -57,13 +68,14 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
 //        KnifeKit.bind(this);
 
-        materialEditTextDueDate = (MaterialEditText) findViewById(R.id.dueDate);
-        materialEditTextDueTime = (MaterialEditText) findViewById(R.id.dueTime);
-        dueTimeContainer = (RelativeLayout) findViewById(R.id.dueTimeContainer);
+        materialEditTextDueDate = findViewById(R.id.dueDate);
+        materialEditTextDueTime = findViewById(R.id.dueTime);
+        dueTimeContainer = findViewById(R.id.dueTimeContainer);
+        repeat = findViewById(R.id.repeatText);
 
         Intent i = getIntent();
-        EditText editText = (EditText) findViewById(R.id.edit_content);
-        editText.setText(i.getStringExtra("content"));
+//        EditText editText = (EditText) findViewById(R.id.edit_content);
+//        editText.setText(i.getStringExtra("content"));
         toDoItem = (ToDoItem)i.getSerializableExtra( EDITTODOITEMACTIVITY_TODOITEM );
 
         View reback = findViewById(R.id.edit_reback);
@@ -83,10 +95,10 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     {
 
         if( materialEditTextDueDate != null ) {
+            materialEditTextDueDate.setInputType(InputType.TYPE_NULL );
             materialEditTextDueDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Calendar now = Calendar.getInstance();
                     DatePickerDialog dpd = DatePickerDialog.newInstance(
                             EditToDoItemActivity.this,
@@ -116,6 +128,7 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
         }
 
         if( materialEditTextDueTime != null ) {
+            materialEditTextDueTime.setInputType( InputType.TYPE_NULL );
             materialEditTextDueTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -128,6 +141,37 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
                 }
             });
+        }
+
+        if( repeat != null ) {
+            Locale locale = getResources().getConfiguration().locale;
+            SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);  // Sun Dec 31, 2017
+            final DateFormat dateFormatShort = new SimpleDateFormat("dd-MM-yyyy", locale);  // 31-12-2017
+
+            Calendar startDate = Calendar.getInstance();
+            Recurrence recurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
+
+            // Set up dialog recurrence picker
+            final RecurrencePickerDialog pickerDialog = new RecurrencePickerDialog();
+            pickerDialog.setDateFormat(dateFormatShort, dateFormatLong);
+            repeat.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Set the settings
+                    pickerDialog
+                            .setEnabledModes(true , false)
+                            .setShowHeaderInOptionList(true)
+                            .setShowDoneButtonInOptionList(true)
+                            .setShowCancelButton(true)
+                            .setRecurrence(recurrence, startDate.getTimeInMillis());
+
+                    // Not necessary, but if a cancel button is shown, often dialog isn't cancelable
+                    pickerDialog.setCancelable(true);
+
+                    // Show the recurrence dialog
+                    pickerDialog.show(getSupportFragmentManager(), "recur_picker_dialog");
+                }
+            } );
         }
 
 //        if( dueDatePopuTextView != null )

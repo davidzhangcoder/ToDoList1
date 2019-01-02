@@ -1,49 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    >
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/edit_header"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/white">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <ImageView
-            android:id="@+id/edit_reback"
-            android:layout_marginStart="16dp"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:src="@mipmap/reback"/>
-        <EditText
-            android:id="@+id/edit_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginStart="16dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@android:color/black"
-            android:cursorVisible="false"
-            android:background="@null"
-            android:layout_gravity="center"
-            android:text="hhhhshshhshs我呵呵哈哈哈哈hshshshshshhshshshshshshshshs"
-            android:textSize="@dimen/textsize_title"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
-        <!--<com.example.santa.wunderlist.StarViewImage-->
-            <!--android:layout_marginStart="8dp"-->
-            <!--android:id="@+id/edit_star"-->
-            <!--android:layout_width="40dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_gravity="center" />-->
-    </LinearLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+
+            <ImageView
+                android:id="@+id/edit_reback"
+                android:layout_marginLeft="16dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="left"
+                android:src="@mipmap/reback"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="center"
+                android:text="a"
+                />
+            <ImageView
+                android:id="@+id/edit_confirmation"
+                android:layout_marginLeft="16dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:src="@drawable/check"/>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/edit_header"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:background="@android:color/white">-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/edit_reback"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:src="@mipmap/reback"/>-->
+        <!--<EditText-->
+            <!--android:id="@+id/edit_content"-->
+            <!--android:layout_marginTop="15dp"-->
+            <!--android:layout_marginBottom="15dp"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:cursorVisible="false"-->
+            <!--android:background="@null"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text="hhhhshshhshs我呵呵哈哈哈哈hshshshshshhshshshshshshshshs"-->
+            <!--android:textSize="@dimen/textsize_title"-->
+            <!--android:windowSoftInputMode="adjustUnspecified|stateHidden"/>-->
+        <!--&lt;!&ndash;<com.example.santa.wunderlist.StarViewImage&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_marginStart="8dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/edit_star"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="40dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_gravity="center" />&ndash;&gt;-->
+    <!--</LinearLayout>-->
 
     <include layout="@layout/content_tipedit" />
 
@@ -89,4 +132,4 @@
             <!--android:textColor="@color/midGrary"-->
             <!--android:textSize="@dimen/textsize_normal" />-->
     <!--</LinearLayout>-->
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

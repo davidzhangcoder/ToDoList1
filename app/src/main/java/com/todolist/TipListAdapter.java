@@ -125,7 +125,7 @@ public class TipListAdapter extends RecyclerView.Adapter<BaseViewHolder> impleme
 
     public interface ToDoItemAction
     {
-        public void doAction(ToDoItem toDoItem);
+        void doAction(ToDoItem toDoItem);
     }
 
 

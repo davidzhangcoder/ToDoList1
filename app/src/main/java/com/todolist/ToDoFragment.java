@@ -64,9 +64,9 @@ public class ToDoFragment extends Fragment {
 //        editText.setOnEditorActionListener( tipEditOnEditorActionListener );
 //        editText.clearFocus();
 
-        recyclerView = (RecyclerView)view.findViewById(R.id.tip_recycler);
+        recyclerView = view.findViewById(R.id.tip_recycler);
 
-        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.addToDo);
+        floatingActionButton = view.findViewById(R.id.addToDo);
         floatingActionButton.setOnClickListener( tipEditOnEditorActionListener );
 
         initRecyclerView( recyclerView );

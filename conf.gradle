@@ -4,7 +4,7 @@ ext {
             compileSdkVersion: 28,
             buildToolsVersion: "28.0.3",
 
-            minSdkVersion    : 16,
+            minSdkVersion    : 19,
             targetSdkVersion : 28,
 
             versionCode      : 1,
@@ -34,6 +34,7 @@ ext {
             "cardview"       : "com.android.support:cardview-v7:${android["VSupportSdk"]}",
             "materialedittext" : "com.rengwuxian.materialedittext:library:2.1.4",
 //            "sublimepicker"  : "com.appeaser.sublimepickerlibrary:sublimepickerlibrary:2.1.2",
-            "materialdatetimepicker"    : "com.wdullaer:materialdatetimepicker:3.6.0"
+            "materialdatetimepicker"    : "com.wdullaer:materialdatetimepicker:3.6.0",
+            "recurpicker"      : "com.maltaisn:recurpicker:1.4.5"
     ]
 }

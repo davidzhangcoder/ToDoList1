@@ -59,9 +59,9 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
             String dateString = simpleDateFormat.format( toDoItem.getDueDate().getTime() );
             ((TextView)getView(R.id.tip_dueDateAndTime)).setText( dateString );
         }
-        ((TextView)getView(R.id.tip_content)).setOnClickListener(tipListAdapter.getClickListener(position));
+        getView(R.id.tip_content).setOnClickListener(tipListAdapter.getClickListener(position));
         ((CheckBox)getView(R.id.tip_checkbox)).setChecked(false);
-        ((CheckBox)getView(R.id.tip_checkbox)).setOnClickListener(new View.OnClickListener() {
+        getView(R.id.tip_checkbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tipListAdapter.changeToFinish(TipHolder.this);

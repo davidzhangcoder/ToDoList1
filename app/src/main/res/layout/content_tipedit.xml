@@ -6,7 +6,9 @@
     android:layout_height="wrap_content"
     android:layout_below="@+id/edit_header"
     tools:showIn="@layout/activity_tipedit"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    >
 
 
     <LinearLayout
@@ -34,7 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="16dp"
+        >
 
         <ImageView
             android:id="@+id/dueDateImage"
@@ -60,6 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/dueDateImage"
             android:hint="Enter Due Date Here"
+            android:focusable="false"
+            android:inputType="text"
             android:text=""
             />
 
@@ -100,7 +105,7 @@
             android:layout_marginTop="25dp"
             android:layout_alignParentRight="true"
             android:layout_gravity="bottom"
-            android:src="@mipmap/deadline"/>
+            android:src="@drawable/clock_outline"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/dueTime"
@@ -114,6 +119,8 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/dueTimeImage"
             android:hint="Enter Due Time Here"
+            android:focusable="false"
+            android:inputType="text"
             android:text=""
             />
 
@@ -133,6 +140,36 @@
         <!--app:ptv_text="到期日"-->
         <!--app:ptv_TimeViewType = "y-m-d"-->
         <!--app:ptv_textSize="@dimen/textsize_normal"/>-->
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/repeatContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        >
+
+        <ImageView
+            android:id="@+id/repeatImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom"
+            android:src="@drawable/menu_down"/>
+
+        <TextView
+            android:id="@+id/repeatText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/repeatImage"
+            android:hint=""
+            android:text="aaa"
+            />
     </RelativeLayout>
 
     <!--<LinearLayout-->

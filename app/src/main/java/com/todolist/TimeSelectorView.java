@@ -248,9 +248,9 @@ public class TimeSelectorView extends LinearLayout {
                     View viewTop = (view.getChildAt(0));
                     if (viewTop.getTop() < 0) {
                         if (Math.abs(viewTop.getTop()) > viewTop.getHeight()/2) {
-                            ((ListView)view).smoothScrollToPosition(view.getFirstVisiblePosition() + view.getChildCount()-1);
+                            view.smoothScrollToPosition(view.getFirstVisiblePosition() + view.getChildCount()-1);
                         } else {
-                            ((ListView)view).smoothScrollToPosition(view.getFirstVisiblePosition());
+                            view.smoothScrollToPosition(view.getFirstVisiblePosition());
                         }
                     }
                     setText();
