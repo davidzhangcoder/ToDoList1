@@ -93,6 +93,8 @@
         android:orientation="horizontal"
         android:padding="16dp"
         android:visibility="gone"
+        android:background="@drawable/selectableitembackgroundstyle"
+        android:clickable="true"
         >
 
         <ImageView
