@@ -1,5 +1,7 @@
 package com.todolist.util;
 
+import com.todolist.App;
+import com.todolist.R;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.ToDoItem;
 import com.todolist.model.ToDoItemTitle;
@@ -14,11 +16,17 @@ public class ToDoItemUtil {
     public static List<IToDoItem> getToDoItemGroupByDueTime(List<ToDoItem> toDoItemList )
     {
         List<IToDoItem> retList = new LinkedList<IToDoItem>();
-        List<ToDoItem> emptyDueDateList = new ArrayList<ToDoItem>();
 
-        boolean hasAddedCurrentCategory = false;
-        boolean hasAddedNextWeekCategory = false;
-        boolean hasAddedLaterCategory = false;
+        List<ToDoItem> emptyDueDateList = new ArrayList<ToDoItem>();
+        List<ToDoItem> overdueDateList = new ArrayList<ToDoItem>();
+        List<ToDoItem> currentDateList = new ArrayList<ToDoItem>();
+        List<ToDoItem> nextWeekDateList = new ArrayList<ToDoItem>();
+        List<ToDoItem> laterDateList = new ArrayList<ToDoItem>();
+//        List<ToDoItem> noDateDateList = new ArrayList<ToDoItem>();
+
+//        boolean hasAddedCurrentCategory = false;
+//        boolean hasAddedNextWeekCategory = false;
+//        boolean hasAddedLaterCategory = false;
 
         Calendar currentDate = Calendar.getInstance();
         for( int i = 0 ; i < toDoItemList.size() ; i++ )
@@ -27,38 +35,77 @@ public class ToDoItemUtil {
 
             if( toDoItem.getDueDate() == null ) {
                 emptyDueDateList.add( toDoItem );
-                continue;
+//                continue;
             }
 
-            if( toDoItem.getDueDate().before( currentDate ) && i == 0 ) {
-                //Add Overdue Category on position 1
-                ToDoItemTitle newToDoItem = new ToDoItemTitle();
-                newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_OVERDUE );
-                retList.add( 0 , newToDoItem );
+            if( DateUtil.before(toDoItem.getDueDate(),currentDate) ) {
+//                //Add Overdue Category on position 1
+//                ToDoItemTitle newToDoItem = new ToDoItemTitle();
+//                newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_OVERDUE );
+//                newToDoItem.setTitle( App.getContext().getResources().getString(R.string.overdue) );
+//                retList.add( 0 , newToDoItem );
+                overdueDateList.add( toDoItem );
             }
-            else if( toDoItem.getDueDate().equals( currentDate ) && !hasAddedCurrentCategory )
+            else if( DateUtil.sameDay(toDoItem.getDueDate(),currentDate))
             {
-                //Add Overdue Category on position 1
-                ToDoItemTitle newToDoItem = new ToDoItemTitle();
-                newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_CURRENT );
-                retList.add( i , newToDoItem );
+//                //Add Overdue Category on position 1
+//                ToDoItemTitle newToDoItem = new ToDoItemTitle();
+//                newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_CURRENT );
+//                retList.add( i , newToDoItem );
+//                newToDoItem.setTitle( App.getContext().getResources().getString(R.string.current) );
+//                hasAddedCurrentCategory = true;
+
+                currentDateList.add( toDoItem );
             }
-            else if( toDoItem.getDueDate().after( currentDate ) ) {
+            else if( DateUtil.after(toDoItem.getDueDate(),currentDate) ) {
                 int whichWeek = currentDate.get( Calendar.WEEK_OF_YEAR );
                 int objectWhichWeek = toDoItem.getDueDate().get( Calendar.WEEK_OF_YEAR );
-                if( objectWhichWeek - whichWeek == 1 && !hasAddedNextWeekCategory ) {
-                    ToDoItemTitle newToDoItem = new ToDoItemTitle();
-                    newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_NEXT_WEEK );
-                    retList.add( i , newToDoItem );
+                if( objectWhichWeek - whichWeek == 1  ) {
+//                    ToDoItemTitle newToDoItem = new ToDoItemTitle();
+//                    newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_NEXT_WEEK );
+//                    newToDoItem.setTitle( App.getContext().getResources().getString(R.string.nextweek) );
+//                    retList.add( i , newToDoItem );
+//                    hasAddedNextWeekCategory = true;
+                    nextWeekDateList.add( toDoItem );
                 }
-                else if( !hasAddedLaterCategory ){
-                    ToDoItemTitle newToDoItem = new ToDoItemTitle();
-                    newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_LATER );
-                    retList.add( i , newToDoItem );
+                else {
+                    laterDateList.add( toDoItem );
                 }
             }
 
-            retList.add( toDoItem );
+        }
+
+        if( overdueDateList.size() > 0 )
+        {
+            ToDoItemTitle newToDoItem = new ToDoItemTitle();
+            newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_OVERDUE );
+            newToDoItem.setTitle( App.getContext().getResources().getString(R.string.overdue) );
+            retList.add( newToDoItem );
+            retList.addAll( retList.size() , overdueDateList );
+        }
+        if( currentDateList.size() > 0 )
+        {
+            ToDoItemTitle newToDoItem = new ToDoItemTitle();
+            newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_CURRENT );
+            newToDoItem.setTitle( App.getContext().getResources().getString(R.string.current) );
+            retList.add( newToDoItem );
+            retList.addAll( retList.size() , currentDateList );
+        }
+        if( nextWeekDateList.size() > 0 )
+        {
+            ToDoItemTitle newToDoItem = new ToDoItemTitle();
+            newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_NEXT_WEEK );
+            newToDoItem.setTitle( App.getContext().getResources().getString(R.string.nextweek) );
+            retList.add( newToDoItem );
+            retList.addAll( retList.size() , nextWeekDateList );
+        }
+        if( laterDateList.size() > 0 )
+        {
+            ToDoItemTitle newToDoItem = new ToDoItemTitle();
+            newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_LATER );
+            newToDoItem.setTitle( App.getContext().getResources().getString(R.string.later) );
+            retList.add( newToDoItem );
+            retList.addAll( retList.size() , laterDateList );
         }
 
         if( emptyDueDateList.size() > 0 )
@@ -66,8 +113,12 @@ public class ToDoItemUtil {
             //retList add No Date Category first, then add emptyDueDateList
             ToDoItemTitle newToDoItem = new ToDoItemTitle();
             newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_NO_DATE );
+            newToDoItem.setTitle( App.getContext().getResources().getString(R.string.nodate) );
+            retList.add( newToDoItem );
             retList.addAll( retList.size() , emptyDueDateList );
         }
+
+
 
         return retList;
     }

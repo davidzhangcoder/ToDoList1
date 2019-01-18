@@ -15,7 +15,7 @@ public class ToDoItemTitleHolder extends BaseViewHolder<ToDoItemTitle , TipListA
     @Override
     public void setUpView(ToDoItemTitle toDoItemTitle, int position , final TipListAdapter tipListAdapter) {
 //        int a = 0;
-        ((TextView)getView(R.id.tipTitle)).setText(toDoItemTitle.getTitleCategory()+"");
+        ((TextView)getView(R.id.tipTitle)).setText(toDoItemTitle.getTitle()+"");
     }
 
 }

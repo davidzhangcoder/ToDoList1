@@ -43,6 +43,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="right"
+                android:clickable="true"
                 android:src="@drawable/check"/>
 
         </android.support.v7.widget.Toolbar>

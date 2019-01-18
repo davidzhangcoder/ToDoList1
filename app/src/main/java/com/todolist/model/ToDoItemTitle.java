@@ -13,6 +13,9 @@ public class ToDoItemTitle implements Serializable, IToDoItemType , IToDoItem
 
     private int titleCategory = 0;
 
+    private String title = "";
+
+
     @Override
     public int type(ITypeFactory typeFactory) {
         return typeFactory.getType( this );
@@ -24,5 +27,13 @@ public class ToDoItemTitle implements Serializable, IToDoItemType , IToDoItem
 
     public void setTitleCategory(int titleCategory) {
         this.titleCategory = titleCategory;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

@@ -22,6 +22,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
     public static final String COLUMN_CHILD_TASK = "child_task";
     public static final String COLUMN_REMARK = "remark";
     public static final String COLUMN_DONE_INDICATOR = "done_indicator";
+    public static final String COLUMN_RECURRENCE_PERIOD = "recurrence_period";
 
     // Create table SQL query
     public static final String CREATE_TABLE =
@@ -32,6 +33,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
                     + COLUMN_REMIND_TIMESTAMP + " DATETIME ,"
                     + COLUMN_CHILD_TASK + " TEXT , "
                     + COLUMN_REMARK + " TEXT , "
+                    + COLUMN_RECURRENCE_PERIOD + " INTEGER , "
                     + COLUMN_DONE_INDICATOR + " BOOLEAN "
                     + ")";
 
@@ -44,6 +46,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
     private String childTask;
     private String remark;
     private boolean isDone;
+    private long recurrencePeriod;
 
     private Calendar dueDate;
     private Calendar remindDate;
@@ -73,7 +76,8 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
             toDoItem.setChildTask( result.get(COLUMN_CHILD_TASK) );
         if( result.get(COLUMN_REMARK) != null && !result.get(COLUMN_REMARK).trim().equalsIgnoreCase("") )
             toDoItem.setRemark( result.get(COLUMN_REMARK) );
-
+        if( result.get(COLUMN_RECURRENCE_PERIOD) != null && !result.get(COLUMN_RECURRENCE_PERIOD).trim().equalsIgnoreCase("") )
+            toDoItem.setRecurrencePeriod(Long.parseLong(result.get(COLUMN_RECURRENCE_PERIOD)));
 
         return toDoItem;
     }
@@ -106,6 +110,8 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
                 toDoItem.setChildTask( result.get(COLUMN_CHILD_TASK) );
             if( result.get(COLUMN_REMARK) != null && !result.get(COLUMN_REMARK).trim().equalsIgnoreCase("") )
                 toDoItem.setRemark( result.get(COLUMN_REMARK) );
+            if( result.get(COLUMN_RECURRENCE_PERIOD) != null && !result.get(COLUMN_RECURRENCE_PERIOD).trim().equalsIgnoreCase("") )
+                toDoItem.setRecurrencePeriod(Long.parseLong(result.get(COLUMN_RECURRENCE_PERIOD)));
 
             toDoItemList.add( toDoItem );
         }
@@ -133,6 +139,8 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
                 toDoItem.setChildTask( result.get(COLUMN_CHILD_TASK) );
             if( result.get(COLUMN_REMARK) != null && !result.get(COLUMN_REMARK).trim().equalsIgnoreCase("") )
                 toDoItem.setRemark( result.get(COLUMN_REMARK) );
+            if( result.get(COLUMN_RECURRENCE_PERIOD) != null && !result.get(COLUMN_RECURRENCE_PERIOD).trim().equalsIgnoreCase("") )
+                toDoItem.setRecurrencePeriod(Long.parseLong(result.get(COLUMN_RECURRENCE_PERIOD)));
 
             doneItemList.add( toDoItem );
         }
@@ -215,5 +223,13 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
     @Override
     public int type(ITypeFactory typeFactory) {
         return typeFactory.getType( this );
+    }
+
+    public long getRecurrencePeriod() {
+        return recurrencePeriod;
+    }
+
+    public void setRecurrencePeriod(long recurrencePeriod) {
+        this.recurrencePeriod = recurrencePeriod;
     }
 }

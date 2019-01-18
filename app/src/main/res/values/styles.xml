@@ -13,7 +13,7 @@
 
         <item name="recurrencePickerStyle">@style/RecurrencePickerStyleCustom</item>
 
-        <item name="selectableItemBackground">@drawable/selectableitembackgroundstyle</item>
+        <!--<item name="selectableItemBackground">@drawable/selectableitembackgroundstyle</item>-->
     </style>
 
     <!-- Recurrence picker theme -->

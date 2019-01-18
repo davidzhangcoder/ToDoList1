@@ -56,7 +56,7 @@ public class TipListAdapter extends RecyclerView.Adapter<BaseViewHolder> impleme
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(mContext, EditToDoItemActivity.class);
-                i.putExtra("content", ((TextView)v).getText());
+//                i.putExtra("content", ((TextView)v).getText());
                 i.putExtra(EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM, (ToDoItem)mData.get(position));
                 mContext.startActivity(i);
             }

@@ -7,6 +7,7 @@
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tipCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -15,7 +16,7 @@
         android:layout_marginBottom="8dp"
         >
 
-        <cn.droidlover.xdroid.demo.ui.todolist.SwipeLayout
+        <com.todolist.SwipeLayout
             android:id="@+id/tip_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,7 +81,7 @@
 
                 </LinearLayout>
             </LinearLayout>
-        </cn.droidlover.xdroid.demo.ui.todolist.SwipeLayout>
+        </com.todolist.SwipeLayout>
 
     </android.support.v7.widget.CardView>
 

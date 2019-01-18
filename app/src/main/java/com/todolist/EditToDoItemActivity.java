@@ -1,5 +1,6 @@
 package com.todolist;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,12 +12,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.maltaisn.recurpicker.Recurrence;
+import com.maltaisn.recurpicker.RecurrenceFormat;
 import com.maltaisn.recurpicker.RecurrencePickerDialog;
+import com.maltaisn.recurpicker.RecurrencePickerView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.todolist.db.ToDoItemDao;
 import com.todolist.model.ToDoItem;
@@ -33,7 +37,7 @@ import java.util.Locale;
 /**
  * Created by santa on 16/7/16.
  */
-public class EditToDoItemActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener , TimePickerDialog.OnTimeSetListener
+public class EditToDoItemActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener , TimePickerDialog.OnTimeSetListener , RecurrencePickerDialog.RecurrenceSelectedCallback
 {
 
     public static String EDITTODOITEMACTIVITY_TODOITEM = "EDITTODOITEMACTIVITY_TODOITEM";
@@ -52,14 +56,23 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
     private MaterialEditText materialEditTextDueDate;
     private MaterialEditText materialEditTextDueTime;
+    private MaterialEditText materialEditTextToDoItemName;
 
     private TextView repeat;
+    private Recurrence selectedRecurrence;
 
     private RelativeLayout dueTimeContainer;
+    private RelativeLayout repeatContainer;
+
+    private ImageView imageView;
 
     private ToDoItem toDoItem;
-
     private ToDoItemDao db;
+
+    private Calendar selectedDate;
+
+    private RecurrenceFormat formatter;
+    private DateFormat dateFormatLong;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,8 +83,11 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
         materialEditTextDueDate = findViewById(R.id.dueDate);
         materialEditTextDueTime = findViewById(R.id.dueTime);
+        materialEditTextToDoItemName = findViewById(R.id.toDoItemName);
         dueTimeContainer = findViewById(R.id.dueTimeContainer);
+        repeatContainer = findViewById(R.id.repeatContainer);
         repeat = findViewById(R.id.repeatText);
+        imageView = findViewById(R.id.edit_confirmation);
 
         Intent i = getIntent();
 //        EditText editText = (EditText) findViewById(R.id.edit_content);
@@ -86,7 +102,36 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
             }
         });
 
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if( toDoItem == null )
+                    toDoItem = new ToDoItem();
+
+                toDoItem.setName("");
+                toDoItem.setDueTimestamp(0);
+
+                //Add item into "To Do" List
+                String name = materialEditTextToDoItemName.getText().toString();
+                toDoItem.setName( name );
+
+                ContentValues values = new ContentValues();
+                values.put(ToDoItem.COLUMN_NAME, name);
+                values.put(ToDoItem.COLUMN_DONE_INDICATOR, Boolean.FALSE);
+                values.put(ToDoItem.COLUMN_DUE_TIMESTAMP, selectedDate.getTimeInMillis());
+
+                long id = db.addContent( ToDoItem.TABLE_NAME , values );
+                toDoItem.setId( id );
+
+                finish();
+            }
+        });
+
         db = new ToDoItemDao(this);
+
+        Locale locale = getResources().getConfiguration().locale;
+        dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);  // Sun Dec 31, 2017
+        formatter = new RecurrenceFormat(this, dateFormatLong);
 
         init();
     }
@@ -145,11 +190,13 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
         if( repeat != null ) {
             Locale locale = getResources().getConfiguration().locale;
-            SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);  // Sun Dec 31, 2017
+//            SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);  // Sun Dec 31, 2017
             final DateFormat dateFormatShort = new SimpleDateFormat("dd-MM-yyyy", locale);  // 31-12-2017
 
             Calendar startDate = Calendar.getInstance();
-            Recurrence recurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
+
+            if( selectedRecurrence == null )
+                selectedRecurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
 
             // Set up dialog recurrence picker
             final RecurrencePickerDialog pickerDialog = new RecurrencePickerDialog();
@@ -163,7 +210,7 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
                             .setShowHeaderInOptionList(true)
                             .setShowDoneButtonInOptionList(true)
                             .setShowCancelButton(true)
-                            .setRecurrence(recurrence, startDate.getTimeInMillis());
+                            .setRecurrence(selectedRecurrence, startDate.getTimeInMillis());
 
                     // Not necessary, but if a cancel button is shown, often dialog isn't cancelable
                     pickerDialog.setCancelable(true);
@@ -236,13 +283,41 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         dueTimeContainer.setVisibility( View.VISIBLE );
-        String date = dayOfMonth+"/"+(++monthOfYear)+"/"+year;
+        repeatContainer.setVisibility( View.VISIBLE );
+//        String date = dayOfMonth+"/"+(++monthOfYear)+"/"+year;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year,monthOfYear,dayOfMonth);
+        Locale locale = getResources().getConfiguration().locale;
+        SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);
+        String date = dateFormatLong.format( calendar.getTime() );
+        selectedDate = calendar;
+
         materialEditTextDueDate.setText( date );
     }
 
     @Override
-    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        String time = "h"+minute+"m"+second;
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second)
+    {
+        boolean isAM = hourOfDay<12?true:false;
+        String time = (hourOfDay>12?hourOfDay-12:hourOfDay) + ":" + minute + " " + (isAM?"AM":"PM");
+
+        selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        selectedDate.set(Calendar.MINUTE, minute);
+        selectedDate.set(Calendar.SECOND, second);
+
         materialEditTextDueTime.setText(time);
+    }
+
+    @Override
+    public void onRecurrencePickerSelected(Recurrence r) {
+        selectedRecurrence = r;
+        String recurrenceValue = formatter.format(r);
+        repeat.setText( recurrenceValue );
+    }
+
+    @Override
+    public void onRecurrencePickerCancelled(Recurrence r) {
+
     }
 }
