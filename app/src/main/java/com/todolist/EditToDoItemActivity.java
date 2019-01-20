@@ -90,8 +90,6 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
         imageView = findViewById(R.id.edit_confirmation);
 
         Intent i = getIntent();
-//        EditText editText = (EditText) findViewById(R.id.edit_content);
-//        editText.setText(i.getStringExtra("content"));
         toDoItem = (ToDoItem)i.getSerializableExtra( EDITTODOITEMACTIVITY_TODOITEM );
 
         View reback = findViewById(R.id.edit_reback);
@@ -169,17 +167,6 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 //                    dpd.setAccentColor(Color.parseColor("#9C27B0"));
                     dpd.setVersion(DatePickerDialog.Version.VERSION_2);
                     dpd.show(EditToDoItemActivity.this.getFragmentManager(), "Datepickerdialog");
-
-//                    Calendar now = Calendar.getInstance();
-//                    android.app.DatePickerDialog datePickerDialog = new android.app.DatePickerDialog(
-//                            EditToDoItemActivity.this,
-//                            (view1, year, month, dayOfMonth) -> Log.d("Orignal", "Got clicked"),
-//                            now.get(Calendar.YEAR),
-//                            now.get(Calendar.MONTH),
-//                            now.get(Calendar.DAY_OF_MONTH)
-//                    );
-//                    datePickerDialog.show();
-
                 }
             });
         }
@@ -216,7 +203,6 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
         if( repeat != null ) {
             Locale locale = getResources().getConfiguration().locale;
-//            SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);  // Sun Dec 31, 2017
             final DateFormat dateFormatShort = new SimpleDateFormat("dd-MM-yyyy", locale);  // 31-12-2017
 
             Calendar startDate = Calendar.getInstance();
@@ -246,76 +232,15 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
                 }
             } );
         }
-
-//        if( dueDatePopuTextView != null )
-//        {
-//            dueDatePopuTextView.setActionListener(new PopuTextView.ActionListener() {
-//                @Override
-//                public void doSave(long time) {
-//                    toDoItem.setDueTimestamp( time );
-//                    ContentValues values = new ContentValues();
-//                    values.put(ToDoItem.COLUMN_DUE_TIMESTAMP, toDoItem.getDueTimestamp());
-//                    db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
-//                }
-//            });
-//        }
-//
-//        if( remindDatePopuTextView != null )
-//        {
-//            remindDatePopuTextView.setActionListener(new PopuTextView.ActionListener() {
-//                @Override
-//                public void doSave(long time) {
-//                    toDoItem.setRemindTimestamp( time );
-//                    ContentValues values = new ContentValues();
-//                    values.put(ToDoItem.COLUMN_REMIND_TIMESTAMP, toDoItem.getRemindTimestamp());
-//                    db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
-//                }
-//            });
-//        }
-//
-//        editAddChild.setOnEditorActionListener( addChildTaskOnEditorActionListener );
-//
-//        editAddRemark.setOnEditorActionListener( addRemarkOnEditorActionListener );
     }
-
-//    private TextView.OnEditorActionListener addChildTaskOnEditorActionListener = new TextView.OnEditorActionListener() {
-//        @Override
-//        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-//            if( i == EditorInfo.IME_ACTION_DONE)
-//            {
-//                toDoItem.setChildTask( (String)textView.getText().toString() );
-//                ContentValues values = new ContentValues();
-//                values.put(ToDoItem.COLUMN_CHILD_TASK, toDoItem.getChildTask());
-//                db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
-//            }
-//            return false;
-//        }
-//    };
-//
-//    private TextView.OnEditorActionListener addRemarkOnEditorActionListener = new TextView.OnEditorActionListener() {
-//        @Override
-//        public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-//            if( i == EditorInfo.IME_ACTION_DONE)
-//            {
-//                toDoItem.setRemark( (String)textView.getText().toString() );
-//                ContentValues values = new ContentValues();
-//                values.put(ToDoItem.COLUMN_REMARK, toDoItem.getRemark());
-//                db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
-//            }
-//            return false;
-//        }
-//    };
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         dueTimeContainer.setVisibility( View.VISIBLE );
         repeatContainer.setVisibility( View.VISIBLE );
-//        String date = dayOfMonth+"/"+(++monthOfYear)+"/"+year;
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(year,monthOfYear,dayOfMonth);
-//        Locale locale = getResources().getConfiguration().locale;
-//        SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);
         String date = getDateString( calendar );
         selectedDate = calendar;
 
@@ -325,9 +250,6 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second)
     {
-//        boolean isAM = hourOfDay<12?true:false;
-//        String time = (hourOfDay>12?hourOfDay-12:hourOfDay) + ":" + minute + " " + (isAM?"AM":"PM");
-
         String time = getTimeString( hourOfDay, minute );
 
         selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
