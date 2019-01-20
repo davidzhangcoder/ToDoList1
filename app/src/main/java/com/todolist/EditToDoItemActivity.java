@@ -119,6 +119,7 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
                 values.put(ToDoItem.COLUMN_NAME, name);
                 values.put(ToDoItem.COLUMN_DONE_INDICATOR, Boolean.FALSE);
                 values.put(ToDoItem.COLUMN_DUE_TIMESTAMP, selectedDate.getTimeInMillis());
+                values.put(ToDoItem.COLUMN_RECURRENCE_PERIOD, selectedRecurrence.getPeriod());
 
                 long id = db.addContent( ToDoItem.TABLE_NAME , values );
                 toDoItem.setId( id );
@@ -139,12 +140,23 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     private void init()
     {
 
+        if( materialEditTextToDoItemName != null )
+            materialEditTextToDoItemName.setText( toDoItem.getName() );
+
         if( materialEditTextDueDate != null ) {
+            if( toDoItem.getDueDate() != null ) {
+                materialEditTextDueDate.setText(getDateString(toDoItem.getDueDate()));
+                selectedDate = toDoItem.getDueDate();
+            }
             materialEditTextDueDate.setInputType(InputType.TYPE_NULL );
             materialEditTextDueDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Calendar now = Calendar.getInstance();
+
+                    if( toDoItem.getDueDate() != null )
+                        now = toDoItem.getDueDate();
+
                     DatePickerDialog dpd = DatePickerDialog.newInstance(
                             EditToDoItemActivity.this,
                             now.get(Calendar.YEAR), // Initial year selection
@@ -179,13 +191,27 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
                 public void onClick(View view) {
 
                     Calendar now = Calendar.getInstance();
+
+                    if( toDoItem.getDueDate() != null )
+                        now = toDoItem.getDueDate();
+
                     TimePickerDialog tpd = TimePickerDialog.newInstance(
-                            EditToDoItemActivity.this, false
+                            EditToDoItemActivity.this,
+                            now.get(Calendar.HOUR_OF_DAY),
+                            now.get(Calendar.MINUTE),
+                            false
                     );
                     tpd.show(EditToDoItemActivity.this.getFragmentManager(), "Datepickerdialog");
 
                 }
             });
+
+            if( toDoItem.getDueDate() != null ) {
+                dueTimeContainer.setVisibility(View.VISIBLE);
+                int hour = toDoItem.getDueDate().get(Calendar.HOUR_OF_DAY);
+                int minute = toDoItem.getDueDate().get(Calendar.MINUTE);
+                materialEditTextDueTime.setText( getTimeString( hour , minute ) );
+            }
         }
 
         if( repeat != null ) {
@@ -288,9 +314,9 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(year,monthOfYear,dayOfMonth);
-        Locale locale = getResources().getConfiguration().locale;
-        SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);
-        String date = dateFormatLong.format( calendar.getTime() );
+//        Locale locale = getResources().getConfiguration().locale;
+//        SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);
+        String date = getDateString( calendar );
         selectedDate = calendar;
 
         materialEditTextDueDate.setText( date );
@@ -299,14 +325,30 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second)
     {
-        boolean isAM = hourOfDay<12?true:false;
-        String time = (hourOfDay>12?hourOfDay-12:hourOfDay) + ":" + minute + " " + (isAM?"AM":"PM");
+//        boolean isAM = hourOfDay<12?true:false;
+//        String time = (hourOfDay>12?hourOfDay-12:hourOfDay) + ":" + minute + " " + (isAM?"AM":"PM");
+
+        String time = getTimeString( hourOfDay, minute );
 
         selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
         selectedDate.set(Calendar.MINUTE, minute);
         selectedDate.set(Calendar.SECOND, second);
 
         materialEditTextDueTime.setText(time);
+    }
+
+    private String getDateString( Calendar calendar )
+    {
+        Locale locale = getResources().getConfiguration().locale;
+        SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);
+        String date = dateFormatLong.format( calendar.getTime() );
+        return date;
+    }
+
+    private String getTimeString( int hourOfDay, int minute ) {
+        boolean isAM = hourOfDay<12?true:false;
+        String time = (hourOfDay>12?hourOfDay-12:hourOfDay) + ":" + minute + " " + (isAM?"AM":"PM");
+        return time;
     }
 
     @Override
