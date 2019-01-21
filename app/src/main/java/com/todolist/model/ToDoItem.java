@@ -46,7 +46,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
     private String childTask;
     private String remark;
     private boolean isDone;
-    private long recurrencePeriod;
+    private int recurrencePeriod;
 
     private Calendar dueDate;
     private Calendar remindDate;
@@ -77,7 +77,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
         if( result.get(COLUMN_REMARK) != null && !result.get(COLUMN_REMARK).trim().equalsIgnoreCase("") )
             toDoItem.setRemark( result.get(COLUMN_REMARK) );
         if( result.get(COLUMN_RECURRENCE_PERIOD) != null && !result.get(COLUMN_RECURRENCE_PERIOD).trim().equalsIgnoreCase("") )
-            toDoItem.setRecurrencePeriod(Long.parseLong(result.get(COLUMN_RECURRENCE_PERIOD)));
+            toDoItem.setRecurrencePeriod(Integer.parseInt(result.get(COLUMN_RECURRENCE_PERIOD)));
 
         return toDoItem;
     }
@@ -111,7 +111,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
             if( result.get(COLUMN_REMARK) != null && !result.get(COLUMN_REMARK).trim().equalsIgnoreCase("") )
                 toDoItem.setRemark( result.get(COLUMN_REMARK) );
             if( result.get(COLUMN_RECURRENCE_PERIOD) != null && !result.get(COLUMN_RECURRENCE_PERIOD).trim().equalsIgnoreCase("") )
-                toDoItem.setRecurrencePeriod(Long.parseLong(result.get(COLUMN_RECURRENCE_PERIOD)));
+                toDoItem.setRecurrencePeriod(Integer.parseInt(result.get(COLUMN_RECURRENCE_PERIOD)));
 
             toDoItemList.add( toDoItem );
         }
@@ -140,7 +140,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
             if( result.get(COLUMN_REMARK) != null && !result.get(COLUMN_REMARK).trim().equalsIgnoreCase("") )
                 toDoItem.setRemark( result.get(COLUMN_REMARK) );
             if( result.get(COLUMN_RECURRENCE_PERIOD) != null && !result.get(COLUMN_RECURRENCE_PERIOD).trim().equalsIgnoreCase("") )
-                toDoItem.setRecurrencePeriod(Long.parseLong(result.get(COLUMN_RECURRENCE_PERIOD)));
+                toDoItem.setRecurrencePeriod(Integer.parseInt(result.get(COLUMN_RECURRENCE_PERIOD)));
 
             doneItemList.add( toDoItem );
         }
@@ -225,11 +225,11 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
         return typeFactory.getType( this );
     }
 
-    public long getRecurrencePeriod() {
+    public int getRecurrencePeriod() {
         return recurrencePeriod;
     }
 
-    public void setRecurrencePeriod(long recurrencePeriod) {
+    public void setRecurrencePeriod(int recurrencePeriod) {
         this.recurrencePeriod = recurrencePeriod;
     }
 }

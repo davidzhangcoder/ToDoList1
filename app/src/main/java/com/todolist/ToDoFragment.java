@@ -33,6 +33,8 @@ public class ToDoFragment extends Fragment {
 
     private ToDoItemDao db;
 
+    private TipListAdapter tipListAdapter;
+
     public ToDoFragment() {
     }
 
@@ -88,7 +90,7 @@ public class ToDoFragment extends Fragment {
 //            toDoItemList.add(toDoItem);
 //        }
 
-        TipListAdapter tipListAdapter = new TipListAdapter( this.getContext(), toDoItemList );
+        tipListAdapter = new TipListAdapter( this.getContext(), toDoItemList );
         tipListAdapter.setDoneAction( getDoneAction() );
         recyclerView.setAdapter( tipListAdapter );
         ItemTouchHelper.Callback callback = new TipListItemTouchHelperCallback();
@@ -169,6 +171,8 @@ public class ToDoFragment extends Fragment {
 
         toDoItemList.clear();
         toDoItemList.addAll( ToDoItemUtil.getToDoItemGroupByDueTime( ToDoItem.getToDoItems() ) );
+
+        tipListAdapter.notifyData( toDoItemList );
     }
 
     public interface OnFragmentInteractionListener {

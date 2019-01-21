@@ -57,6 +57,7 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     private MaterialEditText materialEditTextDueDate;
     private MaterialEditText materialEditTextDueTime;
     private MaterialEditText materialEditTextToDoItemName;
+    private View reback;
 
     private TextView repeat;
     private Recurrence selectedRecurrence;
@@ -91,40 +92,19 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
         Intent i = getIntent();
         toDoItem = (ToDoItem)i.getSerializableExtra( EDITTODOITEMACTIVITY_TODOITEM );
+        if( toDoItem == null ) {
+            toDoItem = new ToDoItem();
+            Calendar startDate = Calendar.getInstance();
+            selectedDate = startDate;
+            selectedRecurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
+            toDoItem.setRecurrencePeriod( Recurrence.NONE );
+        }
+        else {
+            selectedDate = toDoItem.getDueDate();
+            selectedRecurrence = new Recurrence( toDoItem.getDueDate().getTimeInMillis() , toDoItem.getRecurrencePeriod() );
+        }
 
-        View reback = findViewById(R.id.edit_reback);
-        reback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if( toDoItem == null )
-                    toDoItem = new ToDoItem();
-
-                toDoItem.setName("");
-                toDoItem.setDueTimestamp(0);
-
-                //Add item into "To Do" List
-                String name = materialEditTextToDoItemName.getText().toString();
-                toDoItem.setName( name );
-
-                ContentValues values = new ContentValues();
-                values.put(ToDoItem.COLUMN_NAME, name);
-                values.put(ToDoItem.COLUMN_DONE_INDICATOR, Boolean.FALSE);
-                values.put(ToDoItem.COLUMN_DUE_TIMESTAMP, selectedDate.getTimeInMillis());
-                values.put(ToDoItem.COLUMN_RECURRENCE_PERIOD, selectedRecurrence.getPeriod());
-
-                long id = db.addContent( ToDoItem.TABLE_NAME , values );
-                toDoItem.setId( id );
-
-                finish();
-            }
-        });
+        reback = findViewById(R.id.edit_reback);
 
         db = new ToDoItemDao(this);
 
@@ -137,23 +117,54 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
     private void init()
     {
+        reback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                toDoItem.setName("");
+//                toDoItem.setDueTimestamp(0);
+
+                //Add item into "To Do" List
+                String name = materialEditTextToDoItemName.getText().toString();
+                toDoItem.setName( name );
+
+                ContentValues values = new ContentValues();
+                values.put(ToDoItem.COLUMN_NAME, name);
+                values.put(ToDoItem.COLUMN_DONE_INDICATOR, toDoItem.isDone());
+                values.put(ToDoItem.COLUMN_DUE_TIMESTAMP, toDoItem.getDueTimestamp());
+                values.put(ToDoItem.COLUMN_RECURRENCE_PERIOD, toDoItem.getRecurrencePeriod());
+
+                if( toDoItem.getId() == 0 ) {
+                    long id = db.addContent(ToDoItem.TABLE_NAME, values);
+                    toDoItem.setId(id);
+                }
+                else
+                {
+                    db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
+                }
+
+                finish();
+            }
+        });
 
         if( materialEditTextToDoItemName != null )
-            materialEditTextToDoItemName.setText( toDoItem.getName() );
+            materialEditTextToDoItemName.setText( toDoItem.getName()==null?"":toDoItem.getName() );
 
         if( materialEditTextDueDate != null ) {
             if( toDoItem.getDueDate() != null ) {
                 materialEditTextDueDate.setText(getDateString(toDoItem.getDueDate()));
-                selectedDate = toDoItem.getDueDate();
             }
             materialEditTextDueDate.setInputType(InputType.TYPE_NULL );
             materialEditTextDueDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Calendar now = Calendar.getInstance();
-
-                    if( toDoItem.getDueDate() != null )
-                        now = toDoItem.getDueDate();
+                    Calendar now = selectedDate;
 
                     DatePickerDialog dpd = DatePickerDialog.newInstance(
                             EditToDoItemActivity.this,
@@ -177,10 +188,7 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
                 @Override
                 public void onClick(View view) {
 
-                    Calendar now = Calendar.getInstance();
-
-                    if( toDoItem.getDueDate() != null )
-                        now = toDoItem.getDueDate();
+                    Calendar now = selectedDate;
 
                     TimePickerDialog tpd = TimePickerDialog.newInstance(
                             EditToDoItemActivity.this,
@@ -205,10 +213,10 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
             Locale locale = getResources().getConfiguration().locale;
             final DateFormat dateFormatShort = new SimpleDateFormat("dd-MM-yyyy", locale);  // 31-12-2017
 
-            Calendar startDate = Calendar.getInstance();
+            Calendar startDate = selectedDate;
 
-            if( selectedRecurrence == null )
-                selectedRecurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
+//            if( selectedRecurrence == null )
+//                selectedRecurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
 
             // Set up dialog recurrence picker
             final RecurrencePickerDialog pickerDialog = new RecurrencePickerDialog();
@@ -231,6 +239,13 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
                     pickerDialog.show(getSupportFragmentManager(), "recur_picker_dialog");
                 }
             } );
+
+            String recurrenceValue = formatter.format( selectedRecurrence );
+            repeat.setText( recurrenceValue );
+
+            if( toDoItem.getId() > 0 ) {
+                repeatContainer.setVisibility( View.VISIBLE );
+            }
         }
     }
 
@@ -244,7 +259,20 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
         String date = getDateString( calendar );
         selectedDate = calendar;
 
+        if( toDoItem.getDueDate() != null ) {
+            int hourOfDay = toDoItem.getDueDate().get( Calendar.HOUR_OF_DAY );
+            int minute = toDoItem.getDueDate().get( Calendar.MINUTE );
+            selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            selectedDate.set(Calendar.MINUTE, minute);
+        }
+
+        toDoItem.setDueTimestamp( selectedDate.getTimeInMillis() );
+        toDoItem.setDueDate( selectedDate );
+
         materialEditTextDueDate.setText( date );
+
+        String time = getTimeString( toDoItem.getDueDate().get( Calendar.HOUR_OF_DAY ), toDoItem.getDueDate().get( Calendar.MINUTE ) );
+        materialEditTextDueTime.setText(time);
     }
 
     @Override
@@ -255,6 +283,9 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
         selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
         selectedDate.set(Calendar.MINUTE, minute);
         selectedDate.set(Calendar.SECOND, second);
+
+        toDoItem.setDueTimestamp( selectedDate.getTimeInMillis() );
+        toDoItem.setDueDate( selectedDate );
 
         materialEditTextDueTime.setText(time);
     }
@@ -278,6 +309,8 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
         selectedRecurrence = r;
         String recurrenceValue = formatter.format(r);
         repeat.setText( recurrenceValue );
+
+        toDoItem.setRecurrencePeriod( r.getPeriod() );
     }
 
     @Override
