@@ -4,11 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -57,15 +59,18 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     private MaterialEditText materialEditTextDueDate;
     private MaterialEditText materialEditTextDueTime;
     private MaterialEditText materialEditTextToDoItemName;
+    private MaterialEditText repeat;
     private View reback;
 
-    private TextView repeat;
     private Recurrence selectedRecurrence;
 
     private RelativeLayout dueTimeContainer;
     private RelativeLayout repeatContainer;
 
     private ImageView imageView;
+    private ImageView dueDateImage;
+    private ImageView dueTimeImage;
+    private ImageView repeatImage;
 
     private ToDoItem toDoItem;
     private ToDoItemDao db;
@@ -89,6 +94,9 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
         repeatContainer = findViewById(R.id.repeatContainer);
         repeat = findViewById(R.id.repeatText);
         imageView = findViewById(R.id.edit_confirmation);
+        dueDateImage = findViewById(R.id.dueDateImage);
+        dueTimeImage = findViewById(R.id.dueTimeImage);
+        repeatImage = findViewById(R.id.repeatImage);
 
         Intent i = getIntent();
         toDoItem = (ToDoItem)i.getSerializableExtra( EDITTODOITEMACTIVITY_TODOITEM );
@@ -153,51 +161,76 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
             }
         });
 
-        if( materialEditTextToDoItemName != null )
-            materialEditTextToDoItemName.setText( toDoItem.getName()==null?"":toDoItem.getName() );
+        if( materialEditTextToDoItemName != null ) {
+            materialEditTextToDoItemName.setAccentTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            materialEditTextToDoItemName.setFocusFraction(1.0f);
+            materialEditTextToDoItemName.setText(toDoItem.getName() == null ? "" : toDoItem.getName());
+
+            materialEditTextToDoItemName.setOnTouchListener( new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View arg0, MotionEvent event) {
+                    if(event.getAction()==MotionEvent.ACTION_DOWN) {
+                        resetFocusFraction();
+                    }
+                    return false;
+                }
+            } );
+        }
 
         if( materialEditTextDueDate != null ) {
+            materialEditTextDueDate.setAccentTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            materialEditTextDueDate.setFocusFraction(1.0f);
+            dueDateImage.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
             if( toDoItem.getDueDate() != null ) {
                 materialEditTextDueDate.setText(getDateString(toDoItem.getDueDate()));
             }
             materialEditTextDueDate.setInputType(InputType.TYPE_NULL );
-            materialEditTextDueDate.setOnClickListener(new View.OnClickListener() {
+            materialEditTextDueDate.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View view) {
-                    Calendar now = selectedDate;
+                public boolean onTouch(View arg0, MotionEvent event) {
+                    if(event.getAction()==MotionEvent.ACTION_DOWN) {
+                        resetFocusFraction();
+                        Calendar now = selectedDate;
 
-                    DatePickerDialog dpd = DatePickerDialog.newInstance(
-                            EditToDoItemActivity.this,
-                            now.get(Calendar.YEAR), // Initial year selection
-                            now.get(Calendar.MONTH), // Initial month selection
-                            now.get(Calendar.DAY_OF_MONTH) // Inital day selection
-                    );
+                        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                                EditToDoItemActivity.this,
+                                now.get(Calendar.YEAR), // Initial year selection
+                                now.get(Calendar.MONTH), // Initial month selection
+                                now.get(Calendar.DAY_OF_MONTH) // Inital day selection
+                        );
 // If you're calling this from a support Fragment
 //                    dpd.show(getFragmentManager(), "Datepickerdialog");
 // If you're calling this from an AppCompatActivity
 //                    dpd.setAccentColor(Color.parseColor("#9C27B0"));
-                    dpd.setVersion(DatePickerDialog.Version.VERSION_2);
-                    dpd.show(EditToDoItemActivity.this.getFragmentManager(), "Datepickerdialog");
+                        dpd.setVersion(DatePickerDialog.Version.VERSION_2);
+                        dpd.show(EditToDoItemActivity.this.getFragmentManager(), "Datepickerdialog");
+                    }
+                    return false;
                 }
             });
         }
 
         if( materialEditTextDueTime != null ) {
+            materialEditTextDueTime.setAccentTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            materialEditTextDueTime.setFocusFraction(1.0f);
+            dueTimeImage.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
             materialEditTextDueTime.setInputType( InputType.TYPE_NULL );
-            materialEditTextDueTime.setOnClickListener(new View.OnClickListener() {
+            materialEditTextDueTime.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View view) {
+                public boolean onTouch(View arg0, MotionEvent event) {
+                    if(event.getAction()==MotionEvent.ACTION_DOWN) {
+                        resetFocusFraction();
+                        Calendar now = selectedDate;
 
-                    Calendar now = selectedDate;
-
-                    TimePickerDialog tpd = TimePickerDialog.newInstance(
-                            EditToDoItemActivity.this,
-                            now.get(Calendar.HOUR_OF_DAY),
-                            now.get(Calendar.MINUTE),
-                            false
-                    );
-                    tpd.show(EditToDoItemActivity.this.getFragmentManager(), "Datepickerdialog");
-
+                        TimePickerDialog tpd = TimePickerDialog.newInstance(
+                                EditToDoItemActivity.this,
+                                now.get(Calendar.HOUR_OF_DAY),
+                                now.get(Calendar.MINUTE),
+                                false
+                        );
+                        tpd.show(EditToDoItemActivity.this.getFragmentManager(), "Datepickerdialog");
+                    }
+                    return false;
                 }
             });
 
@@ -210,6 +243,9 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
         }
 
         if( repeat != null ) {
+            repeat.setAccentTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            repeat.setFocusFraction(1.0f);
+            repeatImage.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
             Locale locale = getResources().getConfiguration().locale;
             final DateFormat dateFormatShort = new SimpleDateFormat("dd-MM-yyyy", locale);  // 31-12-2017
 
@@ -224,6 +260,7 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
             repeat.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    resetFocusFraction();
                     // Set the settings
                     pickerDialog
                             .setEnabledModes(true , false)
@@ -253,6 +290,7 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         dueTimeContainer.setVisibility( View.VISIBLE );
         repeatContainer.setVisibility( View.VISIBLE );
+        resetFocusFraction();
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(year,monthOfYear,dayOfMonth);
@@ -278,6 +316,8 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second)
     {
+        resetFocusFraction();
+
         String time = getTimeString( hourOfDay, minute );
 
         selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -288,6 +328,14 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
         toDoItem.setDueDate( selectedDate );
 
         materialEditTextDueTime.setText(time);
+    }
+
+    private void resetFocusFraction()
+    {
+        materialEditTextToDoItemName.setFocusFraction(1.0f);
+        materialEditTextDueTime.setFocusFraction(1.0f);
+        materialEditTextDueDate.setFocusFraction(1.0f);
+        repeat.setFocusFraction(1.0f);
     }
 
     private String getDateString( Calendar calendar )
@@ -306,6 +354,8 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
     @Override
     public void onRecurrencePickerSelected(Recurrence r) {
+        resetFocusFraction();
+
         selectedRecurrence = r;
         String recurrenceValue = formatter.format(r);
         repeat.setText( recurrenceValue );

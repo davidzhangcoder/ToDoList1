@@ -24,6 +24,14 @@
 
         <activity android:name=".EditToDoItemActivity" />
 
+        <service android:name=".service.ToDoListAlarmService" />
+
+        <receiver android:name=".broadcast.ToDoListAlarmBroadCastReceiver">
+            <intent-filter>
+                <action android:name="alarmAction" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 
