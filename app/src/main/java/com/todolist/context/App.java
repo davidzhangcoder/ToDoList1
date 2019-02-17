@@ -6,7 +6,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ContextHolder.initial(this);
+//        ContextHolder.initial(this);
     }
 }
 

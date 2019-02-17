@@ -6,13 +6,25 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.todolist.App;
+import com.todolist.R;
+import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
+import com.todolist.context.ContextHolder;
+import com.todolist.db.ToDoItemDao;
+import com.todolist.model.ToDoItem;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 public class ToDoListAlarmService extends Service{
 
@@ -24,6 +36,7 @@ public class ToDoListAlarmService extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        //Test
 //        Runnable runnable = new Runnable() {
 //            @Override
 //            public void run() {
@@ -50,23 +63,22 @@ public class ToDoListAlarmService extends Service{
 //        Log.i("ToDoListAlarmService", "Run at: " + " Service " );
 
 
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Intent toDoListAlarmServiceIntent = new Intent(this,ToDoListAlarmService.class);
-            intent.setAction("alarmAction");
             PendingIntent pendingIntent=PendingIntent.getService(this,0, toDoListAlarmServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + App.INITIAL_SECONDS_IN_MILLS , pendingIntent);
+            App.getAlarmManager().setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + App.INITIAL_SECONDS_IN_MILLS , pendingIntent);
         }
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Intent toDoListAlarmServiceIntent = new Intent(this,ToDoListAlarmService.class);
-            intent.setAction("alarmAction");
             PendingIntent pendingIntent=PendingIntent.getService(this,0, toDoListAlarmServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + App.INITIAL_SECONDS_IN_MILLS , pendingIntent);
+            App.getAlarmManager().setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + App.INITIAL_SECONDS_IN_MILLS , pendingIntent);
         }
 
+        doDectectToDoDue();
 
+        //Test
         Toast.makeText(App.getContext(), "开启", Toast.LENGTH_LONG).show();
 
         return super.onStartCommand(intent, flags, startId);
@@ -83,4 +95,66 @@ public class ToDoListAlarmService extends Service{
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    private void doDectectToDoDue()
+    {
+        Thread thread = new Thread( createToDoDueAlarmRunnable() );
+        thread.start();
+    }
+
+    private Runnable createToDoDueAlarmRunnable()
+    {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                Calendar current = Calendar.getInstance();
+                long from = current.getTimeInMillis();
+
+                current.add( Calendar.HOUR_OF_DAY  , 1);
+                long to = current.getTimeInMillis();
+
+                ToDoItemDao db = new ToDoItemDao(App.getContext());
+                List<Map<String, String>> resultList = db.getListData( ToDoItem.TABLE_NAME , ToDoItem.COLUMN_DUE_TIMESTAMP + " between ? and ? " , new String[]{ String.valueOf(from) , String.valueOf(to) } , ToDoItem.COLUMN_DUE_TIMESTAMP + " ASC " );
+
+                for( Map<String, String> map : resultList )
+                {
+                    if( map.get(ToDoItem.COLUMN_DUE_TIMESTAMP) != null && !map.get(ToDoItem.COLUMN_DUE_TIMESTAMP).trim().equalsIgnoreCase("") ) {
+                        doAlarm( Long.parseLong(map.get(ToDoItem.COLUMN_DUE_TIMESTAMP)) );
+                    }
+                }
+
+            }
+        };
+
+        return runnable;
+    }
+
+    private void doAlarm( long time )
+    {
+//        //Test
+        Handler handler = new Handler( Looper.getMainLooper() );
+        handler.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy hh:mm:ss", getResources().getConfiguration().locale);
+                        String date = dateFormatLong.format( time );
+                        Toast.makeText(App.getContext(), date , Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        Intent intent = new Intent(this,ToDoListAlarmBroadCastReceiver.class);
+        intent.setAction( getResources().getString(R.string.alarmAction) );
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(App.getContext(),0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            App.getAlarmManager().setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time , pendingIntent);
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            App.getAlarmManager().setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+        else
+            App.getAlarmManager().set( AlarmManager.RTC_WAKEUP , time , pendingIntent );
+    }
+
 }

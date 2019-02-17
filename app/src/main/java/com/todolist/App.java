@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.SystemClock;
 
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
+import com.todolist.context.ContextHolder;
 import com.todolist.service.ToDoListAlarmService;
 import com.zhy.http.okhttp.OkHttpUtils;
 
@@ -30,6 +31,8 @@ public class App extends Application {
 
     private static Context context;
 
+    private static AlarmManager alarmManager;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -44,13 +47,17 @@ public class App extends Application {
 
         context = getApplicationContext();
 
+        init();
+
+    }
+
+    private void doDueAlarmService() {
         //Alarm Service
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Calendar calendar =Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(System.currentTimeMillis());
 
         Intent intent = new Intent(this,ToDoListAlarmService.class);
-        intent.setAction("alarmAction");
+//        intent.setAction("alarmAction");
         PendingIntent pendingIntent=PendingIntent.getService(context,0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 //        alarmManager.set( AlarmManager.RTC_WAKEUP , calendar.getTimeInMillis() + HOUR_IN_MILLS , pendingIntent );
 
@@ -60,10 +67,22 @@ public class App extends Application {
             alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + INITIAL_SECONDS_IN_MILLS, pendingIntent);
         else
             alarmManager.setRepeating( AlarmManager.RTC_WAKEUP , calendar.getTimeInMillis() + INITIAL_SECONDS_IN_MILLS , INITIAL_SECONDS_IN_MILLS , pendingIntent );
-
     }
 
     public static Context getContext() {
         return context;
+    }
+
+    public void init()
+    {
+        ContextHolder.initial(this);
+
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        doDueAlarmService();
+    }
+
+    public static AlarmManager getAlarmManager() {
+        return alarmManager;
     }
 }

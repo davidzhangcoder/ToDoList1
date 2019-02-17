@@ -8,4 +8,5 @@
     <string name="nextweek">Next Week</string>
     <string name="later">Later</string>
     <string name="nodate">No Date</string>
+    <string name="alarmAction">alarmAction</string>
 </resources>
