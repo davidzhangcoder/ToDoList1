@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.todolist.App;
+import com.todolist.EditToDoItemActivity;
 import com.todolist.R;
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
 import com.todolist.context.ContextHolder;
@@ -120,7 +122,7 @@ public class ToDoListAlarmService extends Service{
                 for( Map<String, String> map : resultList )
                 {
                     if( map.get(ToDoItem.COLUMN_DUE_TIMESTAMP) != null && !map.get(ToDoItem.COLUMN_DUE_TIMESTAMP).trim().equalsIgnoreCase("") ) {
-                        doAlarm( Long.parseLong(map.get(ToDoItem.COLUMN_DUE_TIMESTAMP)) );
+                        doAlarm( Long.parseLong(map.get(ToDoItem.COLUMN_DUE_TIMESTAMP)) , Long.parseLong(map.get(ToDoItem.COLUMN_ID)) );
                     }
                 }
 
@@ -130,8 +132,28 @@ public class ToDoListAlarmService extends Service{
         return runnable;
     }
 
-    private void doAlarm( long time )
+    private void doAlarm( long time , long id )
     {
+        ToDoItem toDoItem = ToDoItem.getToDoItem( id );
+
+        Intent intent = new Intent(App.getContext(),ToDoListAlarmBroadCastReceiver.class);
+        intent.setAction( getResources().getString(R.string.alarmAction) );
+//        intent.putExtra(EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM,toDoItem);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("test" , "aaaaa");
+        bundle.putSerializable( EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM , toDoItem );
+        intent.putExtra("data",bundle);
+
+//        intent.putExtra("test1" , "11111" );
+
+        int uniqueInt = (int)toDoItem.getId(); //(int) (System.currentTimeMillis() & 0xfffffff);
+
+//        if( isPendingIntentAvailable( App.getContext() , uniqueInt , intent ) )
+//            return;
+
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(App.getContext(),uniqueInt, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
 //        //Test
         Handler handler = new Handler( Looper.getMainLooper() );
         handler.post(
@@ -140,14 +162,11 @@ public class ToDoListAlarmService extends Service{
                     public void run() {
                         SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy hh:mm:ss", getResources().getConfiguration().locale);
                         String date = dateFormatLong.format( time );
-                        Toast.makeText(App.getContext(), date , Toast.LENGTH_LONG).show();
+                        Toast.makeText(App.getContext(), toDoItem + " " + pendingIntent +" " + date , Toast.LENGTH_LONG).show();
                     }
                 }
         );
 
-        Intent intent = new Intent(this,ToDoListAlarmBroadCastReceiver.class);
-        intent.setAction( getResources().getString(R.string.alarmAction) );
-        PendingIntent pendingIntent=PendingIntent.getBroadcast(App.getContext(),0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             App.getAlarmManager().setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time , pendingIntent);
@@ -155,6 +174,11 @@ public class ToDoListAlarmService extends Service{
             App.getAlarmManager().setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
         else
             App.getAlarmManager().set( AlarmManager.RTC_WAKEUP , time , pendingIntent );
+    }
+
+    public static boolean isPendingIntentAvailable(Context context , int requestCode , Intent i ) {
+        PendingIntent pi = PendingIntent.getBroadcast(context, requestCode, i, PendingIntent.FLAG_NO_CREATE);
+        return pi != null;
     }
 
 }

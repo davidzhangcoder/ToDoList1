@@ -100,6 +100,11 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
 
         Intent i = getIntent();
         toDoItem = (ToDoItem)i.getSerializableExtra( EDITTODOITEMACTIVITY_TODOITEM );
+
+        Bundle data = i.getBundleExtra("data");
+        if( data != null )
+            toDoItem = (ToDoItem)data.get(EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM);
+
         if( toDoItem == null ) {
             toDoItem = new ToDoItem();
             Calendar startDate = Calendar.getInstance();

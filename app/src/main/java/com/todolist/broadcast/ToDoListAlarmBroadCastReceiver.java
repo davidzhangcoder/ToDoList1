@@ -12,6 +12,7 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
@@ -20,10 +21,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.todolist.EditToDoItemActivity;
 import com.todolist.R;
 import com.todolist.ToDoListMainActivity;
+import com.todolist.model.ToDoItem;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -43,11 +47,14 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
             Log.i("AlarmBroadCastReceiver", "Run at: " );
             Toast.makeText(context, "ToDoListAlarmBroadCastReceiver - Alarm - 开启", Toast.LENGTH_LONG).show();
 
-            doNotify( context );
+            Bundle data = intent.getBundleExtra("data");
+            ToDoItem toDoItem = (ToDoItem)data.get(EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM);
+
+            doNotify( context , toDoItem );
         }
     }
 
-    private void doNotify(Context context) {
+    private void doNotify(Context context , ToDoItem toDoItem) {
 
         try {
 
@@ -101,7 +108,7 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
             createNotificationChannel(context,channelId,channelName,importance);
         }
 
-        sendChatMsg( context );
+        sendChatMsg( context , toDoItem );
 
     }
 
@@ -113,7 +120,8 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
         manager.createNotificationChannel(channel);
     }
 
-    public void sendChatMsg(Context context) {
+    public void sendChatMsg(Context context , ToDoItem toDoItem) {
+
         NotificationManager manager=(NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
 //            NotificationChannel channel=manager.getNotificationChannel("chat");//因为是NotificationManager创建的Channel，所以通过mannager能获取
@@ -125,19 +133,31 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
 //                Toast.makeText(this,"请手动打开权限",Toast.LENGTH_SHORT).show();
 //            }
         }
-        Intent intent=new Intent(context,ToDoListMainActivity.class);
-        intent.putExtra("data","今晚吃什么");
-        PendingIntent pi=PendingIntent.getActivity(context,0,intent,0);
+
+        Intent intent=new Intent(context,EditToDoItemActivity.class);
+
+//        Bundle bundle = new Bundle();
+//        bundle.putString("test" , "aaaaa");
+//        bundle.putSerializable( EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM , toDoItem );
+//        intent.putExtra("data",bundle);
+
+        intent.putExtra( EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM , toDoItem );
+//        intent.putExtra("data","今晚吃什么");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// HH:mm:ss
+        String dateString = simpleDateFormat.format( toDoItem.getDueDate().getTime() );
+
+        int uniqueInt = (int)toDoItem.getId();
+        PendingIntent pi=PendingIntent.getActivity(context,uniqueInt,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification= new NotificationCompat.Builder(context,"chat")
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setWhen(System.currentTimeMillis())
-                .setContentTitle("收到一条聊天消息")
-                .setContentText("今晚吃什么")
+                .setContentTitle(toDoItem.getName())
+                .setContentText(dateString)
                 .setNumber(1)//设置角标的数量
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setContentIntent(pi)
                 .build();
-        manager.notify(1,notification);
+        manager.notify(uniqueInt,notification);
 
     }
 
