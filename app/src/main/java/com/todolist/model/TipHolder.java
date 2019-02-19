@@ -54,6 +54,7 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
     @Override
     public void setUpView(ToDoItem toDoItem, int position , final TipListAdapter tipListAdapter) {
         ((TextView)getView(R.id.tip_content)).setText(toDoItem.getName().toString());
+
         if( toDoItem.getDueDate() != null ) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// HH:mm:ss
             String dateString = simpleDateFormat.format( toDoItem.getDueDate().getTime() );
@@ -64,12 +65,14 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
 //        getView(R.id.tip_content).setOnClickListener(tipListAdapter.getClickListener(position));
 
         ((CheckBox)getView(R.id.tip_checkbox)).setChecked(false);
+
         getView(R.id.tip_checkbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tipListAdapter.changeToFinish(TipHolder.this);
             }
         });
+
         ((SwipeLayout)getView(R.id.tip_layout)).setListener(new SwipeLayout.OperatorListener() {
             @Override
             public void onDelete() {

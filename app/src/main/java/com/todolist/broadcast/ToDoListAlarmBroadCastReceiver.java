@@ -17,6 +17,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -147,7 +148,15 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
         String dateString = simpleDateFormat.format( toDoItem.getDueDate().getTime() );
 
         int uniqueInt = (int)toDoItem.getId();
-        PendingIntent pi=PendingIntent.getActivity(context,uniqueInt,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+//        PendingIntent pi=PendingIntent.getActivity(context,uniqueInt,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(EditToDoItemActivity.class);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent pi = stackBuilder.getPendingIntent(uniqueInt, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
         Notification notification= new NotificationCompat.Builder(context,"chat")
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setWhen(System.currentTimeMillis())

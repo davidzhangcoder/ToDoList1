@@ -105,11 +105,13 @@ public class ToDoListMainActivity extends AppCompatActivity implements ToDoFragm
         return R.layout.activity_to_do_list_main;
     }
 
+    //implemented for DoneFragment
     @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
 
+    //implemented for ToDoFragment
     @Override
     public void refresh() {
         fragmentList.clear();

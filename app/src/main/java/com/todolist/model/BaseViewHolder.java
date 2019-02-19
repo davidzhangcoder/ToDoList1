@@ -5,8 +5,10 @@ import android.util.SparseArray;
 import android.view.View;
 
 public abstract class BaseViewHolder<T,V> extends RecyclerView.ViewHolder {
+
     private SparseArray<View> views;
     private View mItemView;
+
     public BaseViewHolder(View itemView) {
         super(itemView);
         views = new SparseArray<>();
