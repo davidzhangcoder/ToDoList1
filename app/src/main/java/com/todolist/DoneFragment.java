@@ -1,5 +1,6 @@
 package com.todolist;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -83,11 +84,30 @@ public class DoneFragment extends Fragment {
 
         doneList.addAll( ToDoItem.getDoneItems() );
 
-        recyclerView.setAdapter(new TipListAdapter( this.getContext(), doneList ));
+        TipListAdapter tipListAdapter = new TipListAdapter( this.getContext(), doneList );
+        tipListAdapter.setDoneAction( getDoneAction() );
+        recyclerView.setAdapter( tipListAdapter );
 
 //        ItemTouchHelper.Callback callback = new TipListItemTouchHelperCallback();
 //        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
 //        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    private TipListAdapter.ToDoItemAction getDoneAction()
+    {
+        TipListAdapter.ToDoItemAction doneAction = new TipListAdapter.ToDoItemAction() {
+            @Override
+            public void doAction(ToDoItem toDoItem) {
+                toDoItem.setDone( false );
+                ContentValues values = new ContentValues();
+                values.put(ToDoItem.COLUMN_DONE_INDICATOR, toDoItem.isDone());
+                db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
+
+                mListener.refresh();
+            }
+        };
+
+        return doneAction;
     }
 
     @Override
@@ -109,6 +129,6 @@ public class DoneFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void refresh();
     }
 }

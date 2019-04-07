@@ -9,4 +9,12 @@
     <string name="later">Later</string>
     <string name="nodate">No Date</string>
     <string name="alarmAction">alarmAction</string>
+
+    <string name="category_all">All</string>
+    <string name="category_default">Default</string>
+    <string name="category_working">Working</string>
+    <string name="category_learning">Learning</string>
+    <string name="category_meeting">Meeting</string>
+    <string name="category_appointment">Appointment</string>
+    <string name="category_shopping">Shopping</string>
 </resources>

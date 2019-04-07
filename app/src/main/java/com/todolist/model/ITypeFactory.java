@@ -6,4 +6,6 @@ public interface ITypeFactory {
 
     int getType(ToDoItem toDoItem);
 
+    int getType(ToDoCategory toDoCategory);
+
 }

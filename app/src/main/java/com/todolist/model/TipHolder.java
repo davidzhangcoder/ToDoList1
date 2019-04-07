@@ -12,8 +12,10 @@ import com.todolist.R;
 import com.todolist.SwipeLayout;
 import com.todolist.TipListAdapter;
 import com.todolist.TipListItemTouchHelperCallback;
+import com.todolist.util.DateUtil;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> implements TipListItemTouchHelperCallback.OnDragVHListener {
 //    private TextView content;
@@ -54,17 +56,31 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
     @Override
     public void setUpView(ToDoItem toDoItem, int position , final TipListAdapter tipListAdapter) {
         ((TextView)getView(R.id.tip_content)).setText(toDoItem.getName().toString());
+        ((TextView)getView(R.id.tip_category)).setText(toDoItem.getToDoCategory().getName().toString());
+
+        Calendar currentDate = Calendar.getInstance();
 
         if( toDoItem.getDueDate() != null ) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// HH:mm:ss
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy hh:mm aaa");// HH:mm:ss
             String dateString = simpleDateFormat.format( toDoItem.getDueDate().getTime() );
-            ((TextView)getView(R.id.tip_dueDateAndTime)).setText( dateString );
+            TextView tipDueDateAndTimeTextView = ((TextView)getView(R.id.tip_dueDateAndTime));
+            tipDueDateAndTimeTextView.setText( dateString );
+
+            if( toDoItem.getDueDate() != null && !toDoItem.isDone() ) {
+                if (DateUtil.before(toDoItem.getDueDate(), currentDate)) {
+                    int overDueColor = tipDueDateAndTimeTextView.getContext().getResources().getColor(R.color.overDueColor);
+                    tipDueDateAndTimeTextView.setTextColor( overDueColor );
+                } else if (DateUtil.sameDay(toDoItem.getDueDate(), currentDate)) {
+                    int colorPrimaryColor = tipDueDateAndTimeTextView.getContext().getResources().getColor(R.color.colorPrimary);
+                    tipDueDateAndTimeTextView.setTextColor( colorPrimaryColor );
+                }
+            }
         }
 
         getView(R.id.tipCardView).setOnClickListener( tipListAdapter.getClickListener(position) );
 //        getView(R.id.tip_content).setOnClickListener(tipListAdapter.getClickListener(position));
 
-        ((CheckBox)getView(R.id.tip_checkbox)).setChecked(false);
+        ((CheckBox)getView(R.id.tip_checkbox)).setChecked( toDoItem.isDone() );
 
         getView(R.id.tip_checkbox).setOnClickListener(new View.OnClickListener() {
             @Override

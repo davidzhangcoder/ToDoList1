@@ -21,4 +21,7 @@
 
     <color name="remindNumColor">#c5645f</color>
 
+    <color name="overDueTitleColor">#df0004</color>
+    <color name="overDueColor">#df0004</color>
+
 </resources>

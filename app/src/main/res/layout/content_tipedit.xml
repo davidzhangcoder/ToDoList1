@@ -200,6 +200,48 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/categoryContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        >
+
+        <ImageView
+            android:id="@+id/categoryImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:src="@drawable/menu_down"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/categoryText"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelText="Category"
+            app:met_floatingLabelAlwaysShown="true"
+            app:met_floatingLabelTextSize="17sp"
+            app:met_floatingLabelTextColor="@color/colorPrimary"
+            app:met_primaryColor="@color/colorPrimary"
+            app:met_hideUnderline="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/categoryImage"
+            android:layout_gravity="center_vertical"
+            android:hint=""
+            android:focusable="false"
+            android:inputType="text"
+            />
+
+    </RelativeLayout>
+
     <!--<LinearLayout-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->

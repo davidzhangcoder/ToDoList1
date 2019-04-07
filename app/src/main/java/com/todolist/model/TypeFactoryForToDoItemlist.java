@@ -22,4 +22,13 @@ public class TypeFactoryForToDoItemlist implements ITypeFactory {
     public int getType(ToDoItem toDoItem) {
         return R.layout.item_tiplist;
     }
+
+    @Override
+    public int getType(ToDoCategory toDoCategory) {
+        if( toDoCategory.getWorkflow().equals( ToDoCategory.WORKFLOW.LIST ) )
+            return R.layout.item_category;
+        else
+            return R.layout.item_category_for_edit;
+    }
+
 }

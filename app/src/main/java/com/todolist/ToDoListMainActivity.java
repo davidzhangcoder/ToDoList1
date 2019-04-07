@@ -13,6 +13,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
 
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
 import com.todolist.event.BusFactory;
@@ -25,7 +27,11 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class ToDoListMainActivity extends AppCompatActivity implements ToDoFragment.OnFragmentInteractionListener , DoneFragment.OnFragmentInteractionListener
+public class ToDoListMainActivity extends AppCompatActivity
+        implements
+        ToDoFragment.OnFragmentInteractionListener ,
+        CategoryFragment.OnFragmentInteractionListener ,
+        DoneFragment.OnFragmentInteractionListener
 {
     protected Activity context;
 //    private Unbinder unbinder;
@@ -38,6 +44,8 @@ public class ToDoListMainActivity extends AppCompatActivity implements ToDoFragm
 
 //    @BindView(R.id.viewPager)
     ViewPager viewPager;
+
+    Button categoryButton;
 
     List<Fragment> fragmentList = new ArrayList<>();
     String[] titles = {"ToDo", "Done"};
@@ -56,9 +64,22 @@ public class ToDoListMainActivity extends AppCompatActivity implements ToDoFragm
         toolbar = findViewById(R.id.toolbar);
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
+        categoryButton = findViewById(R.id.categoryButton);
 
         initData(savedInstanceState);
         initService();
+        initCategoryFragment();
+    }
+
+    private void initCategoryFragment()
+    {
+        categoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CategoryFragment categoryFragment = CategoryFragment.newInstance();
+                categoryFragment.show(getSupportFragmentManager(), null);
+            }
+        });
     }
 
     private void initService()
@@ -105,12 +126,6 @@ public class ToDoListMainActivity extends AppCompatActivity implements ToDoFragm
         return R.layout.activity_to_do_list_main;
     }
 
-    //implemented for DoneFragment
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
     //implemented for ToDoFragment
     @Override
     public void refresh() {
@@ -120,6 +135,12 @@ public class ToDoListMainActivity extends AppCompatActivity implements ToDoFragm
         adapter.updateData( fragmentList );
     }
 
+    public void refresh( long categoryID ) {
+        fragmentList.clear();
+        fragmentList.add(ToDoFragment.newInstance( categoryID ));
+        fragmentList.add(DoneFragment.newInstance());
+        adapter.updateData( fragmentList );
+    }
 
     @Override
     protected void onStart() {

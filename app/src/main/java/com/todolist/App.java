@@ -10,10 +10,13 @@ import android.os.SystemClock;
 
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
 import com.todolist.context.ContextHolder;
+import com.todolist.model.ToDoCategory;
 import com.todolist.service.ToDoListAlarmService;
 import com.zhy.http.okhttp.OkHttpUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -85,4 +88,5 @@ public class App extends Application {
     public static AlarmManager getAlarmManager() {
         return alarmManager;
     }
+
 }

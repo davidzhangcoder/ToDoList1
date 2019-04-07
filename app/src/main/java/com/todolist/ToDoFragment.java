@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.todolist.db.ToDoItemDao;
 import com.todolist.model.IToDoItem;
+import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 import com.todolist.util.ToDoItemUtil;
 
@@ -35,6 +36,8 @@ public class ToDoFragment extends Fragment {
 
     private TipListAdapter tipListAdapter;
 
+    private long categoryFilterID = ToDoCategory.CATEGORY_ALL_ID;
+
     public ToDoFragment() {
     }
 
@@ -45,10 +48,20 @@ public class ToDoFragment extends Fragment {
         return fragment;
     }
 
+    public static ToDoFragment newInstance( long categoryID ) {
+        ToDoFragment fragment = new ToDoFragment();
+        Bundle args = new Bundle();
+        args.putLong(ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID , categoryID);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            if( getArguments().getLong( ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID , Integer.MIN_VALUE ) != Integer.MIN_VALUE )
+                categoryFilterID = getArguments().getLong( ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID );
         }
 
         db = new ToDoItemDao(this.getContext());
@@ -81,7 +94,7 @@ public class ToDoFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(true);
 
-        toDoItemList.addAll( ToDoItemUtil.getToDoItemGroupByDueTime( ToDoItem.getToDoItems() ) );
+        toDoItemList.addAll( getDisplayToDoItemList( categoryFilterID ) );
 
 //        //Test
 //        if( toDoItemList == null || toDoItemList.size() ==0 ) {
@@ -96,6 +109,21 @@ public class ToDoFragment extends Fragment {
         ItemTouchHelper.Callback callback = new TipListItemTouchHelperCallback();
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    private List<IToDoItem> getDisplayToDoItemList( long categoryFilterID ) {
+        List<IToDoItem> toDoItemList = new ArrayList<IToDoItem>();
+
+        if( categoryFilterID == ToDoCategory.CATEGORY_ALL_ID )
+            toDoItemList.addAll( ToDoItemUtil.getToDoItemGroupByDueTime( ToDoItem.getToDoItems() ) );
+        else if( categoryFilterID != ToDoCategory.CATEGORY_ADD_NEW_ID )
+        {
+            String selection = ToDoItem.COLUMN_DONE_INDICATOR + "<=? and " + ToDoItem.COLUMN_CATEGORY + " == ?" ;
+            String[] parameter = new String[]{ "0" , categoryFilterID+"" };
+            toDoItemList.addAll( ToDoItemUtil.getToDoItemGroupByDueTime( ToDoItem.getToDoItems( selection , parameter ) ) );
+        }
+
+        return toDoItemList;
     }
 
     private TipListAdapter.ToDoItemAction getDoneAction()
@@ -148,7 +176,7 @@ public class ToDoFragment extends Fragment {
 //        }
 //    }
 
-    @Override
+     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -169,10 +197,12 @@ public class ToDoFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        toDoItemList.clear();
-        toDoItemList.addAll( ToDoItemUtil.getToDoItemGroupByDueTime( ToDoItem.getToDoItems() ) );
+        if( categoryFilterID != ToDoCategory.CATEGORY_ADD_NEW_ID ) {
+            toDoItemList.clear();
+            toDoItemList.addAll(getDisplayToDoItemList(categoryFilterID));
 
-        tipListAdapter.notifyData( toDoItemList );
+            tipListAdapter.notifyData(toDoItemList);
+        }
     }
 
     public interface OnFragmentInteractionListener {

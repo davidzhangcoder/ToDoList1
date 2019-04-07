@@ -23,6 +23,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
     public static final String COLUMN_REMARK = "remark";
     public static final String COLUMN_DONE_INDICATOR = "done_indicator";
     public static final String COLUMN_RECURRENCE_PERIOD = "recurrence_period";
+    public static final String COLUMN_CATEGORY = "category_id";
 
     // Create table SQL query
     public static final String CREATE_TABLE =
@@ -34,9 +35,10 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
                     + COLUMN_CHILD_TASK + " TEXT , "
                     + COLUMN_REMARK + " TEXT , "
                     + COLUMN_RECURRENCE_PERIOD + " INTEGER , "
-                    + COLUMN_DONE_INDICATOR + " BOOLEAN "
+                    + COLUMN_DONE_INDICATOR + " BOOLEAN , "
+                    + COLUMN_CATEGORY + " INTEGER "
+                    + " FOREIGN KEY( " + COLUMN_CATEGORY + ") REFERENCES " + ToDoCategory.TABLE_NAME + " ( " + ToDoCategory.COLUMN_ID + " ) "
                     + ")";
-
 
     private String name;
 
@@ -47,9 +49,53 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
     private String remark;
     private boolean isDone;
     private int recurrencePeriod;
+    private ToDoCategory toDoCategory;
 
     private Calendar dueDate;
     private Calendar remindDate;
+
+    public static List<ToDoItem> getToDoItems( String selection , String[] parameters )
+    {
+        List<ToDoItem> toDoItemList = new ArrayList<ToDoItem>();
+        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
+
+        List<Map<String, String>> resultList = db.getListData( TABLE_NAME , selection , parameters , COLUMN_DUE_TIMESTAMP + " ASC " );
+
+        for(Iterator<Map<String, String>> it = resultList.iterator(); it.hasNext() ; ) {
+            Map<String, String> result = it.next();
+            ToDoItem toDoItem = new ToDoItem();
+            toDoItem.setId(Long.parseLong(result.get(COLUMN_ID)));
+            toDoItem.setName(result.get(COLUMN_NAME));
+            if( result.get(COLUMN_DUE_TIMESTAMP) != null && !result.get(COLUMN_DUE_TIMESTAMP).trim().equalsIgnoreCase("") ) {
+                toDoItem.setDueTimestamp(Long.parseLong(result.get(COLUMN_DUE_TIMESTAMP)));
+                Calendar date = Calendar.getInstance();
+                date.setTimeInMillis(toDoItem.getDueTimestamp());
+                toDoItem.setDueDate( date );
+            }
+            if( result.get(COLUMN_REMIND_TIMESTAMP) != null && !result.get(COLUMN_REMIND_TIMESTAMP).trim().equalsIgnoreCase("") ) {
+                toDoItem.setRemindTimestamp(Long.parseLong(result.get(COLUMN_REMIND_TIMESTAMP)));
+                Calendar date = Calendar.getInstance();
+                date.setTimeInMillis(toDoItem.getRemindTimestamp());
+                toDoItem.setRemindDate( date );
+            }
+            if( result.get(COLUMN_CHILD_TASK) != null && !result.get(COLUMN_CHILD_TASK).trim().equalsIgnoreCase("") )
+                toDoItem.setChildTask( result.get(COLUMN_CHILD_TASK) );
+            if( result.get(COLUMN_REMARK) != null && !result.get(COLUMN_REMARK).trim().equalsIgnoreCase("") )
+                toDoItem.setRemark( result.get(COLUMN_REMARK) );
+            if( result.get(COLUMN_RECURRENCE_PERIOD) != null && !result.get(COLUMN_RECURRENCE_PERIOD).trim().equalsIgnoreCase("") )
+                toDoItem.setRecurrencePeriod(Integer.parseInt(result.get(COLUMN_RECURRENCE_PERIOD)));
+            if( result.get(COLUMN_CATEGORY) != null && !result.get(COLUMN_CATEGORY).trim().equalsIgnoreCase("") ) {
+                toDoItem.setToDoCategory(ToDoCategory.getToDoCategory(Long.parseLong( result.get(COLUMN_CATEGORY) )));
+            }
+            if( result.get(COLUMN_DONE_INDICATOR) != null && !result.get(COLUMN_DONE_INDICATOR).trim().equalsIgnoreCase("") ) {
+                toDoItem.setDone(Boolean.getBoolean( result.get(COLUMN_DONE_INDICATOR) ));
+            }
+
+            toDoItemList.add( toDoItem );
+        }
+
+        return toDoItemList;
+    }
 
     public static ToDoItem getToDoItem(long id )
     {
@@ -78,6 +124,12 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
             toDoItem.setRemark( result.get(COLUMN_REMARK) );
         if( result.get(COLUMN_RECURRENCE_PERIOD) != null && !result.get(COLUMN_RECURRENCE_PERIOD).trim().equalsIgnoreCase("") )
             toDoItem.setRecurrencePeriod(Integer.parseInt(result.get(COLUMN_RECURRENCE_PERIOD)));
+        if( result.get(COLUMN_CATEGORY) != null && !result.get(COLUMN_CATEGORY).trim().equalsIgnoreCase("") ) {
+            toDoItem.setToDoCategory(ToDoCategory.getToDoCategory(Long.parseLong( result.get(COLUMN_CATEGORY) )));
+        }
+        if( result.get(COLUMN_DONE_INDICATOR) != null && !result.get(COLUMN_DONE_INDICATOR).trim().equalsIgnoreCase("") ) {
+            toDoItem.setDone(Boolean.getBoolean( result.get(COLUMN_DONE_INDICATOR) ));
+        }
 
         return toDoItem;
     }
@@ -112,6 +164,12 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
                 toDoItem.setRemark( result.get(COLUMN_REMARK) );
             if( result.get(COLUMN_RECURRENCE_PERIOD) != null && !result.get(COLUMN_RECURRENCE_PERIOD).trim().equalsIgnoreCase("") )
                 toDoItem.setRecurrencePeriod(Integer.parseInt(result.get(COLUMN_RECURRENCE_PERIOD)));
+            if( result.get(COLUMN_CATEGORY) != null && !result.get(COLUMN_CATEGORY).trim().equalsIgnoreCase("") ) {
+                toDoItem.setToDoCategory(ToDoCategory.getToDoCategory(Long.parseLong( result.get(COLUMN_CATEGORY) )));
+            }
+            if( result.get(COLUMN_DONE_INDICATOR) != null && !result.get(COLUMN_DONE_INDICATOR).trim().equalsIgnoreCase("") ) {
+                toDoItem.setDone(Boolean.getBoolean( result.get(COLUMN_DONE_INDICATOR) ));
+            }
 
             toDoItemList.add( toDoItem );
         }
@@ -124,15 +182,19 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
         List<ToDoItem> doneItemList = new ArrayList<ToDoItem>();
         ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
 
-        List<Map<String, String>> resultList = db.getListData( TABLE_NAME , ToDoItem.COLUMN_DONE_INDICATOR + ">?" , new String[]{"0"} , null );
+        List<Map<String, String>> resultList = db.getListData( TABLE_NAME , ToDoItem.COLUMN_DONE_INDICATOR + ">?" , new String[]{"0"} , COLUMN_DUE_TIMESTAMP + " ASC " );
 
         for(Iterator<Map<String, String>> it = resultList.iterator(); it.hasNext() ; ) {
             Map<String, String> result = it.next();
             ToDoItem toDoItem = new ToDoItem();
             toDoItem.setId(Long.parseLong(result.get(COLUMN_ID)));
             toDoItem.setName(result.get(COLUMN_NAME));
-            if( result.get(COLUMN_DUE_TIMESTAMP) != null && !result.get(COLUMN_DUE_TIMESTAMP).trim().equalsIgnoreCase("") )
-                toDoItem.setDueTimestamp( Long.parseLong(result.get(COLUMN_DUE_TIMESTAMP)) );
+            if( result.get(COLUMN_DUE_TIMESTAMP) != null && !result.get(COLUMN_DUE_TIMESTAMP).trim().equalsIgnoreCase("") ) {
+                toDoItem.setDueTimestamp(Long.parseLong(result.get(COLUMN_DUE_TIMESTAMP)));
+                Calendar date = Calendar.getInstance();
+                date.setTimeInMillis(toDoItem.getDueTimestamp());
+                toDoItem.setDueDate( date );
+            }
             if( result.get(COLUMN_REMIND_TIMESTAMP) != null && !result.get(COLUMN_REMIND_TIMESTAMP).trim().equalsIgnoreCase("") )
                 toDoItem.setRemindTimestamp( Long.parseLong(result.get(COLUMN_REMIND_TIMESTAMP)) );
             if( result.get(COLUMN_CHILD_TASK) != null && !result.get(COLUMN_CHILD_TASK).trim().equalsIgnoreCase("") )
@@ -141,6 +203,12 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
                 toDoItem.setRemark( result.get(COLUMN_REMARK) );
             if( result.get(COLUMN_RECURRENCE_PERIOD) != null && !result.get(COLUMN_RECURRENCE_PERIOD).trim().equalsIgnoreCase("") )
                 toDoItem.setRecurrencePeriod(Integer.parseInt(result.get(COLUMN_RECURRENCE_PERIOD)));
+            if( result.get(COLUMN_CATEGORY) != null && !result.get(COLUMN_CATEGORY).trim().equalsIgnoreCase("") ) {
+                toDoItem.setToDoCategory(ToDoCategory.getToDoCategory(Long.parseLong( result.get(COLUMN_CATEGORY) )));
+            }
+            if( result.get(COLUMN_DONE_INDICATOR) != null && !result.get(COLUMN_DONE_INDICATOR).trim().equalsIgnoreCase("") ) {
+                toDoItem.setDone( Boolean.valueOf( result.get(COLUMN_DONE_INDICATOR).equalsIgnoreCase("1")?"true":"false" ) );
+        }
 
             doneItemList.add( toDoItem );
         }
@@ -231,5 +299,13 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
 
     public void setRecurrencePeriod(int recurrencePeriod) {
         this.recurrencePeriod = recurrencePeriod;
+    }
+
+    public ToDoCategory getToDoCategory() {
+        return toDoCategory;
+    }
+
+    public void setToDoCategory(ToDoCategory toDoCategory) {
+        this.toDoCategory = toDoCategory;
     }
 }

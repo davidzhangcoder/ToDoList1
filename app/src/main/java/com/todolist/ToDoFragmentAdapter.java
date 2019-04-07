@@ -67,7 +67,6 @@ public class ToDoFragmentAdapter extends FragmentPagerAdapter {
     public void updateData(List<Fragment> fragmentList) {
         ArrayList<Fragment> fragments = new ArrayList<>();
         for ( Fragment fragment : fragmentList ) {
-//            Log.e("FPagerAdapter1", dataList.get(i).toString());
             fragments.add( fragment );
         }
         setFragments(fragments);

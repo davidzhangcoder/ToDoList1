@@ -2,11 +2,13 @@ package com.todolist;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.maltaisn.recurpicker.Recurrence;
 import com.maltaisn.recurpicker.RecurrenceFormat;
@@ -25,7 +28,9 @@ import com.maltaisn.recurpicker.RecurrencePickerDialog;
 import com.maltaisn.recurpicker.RecurrencePickerView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.todolist.db.ToDoItemDao;
+import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
+import com.todolist.ui.dialog.CategorySelectionDialog;
 import com.todolist.util.KnifeKit;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -33,13 +38,18 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 
 /**
  * Created by santa on 16/7/16.
  */
-public class EditToDoItemActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener , TimePickerDialog.OnTimeSetListener , RecurrencePickerDialog.RecurrenceSelectedCallback
+public class EditToDoItemActivity extends AppCompatActivity
+        implements DatePickerDialog.OnDateSetListener ,
+        TimePickerDialog.OnTimeSetListener ,
+        RecurrencePickerDialog.RecurrenceSelectedCallback ,
+        CategorySelectionDialog.CategorySelectedCallback
 {
 
     public static String EDITTODOITEMACTIVITY_TODOITEM = "EDITTODOITEMACTIVITY_TODOITEM";
@@ -60,17 +70,21 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     private MaterialEditText materialEditTextDueTime;
     private MaterialEditText materialEditTextToDoItemName;
     private MaterialEditText repeat;
+    private MaterialEditText category;
     private View reback;
 
     private Recurrence selectedRecurrence;
+    private ToDoCategory selectedToDoCategory;
 
     private RelativeLayout dueTimeContainer;
     private RelativeLayout repeatContainer;
+    private RelativeLayout categoryContainer;
 
     private ImageView imageView;
     private ImageView dueDateImage;
     private ImageView dueTimeImage;
     private ImageView repeatImage;
+    private ImageView categoryImage;
 
     private ToDoItem toDoItem;
     private ToDoItemDao db;
@@ -90,13 +104,18 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
         materialEditTextDueDate = findViewById(R.id.dueDate);
         materialEditTextDueTime = findViewById(R.id.dueTime);
         materialEditTextToDoItemName = findViewById(R.id.toDoItemName);
+
         dueTimeContainer = findViewById(R.id.dueTimeContainer);
         repeatContainer = findViewById(R.id.repeatContainer);
+        categoryContainer = findViewById(R.id.categoryContainer);
+
         repeat = findViewById(R.id.repeatText);
+        category = findViewById(R.id.categoryText);
         imageView = findViewById(R.id.edit_confirmation);
         dueDateImage = findViewById(R.id.dueDateImage);
         dueTimeImage = findViewById(R.id.dueTimeImage);
         repeatImage = findViewById(R.id.repeatImage);
+        categoryImage = findViewById(R.id.categoryImage);
 
         Intent i = getIntent();
         toDoItem = (ToDoItem)i.getSerializableExtra( EDITTODOITEMACTIVITY_TODOITEM );
@@ -111,10 +130,13 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
             selectedDate = startDate;
             selectedRecurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
             toDoItem.setRecurrencePeriod( Recurrence.NONE );
+            toDoItem.setToDoCategory( ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID ) );
+            selectedToDoCategory = ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID );
         }
         else {
             selectedDate = toDoItem.getDueDate();
             selectedRecurrence = new Recurrence( toDoItem.getDueDate().getTimeInMillis() , toDoItem.getRecurrencePeriod() );
+            selectedToDoCategory = toDoItem.getToDoCategory();
         }
 
         reback = findViewById(R.id.edit_reback);
@@ -152,6 +174,7 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
                 values.put(ToDoItem.COLUMN_DONE_INDICATOR, toDoItem.isDone());
                 values.put(ToDoItem.COLUMN_DUE_TIMESTAMP, toDoItem.getDueTimestamp());
                 values.put(ToDoItem.COLUMN_RECURRENCE_PERIOD, toDoItem.getRecurrencePeriod());
+                values.put(ToDoItem.COLUMN_CATEGORY, toDoItem.getToDoCategory().getId() );
 
                 if( toDoItem.getId() == 0 ) {
                     long id = db.addContent(ToDoItem.TABLE_NAME, values);
@@ -269,7 +292,7 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
                     // Set the settings
                     pickerDialog
                             .setEnabledModes(true , false)
-                            .setShowHeaderInOptionList(true)
+                            .setShowHeaderInOptionList(false)
                             .setShowDoneButtonInOptionList(true)
                             .setShowCancelButton(true)
                             .setRecurrence(selectedRecurrence, startDate.getTimeInMillis());
@@ -289,12 +312,37 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
                 repeatContainer.setVisibility( View.VISIBLE );
             }
         }
+
+        if( category != null )
+        {
+            category.setAccentTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            category.setFocusFraction(1.0f);
+            categoryImage.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
+
+            category.setOnClickListener( new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v) {
+
+                    CategorySelectionDialog categorySelectionDialog = new CategorySelectionDialog();
+                    categorySelectionDialog.show(getSupportFragmentManager(), "categoryDialog");
+
+                }
+            });
+
+            category.setText( selectedToDoCategory.getName() );
+
+            if( toDoItem.getId() > 0 ) {
+                categoryContainer.setVisibility( View.VISIBLE );
+            }
+        }
     }
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         dueTimeContainer.setVisibility( View.VISIBLE );
         repeatContainer.setVisibility( View.VISIBLE );
+        categoryContainer.setVisibility( View.VISIBLE );
         resetFocusFraction();
 
         Calendar calendar = Calendar.getInstance();
@@ -341,6 +389,7 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
         materialEditTextDueTime.setFocusFraction(1.0f);
         materialEditTextDueDate.setFocusFraction(1.0f);
         repeat.setFocusFraction(1.0f);
+        category.setFocusFraction(1.0f);
     }
 
     private String getDateString( Calendar calendar )
@@ -371,5 +420,15 @@ public class EditToDoItemActivity extends AppCompatActivity implements DatePicke
     @Override
     public void onRecurrencePickerCancelled(Recurrence r) {
 
+    }
+
+    @Override
+    public void onCategorySelected(ToDoCategory toDoCategory) {
+        resetFocusFraction();
+
+        selectedToDoCategory = toDoCategory;
+        category.setText( toDoCategory.getName() );
+
+        toDoItem.setToDoCategory( toDoCategory );
     }
 }

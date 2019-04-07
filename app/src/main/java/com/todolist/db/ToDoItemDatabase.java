@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.todolist.App;
+import com.todolist.R;
+import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 
 public class ToDoItemDatabase extends SQLiteOpenHelper {
@@ -11,7 +14,7 @@ public class ToDoItemDatabase extends SQLiteOpenHelper {
     private final static String DB_NAME = "todo_list_db";
 
 
-    public final static int DB_VERSION = 1;
+    public final static int DB_VERSION = 3;
 
 
 
@@ -32,16 +35,78 @@ public class ToDoItemDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // create notes table
+
+        //Version 1
         db.execSQL(ToDoItem.CREATE_TABLE);
+
+        //Version 2
+        db.execSQL(ToDoCategory.CREATE_TABLE);
+        initCategory( db );
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
-        // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + ToDoItem.TABLE_NAME);
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//        // Drop older table if existed
+//        db.execSQL("DROP TABLE IF EXISTS " + ToDoItem.TABLE_NAME);
+//
+//        db.execSQL("DROP TABLE IF EXISTS " + ToDoCategory.TABLE_NAME);
+//
+//        // Create tables again
+//        onCreate(db);
 
-        // Create tables again
-        onCreate(db);
+        switch( oldVersion )
+        {
+            case 1:
+                db.execSQL(ToDoCategory.CREATE_TABLE);
+                initCategory( db );
+                break;
+            case 2:
+                String addCategoryIDInToDoITemSQL = "ALTER TABLE " + ToDoItem.TABLE_NAME + " ADD COLUMN " + ToDoItem.COLUMN_CATEGORY + " INTEGER ";
+                db.execSQL( addCategoryIDInToDoITemSQL );
+                break;
+            default: {
+                try {
+                    db.beginTransaction();
+                    // Drop older table if existed
+                    db.execSQL("DROP TABLE IF EXISTS " + ToDoItem.TABLE_NAME);
+
+                    db.execSQL("DROP TABLE IF EXISTS " + ToDoCategory.TABLE_NAME);
+
+                    // Create tables again
+                    onCreate(db);
+                    db.setTransactionSuccessful();
+                }
+                finally
+                {
+                    db.endTransaction();
+                }
+            }
+        }
+    }
+
+    private void initCategory(SQLiteDatabase db)
+    {
+        //Inital category
+//        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+//                + ") Values( null ,'" + App.getContext().getString(R.string.category_all) + "')");
+
+        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+                + ") Values( " + ToDoCategory.CATEGORY_DEFAULT_ID + " ,'" + App.getContext().getString(R.string.category_default) + "')");
+
+        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+                + ") Values( null ,'" + App.getContext().getString(R.string.category_working) + "')");
+
+        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+                + ") Values( null ,'" + App.getContext().getString(R.string.category_learning) + "')");
+
+        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+                + ") Values( null ,'" + App.getContext().getString(R.string.category_meeting) + "')");
+
+        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+                + ") Values( null ,'" + App.getContext().getString(R.string.category_appointment) + "')");
+
+        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+                + ") Values( null ,'" + App.getContext().getString(R.string.category_shopping) + "')");
     }
 
 }
