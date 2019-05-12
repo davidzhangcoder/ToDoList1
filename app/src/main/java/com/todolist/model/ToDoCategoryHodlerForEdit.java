@@ -1,5 +1,6 @@
 package com.todolist.model;
 
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,6 +18,11 @@ public class ToDoCategoryHodlerForEdit extends BaseViewHolder<IToDoCategory , Ca
     public void setUpView(IToDoCategory toDoCategory, int position, CategoryListAdapter adapter) {
         ((TextView)getView(R.id.categoryName)).setText(toDoCategory.getName());
 
+        if( toDoCategory instanceof  ToDoCategory && ((ToDoCategory)toDoCategory).isSelected() )
+            ((AppCompatImageView)getView(R.id.categoryImageCheck)).setVisibility( View.VISIBLE );
+        else
+            ((AppCompatImageView)getView(R.id.categoryImageCheck)).setVisibility( View.INVISIBLE );
+
         View.OnClickListener itemOnClickListener = new View.OnClickListener()
         {
             @Override
@@ -25,7 +31,6 @@ public class ToDoCategoryHodlerForEdit extends BaseViewHolder<IToDoCategory , Ca
                 adapter.getItemCallBack().doItemClickCallBack( toDoCategory );
             }
         };
-
         ((RelativeLayout)getView(R.id.categoryContainer)).setOnClickListener( itemOnClickListener );
     }
 }

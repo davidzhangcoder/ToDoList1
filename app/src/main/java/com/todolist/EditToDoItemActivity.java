@@ -431,4 +431,9 @@ public class EditToDoItemActivity extends AppCompatActivity
 
         toDoItem.setToDoCategory( toDoCategory );
     }
+
+    @Override
+    public ToDoCategory getSelectedCategory() {
+        return selectedToDoCategory;
+    }
 }

@@ -38,43 +38,7 @@ public class ToDoCategory implements Serializable , IToDoItemType , IToDoCategor
                     + COLUMN_NAME + " TEXT"
                     + ")";
 
-    public static ToDoCategory getToDoCategory( long id )
-    {
-        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
-
-        Map<String, String> result = db.getRowData( TABLE_NAME , ToDoItem.COLUMN_ID + "=?" , new String[]{String.valueOf(id)}  );
-
-        ToDoCategory toDoCategory = new ToDoCategory();
-        toDoCategory.setId( Long.parseLong(result.get(COLUMN_ID)) );
-        toDoCategory.setName( result.get(COLUMN_NAME) );
-
-        return toDoCategory;
-    }
-
-    public static List<ToDoCategory> getToDoCategorys()
-    {
-        List<ToDoCategory> toDoCategoryList = new ArrayList<ToDoCategory>();
-        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
-
-        List<Map<String, String>> resultList = db.getListData( TABLE_NAME , null , null , COLUMN_ID + " ASC " );
-
-        for(Iterator<Map<String, String>> it = resultList.iterator(); it.hasNext() ; ) {
-            Map<String, String> result = it.next();
-            ToDoCategory toDoCategory = new ToDoCategory();
-            toDoCategory.setId(Long.parseLong(result.get(COLUMN_ID)));
-            toDoCategory.setName(result.get(COLUMN_NAME));
-
-            toDoCategoryList.add( toDoCategory );
-        }
-
-        return toDoCategoryList;
-    }
-
-    @Override
-    public int type(ITypeFactory typeFactory) {
-        return typeFactory.getType( this );
-    }
-
+    private boolean selected = false;
 
     private long id;
 
@@ -111,4 +75,50 @@ public class ToDoCategory implements Serializable , IToDoItemType , IToDoCategor
     public void setWorkflow(WORKFLOW workflow) {
         this.workflow = workflow;
     }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public static ToDoCategory getToDoCategory(long id )
+    {
+        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
+
+        Map<String, String> result = db.getRowData( TABLE_NAME , ToDoItem.COLUMN_ID + "=?" , new String[]{String.valueOf(id)}  );
+
+        ToDoCategory toDoCategory = new ToDoCategory();
+        toDoCategory.setId( Long.parseLong(result.get(COLUMN_ID)) );
+        toDoCategory.setName( result.get(COLUMN_NAME) );
+
+        return toDoCategory;
+    }
+
+    public static List<ToDoCategory> getToDoCategorys()
+    {
+        List<ToDoCategory> toDoCategoryList = new ArrayList<ToDoCategory>();
+        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
+
+        List<Map<String, String>> resultList = db.getListData( TABLE_NAME , null , null , COLUMN_ID + " ASC " );
+
+        for(Iterator<Map<String, String>> it = resultList.iterator(); it.hasNext() ; ) {
+            Map<String, String> result = it.next();
+            ToDoCategory toDoCategory = new ToDoCategory();
+            toDoCategory.setId(Long.parseLong(result.get(COLUMN_ID)));
+            toDoCategory.setName(result.get(COLUMN_NAME));
+
+            toDoCategoryList.add( toDoCategory );
+        }
+
+        return toDoCategoryList;
+    }
+
+    @Override
+    public int type(ITypeFactory typeFactory) {
+        return typeFactory.getType( this );
+    }
+
 }
