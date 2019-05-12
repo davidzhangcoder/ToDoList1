@@ -30,14 +30,17 @@ public class CategoryFragment extends BottomSheetDialogFragment
 
     private OnFragmentInteractionListener mListener;
 
+    private ToDoCategory selectedToDoCategory;
+
     public CategoryFragment() {
 
     }
 
-    public static CategoryFragment newInstance()
+    public static CategoryFragment newInstance(ToDoCategory toDoCategory)
     {
         CategoryFragment fragment = new CategoryFragment();
         Bundle args = new Bundle();
+        args.putSerializable("selectedToDoCategory",toDoCategory);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,6 +49,7 @@ public class CategoryFragment extends BottomSheetDialogFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            selectedToDoCategory = (ToDoCategory)getArguments().getSerializable("selectedToDoCategory");
         }
 
         db = new ToDoItemDao(this.getContext());
@@ -91,13 +95,15 @@ public class CategoryFragment extends BottomSheetDialogFragment
         categoryList.add( toDoCategoryAddNew );
 
 
-        CategoryListAdapter categoryListAdapter = new CategoryListAdapter( this.getContext(), categoryList );
+        CategoryListAdapter categoryListAdapter = new CategoryListAdapter( this.getContext(), categoryList , selectedToDoCategory );
         CategoryListAdapter.ItemCallBack itemCallBack = new CategoryListAdapter.ItemCallBack() {
             @Override
             public void doItemClickCallBack(IToDoCategory iToDoCategory) {
                 CategoryFragment.this.dismiss();
-                if( ((ToDoCategory)iToDoCategory).getId() != ToDoCategory.CATEGORY_ADD_NEW_ID )
-                    mListener.refresh( ((ToDoCategory)iToDoCategory).getId() );
+                if( ((ToDoCategory)iToDoCategory).getId() != ToDoCategory.CATEGORY_ADD_NEW_ID ) {
+                    mListener.onCategorySelected( (ToDoCategory) iToDoCategory );
+                    mListener.refresh(((ToDoCategory) iToDoCategory).getId());
+                }
                 else
                 {
                     AddCategoryDialog addCategoryDialog = new AddCategoryDialog();
@@ -132,5 +138,7 @@ public class CategoryFragment extends BottomSheetDialogFragment
 //        void onFragmentInteraction(Uri uri);
 
         void refresh( long categoryID );
+
+        void onCategorySelected( ToDoCategory toDoCategory );
     }
 }

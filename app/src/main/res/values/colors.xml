@@ -6,14 +6,15 @@
 
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303f9f</color>
-    <color name="colorAccent">#ff4081</color>
+    <color name="colorAccent">#3d5afe</color>
+    <!--#ff4081-->
 
     <color name="text_primary">#000000</color>
     <color name="text_secondary">#87000000</color>
     <color name="text_disabled">#38000000</color>
 
     <color name="mainGreen">#ff678764</color>
-    <color name="white">#ffededed</color>
+    <color name="white">#ffffffff</color>
     <color name="black">#ff333333</color>
 
     <color name="midGrary">#ff666666</color>
@@ -23,5 +24,7 @@
 
     <color name="overDueTitleColor">#df0004</color>
     <color name="overDueColor">#df0004</color>
+
+    <color name="tabSelected">#ff4081</color>
 
 </resources>

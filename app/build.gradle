@@ -42,4 +42,5 @@ dependencies {
     implementation rootProject.ext.dependencies["annotations"]
     implementation rootProject.ext.dependencies["materialdatetimepicker"]
     implementation rootProject.ext.dependencies["recurpicker"]
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }

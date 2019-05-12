@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
 
         <!--<item name="colorPrimary">#3f51b5</item>-->
         <!--<item name="colorPrimaryDark">#303f9f</item>-->
@@ -13,7 +13,10 @@
 
         <item name="recurrencePickerStyle">@style/RecurrencePickerStyleCustom</item>
 
+        <item name="toDoListOptionItemSelectedColor">@color/white</item>
+
         <!--<item name="selectableItemBackground">@drawable/selectableitembackgroundstyle</item>-->
+
     </style>
 
     <!-- Recurrence picker theme -->
@@ -33,6 +36,29 @@
 
         <!--<item name="android:textStyle">bold</item>-->
     </style>
+
+
+    <style name="ToDoListOptionCheckStyle" >
+        <!--<item name="toDoListOptionItemSelectedColor">@color/colorPrimary</item>-->
+        <item name="android:src">@drawable/todolist_ic_check</item>
+        <item name="tint">?attr/toDoListOptionItemSelectedColor</item>
+    </style>
+
+    <style name="ToDoListOptionItemTextStyle">
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:textAppearance">?attr/rpLabelTextAppearance</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="ToDoListOptionCheckStyleForEdit" parent="ToDoListOptionCheckStyle">
+        <item name="tint">@color/colorPrimary</item>
+    </style>
+
+    <style name="EditActivityCategoryDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
 
 
 </resources>

@@ -2,6 +2,7 @@ package com.todolist.model;
 
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.todolist.CategoryListAdapter;
@@ -25,6 +26,6 @@ public class ToDoCategoryHodlerForEdit extends BaseViewHolder<IToDoCategory , Ca
             }
         };
 
-        ((LinearLayout)getView(R.id.categoryContainer)).setOnClickListener( itemOnClickListener );
+        ((RelativeLayout)getView(R.id.categoryContainer)).setOnClickListener( itemOnClickListener );
     }
 }

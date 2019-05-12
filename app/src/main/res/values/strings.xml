@@ -17,4 +17,6 @@
     <string name="category_meeting">Meeting</string>
     <string name="category_appointment">Appointment</string>
     <string name="category_shopping">Shopping</string>
+    <string name="tab_title_todo">To Do</string>
+    <string name="tab_title_done">Done</string>
 </resources>

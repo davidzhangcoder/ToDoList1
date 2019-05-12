@@ -36,7 +36,6 @@ public class CategorySelectionDialog extends AppCompatDialogFragment
         AlertDialog alertDialog = builder
                 .setView(view)
                 .setCancelable(true)
-                .setMessage("Message")
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which)
@@ -45,7 +44,7 @@ public class CategorySelectionDialog extends AppCompatDialogFragment
 //
 //                        recyclerView.getAdapter();
 
-                        if( CategorySelectionDialog.this.getCallback() != null )
+                        if( CategorySelectionDialog.this.getCallback() != null && ((CategoryListAdapter)recyclerView.getAdapter()).getSelectedToDoCategory() != null )
                             CategorySelectionDialog.this.getCallback().onCategorySelected( (ToDoCategory)((CategoryListAdapter)recyclerView.getAdapter()).getSelectedToDoCategory() );
                     }
                 })
@@ -66,7 +65,7 @@ public class CategorySelectionDialog extends AppCompatDialogFragment
         categoryList.addAll( ToDoCategory.getToDoCategorys() );
         for( IToDoCategory toDoCategory : categoryList )
             ((ToDoCategory)toDoCategory).setWorkflow( ToDoCategory.WORKFLOW.EDIT );
-        CategoryListAdapter categoryListAdapter = new CategoryListAdapter( this.getContext(), categoryList );
+        CategoryListAdapter categoryListAdapter = new CategoryListAdapter( this.getContext(), categoryList , null );
         CategoryListAdapter.ItemCallBack itemCallBack = new CategoryListAdapter.ItemCallBack() {
             @Override
             public void doItemClickCallBack(IToDoCategory iToDoCategory) {

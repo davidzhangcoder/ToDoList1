@@ -1,5 +1,6 @@
 package com.todolist;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -52,11 +53,13 @@ public class ToDoFragmentAdapter extends FragmentPagerAdapter {
 
     private ArrayList<Fragment> mFragmentList;
     private FragmentManager mFragmentManager;
+    private String[] titles;
 
-    public ToDoFragmentAdapter(FragmentManager fm, List<Fragment> fragmentList) {
+    public ToDoFragmentAdapter(FragmentManager fm, List<Fragment> fragmentList, String[] titles) {
         super(fm);
         this.mFragmentManager = fm;
         mFragmentList = new ArrayList<>();
+        this.titles = titles;
         for ( Fragment fragment : fragmentList )
         {
             mFragmentList.add( fragment );
@@ -97,6 +100,12 @@ public class ToDoFragmentAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         return mFragmentList.get(position);
+    }
+
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return (CharSequence)(this.titles != null && this.titles.length > position ? this.titles[position] : super.getPageTitle(position));
     }
 }
 

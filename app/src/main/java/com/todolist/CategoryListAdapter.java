@@ -26,10 +26,11 @@ public class CategoryListAdapter extends RecyclerView.Adapter<BaseViewHolder>
     private IToDoCategory selectedToDoCategory;
 
     private ItemCallBack itemCallBack;
-
-    public CategoryListAdapter(Context mContext, List<IToDoCategory> mData) {
+    
+    public CategoryListAdapter(Context mContext, List<IToDoCategory> mData , ToDoCategory selectedToDoCategory ) {
         this.mContext = mContext;
         this.mData = mData;
+        this.selectedToDoCategory = selectedToDoCategory;
     }
 
     @NonNull

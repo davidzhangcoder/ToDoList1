@@ -35,7 +35,6 @@ public class AddCategoryDialog extends AppCompatDialogFragment
         AlertDialog alertDialog = builder
                 .setView(view)
                 .setCancelable(true)
-                .setMessage("Message")
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which)

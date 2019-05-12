@@ -1,5 +1,6 @@
 package com.todolist.model;
 
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,10 +23,15 @@ public class ToDoCategoryHodler extends BaseViewHolder<IToDoCategory , CategoryL
             @Override
             public void onClick(View v) {
                 adapter.getItemCallBack().doItemClickCallBack( toDoCategory );
+
+                getView(R.id.categoryImageCheck).setVisibility(View.VISIBLE);
             }
         };
 
-        ((LinearLayout)getView(R.id.categoryContainer)).setOnClickListener( itemOnClickListener );
+        if( ((ToDoCategory)adapter.getSelectedToDoCategory()) != null && ((ToDoCategory)adapter.getSelectedToDoCategory()).getId() == ((ToDoCategory)toDoCategory).getId() )
+            getView(R.id.categoryImageCheck).setVisibility(View.VISIBLE);
+
+        ((ConstraintLayout)getView(R.id.categoryContainer)).setOnClickListener( itemOnClickListener );
     }
 
 }

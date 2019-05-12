@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="toDoListOptionItemStyle" format="reference"/>
+    <attr name="toDoListOptionCheckSize" format="dimension"/>
+    <attr name="toDoListOptionItemSelectedColor" format="reference|color" />
+
     <declare-styleable name="PopuTextView">
         <attr name="ptv_textSize" format="dimension"/>
         <attr name="ptv_text" format="string"/>
