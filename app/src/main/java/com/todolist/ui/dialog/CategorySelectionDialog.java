@@ -63,6 +63,7 @@ public class CategorySelectionDialog extends AppCompatDialogFragment
 
         List<IToDoCategory> categoryList = new ArrayList<IToDoCategory>();
         categoryList.addAll( ToDoCategory.getToDoCategorys() );
+
         CategoryListAdapter categoryListAdapter = new CategoryListAdapter( this.getContext(), categoryList , null );
         for( IToDoCategory toDoCategory : categoryList ) {
             if( ((ToDoCategory) toDoCategory).getId() == CategorySelectionDialog.this.getCallback().getSelectedCategory().getId()
