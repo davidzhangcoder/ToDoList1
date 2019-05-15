@@ -1,4 +1,4 @@
-package com.todolist;
+package com.todolist.todomain;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,17 +7,16 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.todolist.db.ToDoItemDao;
+import com.todolist.CategoryListAdapter;
+import com.todolist.R;
+import com.todolist.db.GenericDao;
 import com.todolist.model.IToDoCategory;
 import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
 import com.todolist.ui.dialog.AddCategoryDialog;
-import com.todolist.util.ToDoItemUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class CategoryFragment extends BottomSheetDialogFragment
 {
     private RecyclerView recyclerView;
 
-    private ToDoItemDao db;
+    private GenericDao db;
 
     private OnFragmentInteractionListener mListener;
 
@@ -52,7 +51,7 @@ public class CategoryFragment extends BottomSheetDialogFragment
             selectedToDoCategory = (ToDoCategory)getArguments().getSerializable("selectedToDoCategory");
         }
 
-        db = new ToDoItemDao(this.getContext());
+        db = new GenericDao(this.getContext());
     }
 
     @Override

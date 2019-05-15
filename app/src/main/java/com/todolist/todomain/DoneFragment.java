@@ -1,8 +1,7 @@
-package com.todolist;
+package com.todolist.todomain;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.todolist.db.ToDoItemDao;
+import com.todolist.R;
+import com.todolist.TipListAdapter;
+import com.todolist.db.GenericDao;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.ToDoItem;
 
@@ -29,13 +30,15 @@ import java.util.List;
  */
 public class DoneFragment extends Fragment {
 
+    public static final String NAME = DoneFragment.class.getName();
+
     private RecyclerView recyclerView;
 
     private List<IToDoItem> doneList = new ArrayList<IToDoItem>();
 
     private OnFragmentInteractionListener mListener;
 
-    private ToDoItemDao db;
+    private GenericDao db;
 
     public DoneFragment() {
         // Required empty public constructor
@@ -61,7 +64,7 @@ public class DoneFragment extends Fragment {
         if (getArguments() != null) {
         }
 
-        db = new ToDoItemDao(this.getContext());
+        db = new GenericDao(this.getContext());
     }
 
     @Override

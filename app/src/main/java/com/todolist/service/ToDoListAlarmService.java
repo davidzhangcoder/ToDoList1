@@ -19,8 +19,7 @@ import com.todolist.App;
 import com.todolist.EditToDoItemActivity;
 import com.todolist.R;
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
-import com.todolist.context.ContextHolder;
-import com.todolist.db.ToDoItemDao;
+import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoItem;
 
 import java.text.SimpleDateFormat;
@@ -116,7 +115,7 @@ public class ToDoListAlarmService extends Service{
                 current.add( Calendar.HOUR_OF_DAY  , 1);
                 long to = current.getTimeInMillis();
 
-                ToDoItemDao db = new ToDoItemDao(App.getContext());
+                GenericDao db = new GenericDao(App.getContext());
                 List<Map<String, String>> resultList = db.getListData( ToDoItem.TABLE_NAME , ToDoItem.COLUMN_DUE_TIMESTAMP + " between ? and ? " , new String[]{ String.valueOf(from) , String.valueOf(to) } , ToDoItem.COLUMN_DUE_TIMESTAMP + " ASC " );
 
                 for( Map<String, String> map : resultList )

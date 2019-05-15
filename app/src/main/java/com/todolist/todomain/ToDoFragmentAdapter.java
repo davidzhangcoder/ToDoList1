@@ -1,4 +1,4 @@
-package com.todolist;
+package com.todolist.todomain;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

@@ -1,44 +1,31 @@
 package com.todolist;
 
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.maltaisn.recurpicker.Recurrence;
 import com.maltaisn.recurpicker.RecurrenceFormat;
 import com.maltaisn.recurpicker.RecurrencePickerDialog;
-import com.maltaisn.recurpicker.RecurrencePickerView;
 import com.rengwuxian.materialedittext.MaterialEditText;
-import com.todolist.db.ToDoItemDao;
+import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 import com.todolist.ui.dialog.CategorySelectionDialog;
-import com.todolist.util.KnifeKit;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -87,7 +74,7 @@ public class EditToDoItemActivity extends AppCompatActivity
     private ImageView categoryImage;
 
     private ToDoItem toDoItem;
-    private ToDoItemDao db;
+    private GenericDao db;
 
     private Calendar selectedDate;
 
@@ -141,7 +128,7 @@ public class EditToDoItemActivity extends AppCompatActivity
 
         reback = findViewById(R.id.edit_reback);
 
-        db = new ToDoItemDao(this);
+        db = new GenericDao(this);
 
         Locale locale = getResources().getConfiguration().locale;
         dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);  // Sun Dec 31, 2017

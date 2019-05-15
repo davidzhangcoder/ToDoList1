@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ToDoItemDao implements IDatabaseOperate
+public class GenericDao implements IDatabaseOperate
 {
     private ToDoItemDatabase dbHelper=null;
 
-    public ToDoItemDao(Context context) {
+    public GenericDao(Context context) {
         dbHelper= ToDoItemDatabase.getInstance(context);
     }
 

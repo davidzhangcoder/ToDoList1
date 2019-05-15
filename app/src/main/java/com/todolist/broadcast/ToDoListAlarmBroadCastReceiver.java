@@ -14,17 +14,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.todolist.EditToDoItemActivity;
 import com.todolist.R;
-import com.todolist.ToDoListMainActivity;
 import com.todolist.model.ToDoItem;
 
 import java.io.IOException;
@@ -82,7 +79,7 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
 //        // 无论是否震动、响铃，都有状态栏提示
 //        m_Manager = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
 //        m_Manager.cancel(1023);
-//        m_PendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, ToDoListMainActivity.class), 0);
+//        m_PendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, ToDoMainActivity.class), 0);
 ////        m_Notification = new Notification();
 ////        m_Notification.icon = R.drawable.ic_check_black_18dp;
 ////        m_Notification.tickerText = "随时情感助手在呼唤你……";

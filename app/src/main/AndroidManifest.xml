@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ToDoListMainActivity"
+            android:name=".todomain.ToDoMainActivity"
             android:icon="@mipmap/xdroid_logo_128">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,10 +25,10 @@
         </activity>
 
         <activity android:name=".EditToDoItemActivity"
-            android:parentActivityName=".ToDoListMainActivity">
+            android:parentActivityName=".todomain.ToDoMainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ToDoListMainActivity" />
+                android:value=".todomain.ToDoMainActivity" />
         </activity>
 
 

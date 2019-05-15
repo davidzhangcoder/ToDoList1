@@ -1,9 +1,10 @@
-package com.todolist;
+package com.todolist.todomain;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.todolist.db.ToDoItemDao;
+import com.todolist.EditToDoItemActivity;
+import com.todolist.R;
+import com.todolist.TipListAdapter;
+import com.todolist.TipListItemTouchHelperCallback;
+import com.todolist.db.GenericDao;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
@@ -22,7 +27,12 @@ import com.todolist.util.ToDoItemUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoFragment extends Fragment {
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public class ToDoFragment extends Fragment implements ToDoMainContract.View {
+
+    public static final String NAME = ToDoFragment.class.getName();
+
 
     private RecyclerView recyclerView;
 
@@ -32,11 +42,14 @@ public class ToDoFragment extends Fragment {
 
     private List<IToDoItem> toDoItemList = new ArrayList<IToDoItem>();
 
-    private ToDoItemDao db;
+    private GenericDao db;
 
     private TipListAdapter tipListAdapter;
 
     private long categoryFilterID = ToDoCategory.CATEGORY_ALL_ID;
+
+    private ToDoMainContract.Presenter mPresenter;
+
 
     public ToDoFragment() {
     }
@@ -64,7 +77,7 @@ public class ToDoFragment extends Fragment {
                 categoryFilterID = getArguments().getLong( ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID );
         }
 
-        db = new ToDoItemDao(this.getContext());
+        db = new GenericDao(this.getContext());
     }
 
     @Override
@@ -72,13 +85,6 @@ public class ToDoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_tiplist, container, false)
                 ;
-//        ImageView editPlus = (ImageView) view.findViewById(R.id.edit_plus);
-//        editPlus.setImageDrawable(new PlusDrawable(this.getResources().getColor(R.color.white)));
-
-//        EditText editText = (EditText) view.findViewById(R.id.tip_edit);
-//        editText.setOnEditorActionListener( tipEditOnEditorActionListener );
-//        editText.clearFocus();
-
         recyclerView = view.findViewById(R.id.tip_recycler);
 
         floatingActionButton = view.findViewById(R.id.addToDo);
@@ -95,13 +101,6 @@ public class ToDoFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         toDoItemList.addAll( getDisplayToDoItemList( categoryFilterID ) );
-
-//        //Test
-//        if( toDoItemList == null || toDoItemList.size() ==0 ) {
-//            ToDoItem toDoItem = new ToDoItem();
-//            toDoItem.setName("Test");
-//            toDoItemList.add(toDoItem);
-//        }
 
         tipListAdapter = new TipListAdapter( this.getContext(), toDoItemList );
         tipListAdapter.setDoneAction( getDoneAction() );
@@ -146,35 +145,10 @@ public class ToDoFragment extends Fragment {
     private View.OnClickListener tipEditOnEditorActionListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
-//                //Add item into "To Do" List
-//                String name = textView.getText().toString();
-//                ToDoItem toDoItem = new ToDoItem();
-//                toDoItem.setName( name );
-//                toDoItemList.add( 0 , toDoItem );
-//
-//                ((TipListAdapter)recyclerView.getAdapter()).notifyData( toDoItemList );
-//
-//                ContentValues values = new ContentValues();
-//                values.put(ToDoItem.COLUMN_NAME, name);
-//                values.put(ToDoItem.COLUMN_DONE_INDICATOR, Boolean.FALSE);
-
-
-//                long id = db.addContent( ToDoItem.TABLE_NAME , values );
-//                toDoItem.setId( id );
-
                 Intent intent = new Intent(ToDoFragment.this.getContext(), EditToDoItemActivity.class);
-//                intent.putExtra("content", ((TextView)textView).getText().toString());
-//                intent.putExtra( EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM , toDoItem );
                 ToDoFragment.this.getContext().startActivity(intent);
         }
     };
-
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
 
      @Override
     public void onAttach(Context context) {
@@ -197,6 +171,8 @@ public class ToDoFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        mPresenter.start();
+
         if( categoryFilterID != ToDoCategory.CATEGORY_ADD_NEW_ID ) {
             toDoItemList.clear();
             toDoItemList.addAll(getDisplayToDoItemList(categoryFilterID));
@@ -205,9 +181,22 @@ public class ToDoFragment extends Fragment {
         }
     }
 
+    @Override
+    public void showCategoryFilterDialog() {
+
+    }
+
+    @Override
+    public void showAddCategoryDialog() {
+
+    }
+
+    @Override
+    public void setPresenter(@NonNull ToDoMainContract.Presenter presenter) {
+         this.mPresenter = checkNotNull(presenter);
+    }
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
 
         void refresh();
     }

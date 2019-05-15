@@ -10,20 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-import com.todolist.CategoryListAdapter;
 import com.todolist.R;
-import com.todolist.db.ToDoItemDao;
+import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 
 public class AddCategoryDialog extends AppCompatDialogFragment
 {
 
-    private ToDoItemDao db;
+    private GenericDao db;
 
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        db = new ToDoItemDao(this.getContext());
+        db = new GenericDao(this.getContext());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

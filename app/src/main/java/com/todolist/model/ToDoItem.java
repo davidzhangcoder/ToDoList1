@@ -1,7 +1,7 @@
 package com.todolist.model;
 
 import com.todolist.context.ContextHolder;
-import com.todolist.db.ToDoItemDao;
+import com.todolist.db.GenericDao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
     public static List<ToDoItem> getToDoItems( String selection , String[] parameters )
     {
         List<ToDoItem> toDoItemList = new ArrayList<ToDoItem>();
-        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
+        GenericDao db = new GenericDao(ContextHolder.getContext());
 
         List<Map<String, String>> resultList = db.getListData( TABLE_NAME , selection , parameters , COLUMN_DUE_TIMESTAMP + " ASC " );
 
@@ -99,7 +99,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
 
     public static ToDoItem getToDoItem(long id )
     {
-        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
+        GenericDao db = new GenericDao(ContextHolder.getContext());
 
         Map<String, String> result = db.getRowData( TABLE_NAME , ToDoItem.COLUMN_ID + "=?" , new String[]{String.valueOf(id)}  );
 
@@ -137,7 +137,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
     public static List<ToDoItem> getToDoItems()
     {
         List<ToDoItem> toDoItemList = new ArrayList<ToDoItem>();
-        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
+        GenericDao db = new GenericDao(ContextHolder.getContext());
 
         List<Map<String, String>> resultList = db.getListData( TABLE_NAME , ToDoItem.COLUMN_DONE_INDICATOR + "<=?" , new String[]{"0"} , COLUMN_DUE_TIMESTAMP + " ASC " );
 
@@ -180,7 +180,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
     public static List<ToDoItem> getDoneItems()
     {
         List<ToDoItem> doneItemList = new ArrayList<ToDoItem>();
-        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
+        GenericDao db = new GenericDao(ContextHolder.getContext());
 
         List<Map<String, String>> resultList = db.getListData( TABLE_NAME , ToDoItem.COLUMN_DONE_INDICATOR + ">?" , new String[]{"0"} , COLUMN_DUE_TIMESTAMP + " ASC " );
 

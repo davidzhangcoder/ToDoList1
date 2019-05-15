@@ -1,11 +1,10 @@
 package com.todolist.model;
 
 import com.todolist.context.ContextHolder;
-import com.todolist.db.ToDoItemDao;
+import com.todolist.db.GenericDao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +85,7 @@ public class ToDoCategory implements Serializable , IToDoItemType , IToDoCategor
 
     public static ToDoCategory getToDoCategory(long id )
     {
-        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
+        GenericDao db = new GenericDao(ContextHolder.getContext());
 
         Map<String, String> result = db.getRowData( TABLE_NAME , ToDoItem.COLUMN_ID + "=?" , new String[]{String.valueOf(id)}  );
 
@@ -100,7 +99,7 @@ public class ToDoCategory implements Serializable , IToDoItemType , IToDoCategor
     public static List<ToDoCategory> getToDoCategorys()
     {
         List<ToDoCategory> toDoCategoryList = new ArrayList<ToDoCategory>();
-        ToDoItemDao db = new ToDoItemDao(ContextHolder.getContext());
+        GenericDao db = new GenericDao(ContextHolder.getContext());
 
         List<Map<String, String>> resultList = db.getListData( TABLE_NAME , null , null , COLUMN_ID + " ASC " );
 
