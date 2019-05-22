@@ -7,16 +7,19 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.todolist.EditToDoItemActivity;
+import com.todolist.data.Injection;
+import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
-import com.todolist.TipListAdapter;
+import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.db.GenericDao;
 import com.todolist.model.IToDoItem;
@@ -41,8 +44,6 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
     private OnFragmentInteractionListener mListener;
 
     private List<IToDoItem> toDoItemList = new ArrayList<IToDoItem>();
-
-    private GenericDao db;
 
     private TipListAdapter tipListAdapter;
 
@@ -76,8 +77,6 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
             if( getArguments().getLong( ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID , Integer.MIN_VALUE ) != Integer.MIN_VALUE )
                 categoryFilterID = getArguments().getLong( ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID );
         }
-
-        db = new GenericDao(this.getContext());
     }
 
     @Override
@@ -90,8 +89,11 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
         floatingActionButton = view.findViewById(R.id.addToDo);
         floatingActionButton.setOnClickListener( tipEditOnEditorActionListener );
 
-        initRecyclerView( recyclerView );
+        Toolbar toolbar = (Toolbar)this.getActivity().findViewById(R.id.toolbar);
+        inflater.inflate(R.layout.toolbar_layout, toolbar, true);
+        ((AppCompatActivity)this.getActivity()).setSupportActionBar(toolbar);
 
+        initRecyclerView( recyclerView );
         return view;
     }
 
@@ -99,8 +101,6 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
     {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(true);
-
-        toDoItemList.addAll( getDisplayToDoItemList( categoryFilterID ) );
 
         tipListAdapter = new TipListAdapter( this.getContext(), toDoItemList );
         tipListAdapter.setDoneAction( getDoneAction() );
@@ -110,32 +110,12 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private List<IToDoItem> getDisplayToDoItemList( long categoryFilterID ) {
-        List<IToDoItem> toDoItemList = new ArrayList<IToDoItem>();
-
-        if( categoryFilterID == ToDoCategory.CATEGORY_ALL_ID )
-            toDoItemList.addAll( ToDoItemUtil.getToDoItemGroupByDueTime( ToDoItem.getToDoItems() ) );
-        else if( categoryFilterID != ToDoCategory.CATEGORY_ADD_NEW_ID )
-        {
-            String selection = ToDoItem.COLUMN_DONE_INDICATOR + "<=? and " + ToDoItem.COLUMN_CATEGORY + " == ?" ;
-            String[] parameter = new String[]{ "0" , categoryFilterID+"" };
-            toDoItemList.addAll( ToDoItemUtil.getToDoItemGroupByDueTime( ToDoItem.getToDoItems( selection , parameter ) ) );
-        }
-
-        return toDoItemList;
-    }
-
     private TipListAdapter.ToDoItemAction getDoneAction()
     {
         TipListAdapter.ToDoItemAction doneAction = new TipListAdapter.ToDoItemAction() {
             @Override
             public void doAction(ToDoItem toDoItem) {
-                toDoItem.setDone( true );
-                ContentValues values = new ContentValues();
-                values.put(ToDoItem.COLUMN_DONE_INDICATOR, toDoItem.isDone());
-                db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
-
-                mListener.refresh();
+                ToDoFragment.this.mPresenter.doneAction( toDoItem );
             }
         };
 
@@ -145,14 +125,16 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
     private View.OnClickListener tipEditOnEditorActionListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-                Intent intent = new Intent(ToDoFragment.this.getContext(), EditToDoItemActivity.class);
-                ToDoFragment.this.getContext().startActivity(intent);
+            ToDoFragment.this.mPresenter.forwardToToDoDetail();
         }
     };
 
-     @Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        new ToDoMainPresenter(Injection.provideToDoItemRepository(),this);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -173,22 +155,28 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
 
         mPresenter.start();
 
-        if( categoryFilterID != ToDoCategory.CATEGORY_ADD_NEW_ID ) {
-            toDoItemList.clear();
-            toDoItemList.addAll(getDisplayToDoItemList(categoryFilterID));
-
-            tipListAdapter.notifyData(toDoItemList);
-        }
+//        if( categoryFilterID != ToDoCategory.CATEGORY_ADD_NEW_ID ) {
+//            toDoItemList.clear();
+//            toDoItemList.addAll(getDisplayToDoItemList(categoryFilterID));
+//
+//            tipListAdapter.notifyData(toDoItemList);
+//        }
     }
 
     @Override
-    public void showCategoryFilterDialog() {
-
+    public void showToDoItems(List<ToDoItem> toDoItemList) {
+        tipListAdapter.replaceData( ToDoItemUtil.getToDoItemGroupByDueTime( toDoItemList ) );
     }
 
     @Override
-    public void showAddCategoryDialog() {
+    public void refreshTabs() {
+        mListener.refresh();
+    }
 
+    @Override
+    public void showToDoDetail() {
+        Intent intent = new Intent(ToDoFragment.this.getContext(), EditToDoItemActivity.class);
+        ToDoFragment.this.getContext().startActivity(intent);
     }
 
     @Override

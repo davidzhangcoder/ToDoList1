@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.todolist.R;
-import com.todolist.TipListAdapter;
+import com.todolist.ui.adapter.TipListAdapter;
 
 public class ToDoItemTitleHolder extends BaseViewHolder<ToDoItemTitle , TipListAdapter> {
 

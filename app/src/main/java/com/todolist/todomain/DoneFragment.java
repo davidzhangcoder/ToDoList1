@@ -11,7 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.todolist.R;
-import com.todolist.TipListAdapter;
+import com.todolist.data.Injection;
+import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.db.GenericDao;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.ToDoItem;
@@ -28,9 +29,12 @@ import java.util.List;
  * Use the {@link DoneFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DoneFragment extends Fragment {
+public class DoneFragment extends Fragment implements DoneMainContract.View {
 
     public static final String NAME = DoneFragment.class.getName();
+
+
+    private DoneMainContract.Presenter mPresenter;
 
     private RecyclerView recyclerView;
 
@@ -38,7 +42,8 @@ public class DoneFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private GenericDao db;
+    private TipListAdapter tipListAdapter;
+
 
     public DoneFragment() {
         // Required empty public constructor
@@ -63,8 +68,6 @@ public class DoneFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
-
-        db = new GenericDao(this.getContext());
     }
 
     @Override
@@ -85,15 +88,9 @@ public class DoneFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(true);
 
-        doneList.addAll( ToDoItem.getDoneItems() );
-
-        TipListAdapter tipListAdapter = new TipListAdapter( this.getContext(), doneList );
+        tipListAdapter = new TipListAdapter( this.getContext(), doneList );
         tipListAdapter.setDoneAction( getDoneAction() );
         recyclerView.setAdapter( tipListAdapter );
-
-//        ItemTouchHelper.Callback callback = new TipListItemTouchHelperCallback();
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-//        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private TipListAdapter.ToDoItemAction getDoneAction()
@@ -101,12 +98,7 @@ public class DoneFragment extends Fragment {
         TipListAdapter.ToDoItemAction doneAction = new TipListAdapter.ToDoItemAction() {
             @Override
             public void doAction(ToDoItem toDoItem) {
-                toDoItem.setDone( false );
-                ContentValues values = new ContentValues();
-                values.put(ToDoItem.COLUMN_DONE_INDICATOR, toDoItem.isDone());
-                db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
-
-                mListener.refresh();
+                DoneFragment.this.mPresenter.reverseDoneAction( toDoItem );
             }
         };
 
@@ -114,8 +106,18 @@ public class DoneFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        mPresenter.start();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        new DoneMainPresenter(Injection.provideToDoItemRepository(),this);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -125,13 +127,29 @@ public class DoneFragment extends Fragment {
     }
 
     @Override
+    public void setPresenter(DoneMainContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
+    public void showToDoItems(List<ToDoItem> toDoItemList) {
+        List<IToDoItem> tempList = new ArrayList<IToDoItem>();
+        for( ToDoItem toDoItem : toDoItemList )
+            tempList.add( toDoItem );
+        tipListAdapter.replaceData(tempList);
+    }
+
+    public void refreshTabs() {
+        mListener.refresh();
+    }
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void refresh();
     }
+
 }

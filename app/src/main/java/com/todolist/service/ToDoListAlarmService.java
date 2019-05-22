@@ -16,7 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.todolist.App;
-import com.todolist.EditToDoItemActivity;
+import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
 import com.todolist.db.GenericDao;
@@ -133,7 +133,7 @@ public class ToDoListAlarmService extends Service{
 
     private void doAlarm( long time , long id )
     {
-        ToDoItem toDoItem = ToDoItem.getToDoItem( id );
+        ToDoItem toDoItem = null;//ToDoItem.getToDoItem( id );
 
         Intent intent = new Intent(App.getContext(),ToDoListAlarmBroadCastReceiver.class);
         intent.setAction( getResources().getString(R.string.alarmAction) );

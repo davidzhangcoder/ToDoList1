@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.todolist.R;
 import com.todolist.SwipeLayout;
-import com.todolist.TipListAdapter;
+import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.util.DateUtil;
 

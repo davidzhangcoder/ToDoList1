@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.todolist.R;
+import com.todolist.data.Injection;
 import com.todolist.event.BusFactory;
 import com.todolist.model.ToDoCategory;
 
@@ -38,7 +39,7 @@ public class ToDoMainActivity extends AppCompatActivity
 //    private Unbinder unbinder;
 
 //    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+//    Toolbar toolbar;
 
 //    @BindView(R.id.tabLayout)
     TabLayout tabLayout;
@@ -46,8 +47,8 @@ public class ToDoMainActivity extends AppCompatActivity
 //    @BindView(R.id.viewPager)
     ViewPager viewPager;
 
-    TextView categoryButton;
-    ImageView categoryButtonImage;
+//    TextView categoryButton;
+//    ImageView categoryButtonImage;
 
     AppBarLayout appBarLayout;
 
@@ -64,25 +65,25 @@ public class ToDoMainActivity extends AppCompatActivity
             setContentView(getLayoutId());
         }
 
-        toolbar = findViewById(R.id.toolbar);
+//        toolbar = findViewById(R.id.toolbar);
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
-        categoryButton = (TextView)findViewById(R.id.categoryButton);
-        categoryButtonImage = (ImageView)findViewById(R.id.categoryButtonImage);;
+//        categoryButton = (TextView)findViewById(R.id.categoryButton);
+//        categoryButtonImage = (ImageView)findViewById(R.id.categoryButtonImage);;
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                //following code make it scroll up to hide actionbar, but not hide Tab
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
-                layoutParams.setMargins(0, 0, 0, toolbar.getMeasuredHeight() + verticalOffset);
-                viewPager.requestLayout();
-
-            }
-
-        });
+//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                //following code make it scroll up to hide actionbar, but not hide Tab
+//                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
+//                layoutParams.setMargins(0, 0, 0, toolbar.getMeasuredHeight() + verticalOffset);
+//                viewPager.requestLayout();
+//
+//            }
+//
+//        });
 
         initViewPagerFragments();
         initCategoryFragment();
@@ -90,28 +91,28 @@ public class ToDoMainActivity extends AppCompatActivity
 
     private void initCategoryFragment()
     {
-        if( selectedToDoCategory == null ) {
-            ToDoCategory allToDoCategory = new ToDoCategory();
-            allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
-            allToDoCategory.setName( ToDoCategory.CATEGORY_ALL_NAME );
-
-            selectedToDoCategory = allToDoCategory;
-        }
-
-        categoryButtonImage.setColorFilter(getResources().getColor(R.color.white));
-        categoryButton.setText( selectedToDoCategory.getName() );
-        categoryButton.setTypeface(categoryButton.getTypeface(), Typeface.BOLD);
-        categoryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CategoryFragment categoryFragment = CategoryFragment.newInstance( selectedToDoCategory );
-                categoryFragment.show(getSupportFragmentManager(), null);
-            }
-        });
+//        if( selectedToDoCategory == null ) {
+//            ToDoCategory allToDoCategory = new ToDoCategory();
+//            allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
+//            allToDoCategory.setName( ToDoCategory.CATEGORY_ALL_NAME );
+//
+//            selectedToDoCategory = allToDoCategory;
+//        }
+//
+//        categoryButtonImage.setColorFilter(getResources().getColor(R.color.white));
+//        categoryButton.setText( selectedToDoCategory.getName() );
+//        categoryButton.setTypeface(categoryButton.getTypeface(), Typeface.BOLD);
+//        categoryButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                CategoryFragment categoryFragment = CategoryFragment.newInstance( selectedToDoCategory );
+//                categoryFragment.show(getSupportFragmentManager(), null);
+//            }
+//        });
     }
 
     private void initViewPagerFragments() {
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 
         ToDoFragment toDoFragment = null;
         DoneFragment doneFragment = null;
@@ -150,6 +151,7 @@ public class ToDoMainActivity extends AppCompatActivity
         viewPager.setOffscreenPageLimit(3);
 
         tabLayout.setupWithViewPager(viewPager);
+
     }
 
 
@@ -176,7 +178,7 @@ public class ToDoMainActivity extends AppCompatActivity
     public void onCategorySelected( ToDoCategory toDoCategory )
     {
         this.selectedToDoCategory = toDoCategory;
-        categoryButton.setText( selectedToDoCategory.getName() );
+//        categoryButton.setText( selectedToDoCategory.getName() );
     }
 
     @Override

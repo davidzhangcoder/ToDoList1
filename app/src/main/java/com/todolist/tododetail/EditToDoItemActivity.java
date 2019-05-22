@@ -1,4 +1,4 @@
-package com.todolist;
+package com.todolist.tododetail;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import com.maltaisn.recurpicker.Recurrence;
 import com.maltaisn.recurpicker.RecurrenceFormat;
 import com.maltaisn.recurpicker.RecurrencePickerDialog;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.todolist.R;
 import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;

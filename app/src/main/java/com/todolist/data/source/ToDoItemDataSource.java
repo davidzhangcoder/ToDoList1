@@ -1,10 +1,12 @@
 package com.todolist.data.source;
 
+import android.support.annotation.NonNull;
+
 import com.todolist.model.ToDoItem;
 
 import java.util.List;
 
-public interface ToDoItemDataSource {
+public interface ToDoItemDataSource extends GenericDataSource{
 
     interface LoadToDoItemsCallBack
     {
@@ -13,20 +15,19 @@ public interface ToDoItemDataSource {
         void onDataNotAvailable();
     }
 
-    interface GetToDoCallBack {
-        void onToDoItemLoaded(ToDoItem toDo);
+    public void loadToDoItems(@NonNull long categoryID , @NonNull LoadToDoItemsCallBack callBack );
 
-        void onDataNotAvailable();
-    }
+    public void getToDoItem( @NonNull long toDoItemID , @NonNull GenericToDoCallBack callBack );
 
-    public void loadToDoItems( LoadToDoItemsCallBack callBack );
+    public void saveToDo(@NonNull ToDoItem toDoItem , @NonNull GenericToDoCallBack callBack);
 
-    public void getToDoItem( long toDoItemID , GetToDoCallBack callBack );
+    public void updateToDo(@NonNull ToDoItem toDoItem , @NonNull GenericToDoCallBack callBack);
 
-    public void saveToDo();
+    public void completeToDo(@NonNull ToDoItem toDoItem , @NonNull GenericToDoCallBack callBack);
 
-    public void completeToDo();
+    public void reverseCompletedToDo(@NonNull ToDoItem toDoItem , @NonNull GenericToDoCallBack callBack);
 
-    public void notcompleteToDo();
+
+    public void loadDoneItems(LoadToDoItemsCallBack callBack);
 
 }

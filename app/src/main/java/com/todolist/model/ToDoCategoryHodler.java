@@ -2,10 +2,9 @@ package com.todolist.model;
 
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.todolist.CategoryListAdapter;
+import com.todolist.ui.adapter.CategoryListAdapter;
 import com.todolist.R;
 
 public class ToDoCategoryHodler extends BaseViewHolder<IToDoCategory , CategoryListAdapter>

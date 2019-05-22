@@ -10,9 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
-import com.todolist.CategoryListAdapter;
+import com.todolist.ui.adapter.CategoryListAdapter;
 import com.todolist.R;
 import com.todolist.model.IToDoCategory;
 import com.todolist.model.ToDoCategory;

@@ -30,7 +30,7 @@ public class ToDoItemRepository implements ToDoItemDataSource
         mRemoteDataSource = checkNotNull(remoteDataReSource);
     }
 
-    public static ToDoItemRepository getInstance(ToDoItemLocalDataSource localDataSource ,
+    public synchronized static ToDoItemRepository getInstance(ToDoItemLocalDataSource localDataSource ,
                                                  ToDoItemRemoteDataReSource remoteDataReSource) {
         if (INSTANCE == null) {
             INSTANCE = new ToDoItemRepository(localDataSource , remoteDataReSource);
@@ -39,9 +39,10 @@ public class ToDoItemRepository implements ToDoItemDataSource
     }
 
     @Override
-    public void loadToDoItems(LoadToDoItemsCallBack callBack) {
+    public void loadToDoItems( @NonNull long categoryID , @NonNull LoadToDoItemsCallBack callBack) {
+        checkNotNull( categoryID );
         checkNotNull( callBack );
-        mLocalDataSource.loadToDoItems(new LoadToDoItemsCallBack() {
+        mLocalDataSource.loadToDoItems(categoryID , new LoadToDoItemsCallBack() {
             @Override
             public void onToDoItemsLoaded(List<ToDoItem> toDos) {
                 callBack.onToDoItemsLoaded( toDos );
@@ -49,14 +50,17 @@ public class ToDoItemRepository implements ToDoItemDataSource
 
             @Override
             public void onDataNotAvailable() {
-                loadToDoItemsFromRemoteDataSource( callBack );
+                //ToDo
+                //loadToDoItemsFromRemoteDataSource( categoryID , callBack );
             }
         });
     }
 
-    private void loadToDoItemsFromRemoteDataSource(LoadToDoItemsCallBack callBack)
+    private void loadToDoItemsFromRemoteDataSource(@NonNull long categoryID , @NonNull LoadToDoItemsCallBack callBack)
     {
-        mRemoteDataSource.loadToDoItems(new LoadToDoItemsCallBack() {
+        checkNotNull( categoryID );
+        checkNotNull( callBack );
+        mRemoteDataSource.loadToDoItems(categoryID , new LoadToDoItemsCallBack() {
             @Override
             public void onToDoItemsLoaded(List<ToDoItem> toDos) {
                 //Because Remote DataSource API not implemented
@@ -71,22 +75,98 @@ public class ToDoItemRepository implements ToDoItemDataSource
     }
 
     @Override
-    public void getToDoItem(long toDoItemID, GetToDoCallBack callBack) {
+    public void loadDoneItems(LoadToDoItemsCallBack callBack) {
+        mLocalDataSource.loadDoneItems(new LoadToDoItemsCallBack() {
+            @Override
+            public void onToDoItemsLoaded(List<ToDoItem> toDos) {
+                callBack.onToDoItemsLoaded( toDos );
+            }
 
+            @Override
+            public void onDataNotAvailable() {
+                //ToDo
+                //loadToDoItemsFromRemoteDataSource( categoryID , callBack );
+            }
+        });
     }
 
     @Override
-    public void saveToDo() {
+    public void getToDoItem(long toDoItemID, GenericToDoCallBack callBack) {
+        checkNotNull( toDoItemID );
+        checkNotNull( callBack );
+        mLocalDataSource.getToDoItem(toDoItemID , new GenericToDoCallBack() {
+            @Override
+            public void onCompleted(ToDoItem toDoItem) {
+                callBack.onCompleted( toDoItem );
+            }
 
+            @Override
+            public void onError() {
+                //ToDo
+                //loadToDoItemsFromRemoteDataSource( categoryID , callBack );
+            }
+        });
     }
 
     @Override
-    public void completeToDo() {
+    public void saveToDo(@NonNull ToDoItem toDoItem , @NonNull GenericToDoCallBack callBack) {
+        checkNotNull( toDoItem );
+        mLocalDataSource.saveToDo(toDoItem , new GenericToDoCallBack() {
+            @Override
+            public void onCompleted(ToDoItem toDoItem) {
+                callBack.onCompleted( toDoItem );
+            }
 
+            @Override
+            public void onError() {
+                //ToDo
+                //loadToDoItemsFromRemoteDataSource( categoryID , callBack );
+            }
+        });
     }
 
     @Override
-    public void notcompleteToDo() {
+    public void updateToDo(@NonNull ToDoItem toDoItem , @NonNull GenericToDoCallBack callBack) {
+        mLocalDataSource.updateToDo(toDoItem, new GenericToDoCallBack() {
+            @Override
+            public void onCompleted(ToDoItem toDo) {
+                callBack.onCompleted( toDoItem );
+            }
 
+            @Override
+            public void onError() {
+                callBack.onError();
+            }
+        });
+    }
+
+    @Override
+    public void completeToDo(@NonNull ToDoItem toDoItem , @NonNull GenericToDoCallBack callBack) {
+        mLocalDataSource.completeToDo(toDoItem, new GenericToDoCallBack() {
+            @Override
+            public void onCompleted(ToDoItem toDo) {
+                callBack.onCompleted( toDoItem );
+            }
+
+            @Override
+            public void onError() {
+                callBack.onError();
+            }
+        });
+    }
+
+    @Override
+    public void reverseCompletedToDo(@NonNull ToDoItem toDoItem , @NonNull GenericToDoCallBack callBack) {
+        mLocalDataSource.reverseCompletedToDo(toDoItem, new GenericToDoCallBack() {
+            @Override
+            public void onCompleted(ToDoItem toDo) {
+                callBack.onCompleted( toDoItem );
+            }
+
+            @Override
+            public void onError() {
+                callBack.onError();
+            }
+        });
     }
 }

@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import com.todolist.ui.adapter.TipListAdapter;
+
 public class TipListItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     //设置拖动及策划方向

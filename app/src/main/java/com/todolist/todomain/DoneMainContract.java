@@ -6,21 +6,14 @@ import com.todolist.ui.BaseView;
 
 import java.util.List;
 
-public interface ToDoMainContract {
-
-    interface View extends BaseView<Presenter>
-    {
+public interface DoneMainContract {
+    interface View extends BaseView<Presenter> {
         void showToDoItems(List<ToDoItem> toDoItemList);
 
         void refreshTabs();
-
-        void showToDoDetail();
     }
 
-    interface Presenter extends BasePresenter
-    {
-        void doneAction(ToDoItem toDoItem);
-
-        void forwardToToDoDetail();
+    interface Presenter extends BasePresenter {
+        void reverseDoneAction(ToDoItem toDoItem);
     }
 }

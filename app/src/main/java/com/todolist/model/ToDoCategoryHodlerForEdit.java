@@ -2,11 +2,10 @@ package com.todolist.model;
 
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.todolist.CategoryListAdapter;
+import com.todolist.ui.adapter.CategoryListAdapter;
 import com.todolist.R;
 
 public class ToDoCategoryHodlerForEdit extends BaseViewHolder<IToDoCategory , CategoryListAdapter> {

@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".EditToDoItemActivity"
+        <activity android:name=".tododetail.EditToDoItemActivity"
             android:parentActivityName=".todomain.ToDoMainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -1,13 +1,15 @@
-package com.todolist;
+package com.todolist.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.todolist.R;
+import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.model.BaseViewHolder;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.TipHolder;
@@ -15,10 +17,13 @@ import com.todolist.model.ToDoItem;
 import com.todolist.model.ToDoItemTitle;
 import com.todolist.model.ToDoItemTitleHolder;
 import com.todolist.model.TypeFactoryForToDoItemlist;
+import com.todolist.tododetail.EditToDoItemActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TipListAdapter extends RecyclerView.Adapter<BaseViewHolder> implements TipListItemTouchHelperCallback.onDragListener
 {
@@ -33,9 +38,6 @@ public class TipListAdapter extends RecyclerView.Adapter<BaseViewHolder> impleme
 
     private ToDoItemAction doneAction;
 
-//    private int textPosition;
-//    private RecyclerView.ViewHolder mTextHolder;
-
     public TipListAdapter(Context context, List<IToDoItem> listTodo) {
         mContext = context;
         mData.addAll(listTodo);
@@ -49,6 +51,11 @@ public class TipListAdapter extends RecyclerView.Adapter<BaseViewHolder> impleme
             mData.addAll(toDoItemList);
             notifyItemRangeInserted(0, toDoItemList.size());
         }
+    }
+
+    public void replaceData( @NonNull List<IToDoItem> toDoItemList ) {
+        mData = checkNotNull( toDoItemList );
+        notifyDataSetChanged();
     }
 
     public View.OnClickListener getClickListener(final int position) {

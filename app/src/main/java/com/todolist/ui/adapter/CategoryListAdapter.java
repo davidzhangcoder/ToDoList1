@@ -1,4 +1,4 @@
-package com.todolist;
+package com.todolist.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.todolist.R;
 import com.todolist.model.BaseViewHolder;
 import com.todolist.model.IToDoCategory;
 import com.todolist.model.ToDoCategoryHodler;

@@ -20,7 +20,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.todolist.EditToDoItemActivity;
+import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
 import com.todolist.model.ToDoItem;
 

@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.todolist.CategoryListAdapter;
+import com.todolist.ui.adapter.CategoryListAdapter;
 import com.todolist.R;
 import com.todolist.db.GenericDao;
 import com.todolist.model.IToDoCategory;
@@ -21,15 +21,15 @@ import com.todolist.ui.dialog.AddCategoryDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryFragment extends BottomSheetDialogFragment
+public class CategoryFragment extends BottomSheetDialogFragment implements CategoryContract.View
 {
     private RecyclerView recyclerView;
-
-    private GenericDao db;
 
     private OnFragmentInteractionListener mListener;
 
     private ToDoCategory selectedToDoCategory;
+
+    private CategoryContract.Presenter presenter;
 
     public CategoryFragment() {
 
@@ -50,8 +50,6 @@ public class CategoryFragment extends BottomSheetDialogFragment
         if (getArguments() != null) {
             selectedToDoCategory = (ToDoCategory)getArguments().getSerializable("selectedToDoCategory");
         }
-
-        db = new GenericDao(this.getContext());
     }
 
     @Override
@@ -112,17 +110,15 @@ public class CategoryFragment extends BottomSheetDialogFragment
         };
         categoryListAdapter.setItemCallBack( itemCallBack );
 
-//        tipListAdapter.setDoneAction( getDoneAction() );
         recyclerView.setAdapter( categoryListAdapter );
-//        ItemTouchHelper.Callback callback = new TipListItemTouchHelperCallback();
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-//        itemTouchHelper.attachToRecyclerView(recyclerView);
-
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+//        new CategoryPresenter();
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -131,11 +127,13 @@ public class CategoryFragment extends BottomSheetDialogFragment
         }
     }
 
+    @Override
+    public void setPresenter(CategoryContract.Presenter presenter) {
+
+    }
+
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-
         void refresh( long categoryID );
 
         void onCategorySelected( ToDoCategory toDoCategory );
