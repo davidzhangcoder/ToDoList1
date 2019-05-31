@@ -3,6 +3,7 @@ package com.todolist.todomain;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.todolist.data.Injection;
 import com.todolist.tododetail.EditToDoItemActivity;
@@ -35,6 +38,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ToDoFragment extends Fragment implements ToDoMainContract.View {
 
     public static final String NAME = ToDoFragment.class.getName();
+    public static final int DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE = 1;
 
 
     private RecyclerView recyclerView;
@@ -48,6 +52,11 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
     private TipListAdapter tipListAdapter;
 
     private long categoryFilterID = ToDoCategory.CATEGORY_ALL_ID;
+
+    private TextView categoryButton;
+    private ImageView categoryButtonImage;
+    private ToDoCategory selectedToDoCategory;
+
 
     private ToDoMainContract.Presenter mPresenter;
 
@@ -92,9 +101,33 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
         Toolbar toolbar = (Toolbar)this.getActivity().findViewById(R.id.toolbar);
         inflater.inflate(R.layout.toolbar_layout, toolbar, true);
         ((AppCompatActivity)this.getActivity()).setSupportActionBar(toolbar);
+        categoryButton = (TextView)toolbar.findViewById(R.id.categoryButton);
+        categoryButtonImage = (ImageView)toolbar.findViewById(R.id.categoryButtonImage);;
 
         initRecyclerView( recyclerView );
+        initCategoryFragment();
         return view;
+    }
+
+    private void initCategoryFragment()
+    {
+        if( selectedToDoCategory == null ) {
+            ToDoCategory allToDoCategory = new ToDoCategory();
+            allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
+            allToDoCategory.setName( ToDoCategory.CATEGORY_ALL_NAME );
+
+            selectedToDoCategory = allToDoCategory;
+        }
+
+        categoryButtonImage.setColorFilter(getResources().getColor(R.color.white));
+        categoryButton.setText( selectedToDoCategory.getName() );
+        categoryButton.setTypeface(categoryButton.getTypeface(), Typeface.BOLD);
+        categoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.doDisplayCategoryDialog();
+            }
+        });
     }
 
     private void initRecyclerView( RecyclerView recyclerView )
@@ -154,13 +187,6 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
         super.onResume();
 
         mPresenter.start();
-
-//        if( categoryFilterID != ToDoCategory.CATEGORY_ADD_NEW_ID ) {
-//            toDoItemList.clear();
-//            toDoItemList.addAll(getDisplayToDoItemList(categoryFilterID));
-//
-//            tipListAdapter.notifyData(toDoItemList);
-//        }
     }
 
     @Override
@@ -170,7 +196,7 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
 
     @Override
     public void refreshTabs() {
-        mListener.refresh();
+        mPresenter.start();;
     }
 
     @Override
@@ -180,12 +206,30 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
     }
 
     @Override
+    public void showCategoryDialog() {
+        CategoryFragment categoryFragment = CategoryFragment.newInstance( selectedToDoCategory );
+        categoryFragment.setTargetFragment( this , DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE );
+        categoryFragment.show( this.getFragmentManager(), null);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //我们根据requestCode判断是哪个子Fragment传回的数据
+        //从data中拿到传回的数据
+        if(resultCode == DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE) {
+            selectedToDoCategory = (ToDoCategory) data.getExtras().get(CategoryFragment.KEY_SELECTED_TODOCATEGORY);
+            categoryButton.setText(selectedToDoCategory.getName());
+            mPresenter.doGetToDoItemsByCategory(selectedToDoCategory.getId());
+        }
+    }
+
+    @Override
     public void setPresenter(@NonNull ToDoMainContract.Presenter presenter) {
          this.mPresenter = checkNotNull(presenter);
     }
 
     public interface OnFragmentInteractionListener {
 
-        void refresh();
+//        void refresh();
     }
 }

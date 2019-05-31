@@ -2,6 +2,7 @@ package com.todolist.data.source;
 
 import android.support.annotation.NonNull;
 
+import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 
 import java.util.List;
@@ -11,6 +12,12 @@ public interface ToDoItemDataSource extends GenericDataSource{
     interface LoadToDoItemsCallBack
     {
         void onToDoItemsLoaded(List<ToDoItem> toDos);
+
+        void onDataNotAvailable();
+    }
+
+    interface LoadToDoCategorysCallBack {
+        void onToDoCategorysLoaded(List<ToDoCategory> toDoCategorys);
 
         void onDataNotAvailable();
     }
@@ -29,5 +36,10 @@ public interface ToDoItemDataSource extends GenericDataSource{
 
 
     public void loadDoneItems(LoadToDoItemsCallBack callBack);
+
+
+    public void loadToDoCategorys(LoadToDoCategorysCallBack callBack);
+
+    public void saveToDoCategory(@NonNull ToDoCategory toDoCategory , @NonNull GenericToDoCategoryCallBack callBack);
 
 }

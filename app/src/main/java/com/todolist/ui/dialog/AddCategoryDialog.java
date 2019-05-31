@@ -1,8 +1,10 @@
 package com.todolist.ui.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -18,11 +20,10 @@ import com.todolist.model.ToDoItem;
 public class AddCategoryDialog extends AppCompatDialogFragment
 {
 
-    private GenericDao db;
+    public static final String KEY_NEW_ADDED_CATEGORY = "KEY_NEW_ADDED_CATEGORY";
 
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        db = new GenericDao(this.getContext());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -36,12 +37,8 @@ public class AddCategoryDialog extends AppCompatDialogFragment
                 .setCancelable(true)
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        String name = categoryNameEditText.getText().toString();
-                        ContentValues values = new ContentValues();
-                        values.put(ToDoItem.COLUMN_NAME, name);
-                        db.addContent(ToDoCategory.TABLE_NAME, values);
+                    public void onClick(DialogInterface dialog, int which) {
+                        setResult(categoryNameEditText.getText().toString());
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -52,4 +49,12 @@ public class AddCategoryDialog extends AppCompatDialogFragment
         return alertDialog;
 
     }
+
+    private void setResult(String newAddedCategoryName) {
+        Intent intent = new Intent();
+        intent.putExtra(KEY_NEW_ADDED_CATEGORY, newAddedCategoryName);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+
+    }
+
 }

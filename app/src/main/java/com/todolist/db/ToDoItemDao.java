@@ -65,6 +65,25 @@ public class ToDoItemDao
         return toDoItemList;
     }
 
+    private List<ToDoCategory> getToDoCategorys(@NonNull String selection , @NonNull String[] parameters) {
+        List<ToDoCategory> toDoCategoryList = new ArrayList<ToDoCategory>();
+
+        GenericDao db = new GenericDao(ContextHolder.getContext());
+
+        List<Map<String, String>> resultList = db.getListData( ToDoCategory.TABLE_NAME , selection , parameters ,  ToDoCategory.COLUMN_ID + " ASC " );
+
+        for(Iterator<Map<String, String>> it = resultList.iterator(); it.hasNext() ; ) {
+            Map<String, String> result = it.next();
+            ToDoCategory toDoCategory = new ToDoCategory();
+            toDoCategory.setId(Long.parseLong(result.get(ToDoCategory.COLUMN_ID)));
+            toDoCategory.setName(result.get(ToDoCategory.COLUMN_NAME));
+
+            toDoCategoryList.add( toDoCategory );
+        }
+
+        return toDoCategoryList;
+    }
+
     public List<ToDoItem> loadToDoItems(@NonNull String selection , @NonNull String[] parameters )
     {
         checkNotNull( selection );
@@ -117,6 +136,20 @@ public class ToDoItemDao
         values.put(ToDoItem.COLUMN_RECURRENCE_PERIOD, toDoItem.getRecurrencePeriod());
         values.put(ToDoItem.COLUMN_CATEGORY, toDoItem.getToDoCategory().getId() );
         return db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
+    }
+
+    public List<ToDoCategory> loadToDoCategorys() {
+        return getToDoCategorys(null,null);
+    }
+
+    public long insertToDoCategory(@NonNull ToDoCategory toDoCategory) {
+        checkNotNull( toDoCategory );
+        GenericDao db = new GenericDao(ContextHolder.getContext());
+        ContentValues values = new ContentValues();
+        values.put(ToDoItem.COLUMN_NAME, toDoCategory.getName());
+        long id = db.addContent(ToDoCategory.TABLE_NAME, values);
+        toDoCategory.setId(id);
+        return id;
     }
 
 }

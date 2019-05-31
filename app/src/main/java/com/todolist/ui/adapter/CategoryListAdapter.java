@@ -10,13 +10,15 @@ import android.view.ViewGroup;
 import com.todolist.R;
 import com.todolist.model.BaseViewHolder;
 import com.todolist.model.IToDoCategory;
-import com.todolist.model.ToDoCategoryHodler;
 import com.todolist.model.ToDoCategory;
+import com.todolist.model.ToDoCategoryHodler;
 import com.todolist.model.ToDoCategoryHodlerForEdit;
 import com.todolist.model.TypeFactoryForToDoItemlist;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class CategoryListAdapter extends RecyclerView.Adapter<BaseViewHolder>
 {
@@ -64,6 +66,12 @@ public class CategoryListAdapter extends RecyclerView.Adapter<BaseViewHolder>
             return ((ToDoCategory) mData.get(position)).type(new TypeFactoryForToDoItemlist());
         }
     }
+
+    public void replaceData( @NonNull List<IToDoCategory> toDoCategoryList ) {
+        mData = checkNotNull( toDoCategoryList );
+        notifyDataSetChanged();
+    }
+
 
     public IToDoCategory getSelectedToDoCategory() {
         return selectedToDoCategory;

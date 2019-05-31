@@ -14,7 +14,6 @@ public class ToDoMainPresenter implements ToDoMainContract.Presenter {
 
     private ToDoItemRepository toDoItemRepository;
     private ToDoMainContract.View view;
-    private long filterToDoCategoryID = ToDoCategory.CATEGORY_ALL_ID;
 
     public ToDoMainPresenter(@NonNull ToDoItemRepository toDoItemRepository , @NonNull ToDoMainContract.View view) {
         this.toDoItemRepository = toDoItemRepository;
@@ -24,7 +23,7 @@ public class ToDoMainPresenter implements ToDoMainContract.Presenter {
 
     @Override
     public void start() {
-        toDoItemRepository.loadToDoItems(filterToDoCategoryID, new ToDoItemDataSource.LoadToDoItemsCallBack() {
+        toDoItemRepository.loadToDoItems(ToDoCategory.CATEGORY_ALL_ID, new ToDoItemDataSource.LoadToDoItemsCallBack() {
             @Override
             public void onToDoItemsLoaded(List<ToDoItem> toDos) {
                 view.showToDoItems(toDos);
@@ -58,11 +57,24 @@ public class ToDoMainPresenter implements ToDoMainContract.Presenter {
         view.showToDoDetail();
     }
 
-    public long getFilterToDoCategoryID() {
-        return filterToDoCategoryID;
+    @Override
+    public void doDisplayCategoryDialog() {
+        view.showCategoryDialog();
     }
 
-    public void setFilterToDoCategoryID(long filterToDoCategoryID) {
-        this.filterToDoCategoryID = filterToDoCategoryID;
+    @Override
+    public void doGetToDoItemsByCategory(long categoryID) {
+        toDoItemRepository.loadToDoItems(categoryID, new ToDoItemDataSource.LoadToDoItemsCallBack() {
+            @Override
+            public void onToDoItemsLoaded(List<ToDoItem> toDos) {
+                view.showToDoItems(toDos);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
     }
+
 }

@@ -195,4 +195,54 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
         updateToDo( toDoItem , callBack );
 
     }
+
+    @Override
+    public void loadToDoCategorys(@NonNull LoadToDoCategorysCallBack callBack) {
+        checkNotNull( callBack );
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final List<ToDoCategory> toDoCategorys = new ArrayList<ToDoCategory>();
+                toDoCategorys.addAll( mToDoItemDao.loadToDoCategorys() );
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!toDoCategorys.isEmpty()) {
+                            callBack.onToDoCategorysLoaded(toDoCategorys);
+                        } else {
+                            // This will be called if the table is new or just empty.
+                            callBack.onDataNotAvailable();
+                        }
+                    }
+                });
+            }
+        };
+
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
+    @Override
+    public void saveToDoCategory(@NonNull ToDoCategory toDoCategory , @NonNull GenericToDoCategoryCallBack callBack) {
+        checkNotNull( toDoCategory );
+        checkNotNull( callBack );
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                long id = mToDoItemDao.insertToDoCategory(toDoCategory);
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if ( id != -1 ) {
+                            callBack.onCompleted(toDoCategory);
+                        } else {
+                            callBack.onError();
+                        }
+                    }
+                });
+            }
+        };
+
+        mAppExecutors.diskIO().execute(runnable);
+    }
 }

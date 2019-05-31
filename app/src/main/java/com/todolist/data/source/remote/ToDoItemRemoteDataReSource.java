@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.todolist.data.source.ToDoItemDataSource;
 import com.todolist.data.source.local.ToDoItemLocalDataSource;
 import com.todolist.db.ToDoItemDao;
+import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 import com.todolist.util.AppExecutors;
 
@@ -63,6 +64,16 @@ public class ToDoItemRemoteDataReSource implements ToDoItemDataSource
 
 
     public void loadDoneItems(LoadToDoItemsCallBack callBack) {
+
+    }
+
+
+    public void loadToDoCategorys(LoadToDoCategorysCallBack callBack) {
+
+    }
+
+    @Override
+    public void saveToDoCategory(@NonNull ToDoCategory toDoCategory , @NonNull GenericToDoCategoryCallBack callBack) {
 
     }
 }

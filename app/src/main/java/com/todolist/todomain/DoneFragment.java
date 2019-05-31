@@ -137,6 +137,7 @@ public class DoneFragment extends Fragment implements DoneMainContract.View {
         mListener = null;
     }
 
+    @Override
     public void showToDoItems(List<ToDoItem> toDoItemList) {
         List<IToDoItem> tempList = new ArrayList<IToDoItem>();
         for( ToDoItem toDoItem : toDoItemList )
@@ -144,12 +145,12 @@ public class DoneFragment extends Fragment implements DoneMainContract.View {
         tipListAdapter.replaceData(tempList);
     }
 
+    @Override
     public void refreshTabs() {
-        mListener.refresh();
+        mPresenter.start();;
     }
 
     public interface OnFragmentInteractionListener {
-        void refresh();
     }
 
 }

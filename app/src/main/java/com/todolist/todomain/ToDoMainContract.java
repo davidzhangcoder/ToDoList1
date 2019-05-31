@@ -15,6 +15,8 @@ public interface ToDoMainContract {
         void refreshTabs();
 
         void showToDoDetail();
+
+        void showCategoryDialog();
     }
 
     interface Presenter extends BasePresenter
@@ -22,5 +24,9 @@ public interface ToDoMainContract {
         void doneAction(ToDoItem toDoItem);
 
         void forwardToToDoDetail();
+
+        void doDisplayCategoryDialog();
+
+        void doGetToDoItemsByCategory(long categoryID);
     }
 }
