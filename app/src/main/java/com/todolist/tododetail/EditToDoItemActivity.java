@@ -17,6 +17,7 @@ import com.maltaisn.recurpicker.RecurrenceFormat;
 import com.maltaisn.recurpicker.RecurrencePickerDialog;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.todolist.R;
+import com.todolist.data.Injection;
 import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
@@ -34,7 +35,9 @@ import java.util.Locale;
  * Created by santa on 16/7/16.
  */
 public class EditToDoItemActivity extends AppCompatActivity
-        implements DatePickerDialog.OnDateSetListener ,
+        implements
+        EditToDoItemContract.View,
+        DatePickerDialog.OnDateSetListener ,
         TimePickerDialog.OnTimeSetListener ,
         RecurrencePickerDialog.RecurrenceSelectedCallback ,
         CategorySelectionDialog.CategorySelectedCallback
@@ -81,6 +84,8 @@ public class EditToDoItemActivity extends AppCompatActivity
 
     private RecurrenceFormat formatter;
     private DateFormat dateFormatLong;
+
+    private EditToDoItemContract.Presenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -135,7 +140,15 @@ public class EditToDoItemActivity extends AppCompatActivity
         dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);  // Sun Dec 31, 2017
         formatter = new RecurrenceFormat(this, dateFormatLong);
 
+        new EditToDoItemPresenter(Injection.provideToDoItemRepository(),this);
+
         init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.presenter.start();
     }
 
     private void init()
@@ -157,21 +170,23 @@ public class EditToDoItemActivity extends AppCompatActivity
                 String name = materialEditTextToDoItemName.getText().toString();
                 toDoItem.setName( name );
 
-                ContentValues values = new ContentValues();
-                values.put(ToDoItem.COLUMN_NAME, name);
-                values.put(ToDoItem.COLUMN_DONE_INDICATOR, toDoItem.isDone());
-                values.put(ToDoItem.COLUMN_DUE_TIMESTAMP, toDoItem.getDueTimestamp());
-                values.put(ToDoItem.COLUMN_RECURRENCE_PERIOD, toDoItem.getRecurrencePeriod());
-                values.put(ToDoItem.COLUMN_CATEGORY, toDoItem.getToDoCategory().getId() );
+                presenter.createOrUpdateToDoItem(toDoItem);
 
-                if( toDoItem.getId() == 0 ) {
-                    long id = db.addContent(ToDoItem.TABLE_NAME, values);
-                    toDoItem.setId(id);
-                }
-                else
-                {
-                    db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
-                }
+//                ContentValues values = new ContentValues();
+//                values.put(ToDoItem.COLUMN_NAME, name);
+//                values.put(ToDoItem.COLUMN_DONE_INDICATOR, toDoItem.isDone());
+//                values.put(ToDoItem.COLUMN_DUE_TIMESTAMP, toDoItem.getDueTimestamp());
+//                values.put(ToDoItem.COLUMN_RECURRENCE_PERIOD, toDoItem.getRecurrencePeriod());
+//                values.put(ToDoItem.COLUMN_CATEGORY, toDoItem.getToDoCategory().getId() );
+//
+//                if( toDoItem.getId() == 0 ) {
+//                    long id = db.addContent(ToDoItem.TABLE_NAME, values);
+//                    toDoItem.setId(id);
+//                }
+//                else
+//                {
+//                    db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
+//                }
 
                 finish();
             }
@@ -423,5 +438,15 @@ public class EditToDoItemActivity extends AppCompatActivity
     @Override
     public ToDoCategory getSelectedCategory() {
         return selectedToDoCategory;
+    }
+
+    @Override
+    public void setPresenter(EditToDoItemContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void showAfterCreateOrUpdateToDoItem() {
+        finish();
     }
 }

@@ -155,7 +155,7 @@ public class CategoryFragment extends BottomSheetDialogFragment implements Categ
     private void setResult(ToDoCategory toDoCategory) {
         Intent intent = new Intent();
         intent.putExtra(KEY_SELECTED_TODOCATEGORY, toDoCategory);
-        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), this.getTargetRequestCode(), intent);
     }
 
     @Override

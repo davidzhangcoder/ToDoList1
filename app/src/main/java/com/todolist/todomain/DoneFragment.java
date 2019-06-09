@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.todolist.R;
 import com.todolist.data.Injection;
+import com.todolist.ui.LazyFragment;
 import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.db.GenericDao;
 import com.todolist.model.IToDoItem;
@@ -29,7 +30,7 @@ import java.util.List;
  * Use the {@link DoneFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DoneFragment extends Fragment implements DoneMainContract.View {
+public class DoneFragment extends LazyFragment implements DoneMainContract.View {
 
     public static final String NAME = DoneFragment.class.getName();
 
@@ -43,6 +44,8 @@ public class DoneFragment extends Fragment implements DoneMainContract.View {
     private OnFragmentInteractionListener mListener;
 
     private TipListAdapter tipListAdapter;
+
+    private boolean isCreated = false;
 
 
     public DoneFragment() {
@@ -80,7 +83,17 @@ public class DoneFragment extends Fragment implements DoneMainContract.View {
 
         initRecyclerView( recyclerView );
 
+        isCreated = true;
+        lazyLoad();
+
         return view;
+    }
+
+    @Override
+    protected void lazyLoad() {
+        if( isCreated && isVisible ) {
+            mPresenter.start();
+        }
     }
 
     private void initRecyclerView( RecyclerView recyclerView )
@@ -109,7 +122,7 @@ public class DoneFragment extends Fragment implements DoneMainContract.View {
     public void onResume() {
         super.onResume();
 
-        mPresenter.start();
+//        mPresenter.start();
     }
 
     @Override

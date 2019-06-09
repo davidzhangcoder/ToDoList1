@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.todolist.data.Injection;
 import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
+import com.todolist.ui.LazyFragment;
 import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.db.GenericDao;
@@ -35,7 +36,7 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class ToDoFragment extends Fragment implements ToDoMainContract.View {
+public class ToDoFragment extends LazyFragment implements ToDoMainContract.View {
 
     public static final String NAME = ToDoFragment.class.getName();
     public static final int DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE = 1;
@@ -59,6 +60,8 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
 
 
     private ToDoMainContract.Presenter mPresenter;
+
+    private boolean isCreated = false;
 
 
     public ToDoFragment() {
@@ -91,8 +94,7 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.content_tiplist, container, false)
-                ;
+        View view = inflater.inflate(R.layout.content_tiplist, container, false);
         recyclerView = view.findViewById(R.id.tip_recycler);
 
         floatingActionButton = view.findViewById(R.id.addToDo);
@@ -106,7 +108,18 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
 
         initRecyclerView( recyclerView );
         initCategoryFragment();
+
+        isCreated = true;
+        lazyLoad();
+
         return view;
+    }
+
+    @Override
+    protected void lazyLoad() {
+        if( isCreated && isVisible ) {
+            mPresenter.start();
+        }
     }
 
     private void initCategoryFragment()
@@ -186,7 +199,15 @@ public class ToDoFragment extends Fragment implements ToDoMainContract.View {
     public void onResume() {
         super.onResume();
 
-        mPresenter.start();
+//        if( isCreated && isVisible )
+//            mPresenter.start();
+
+//        if( categoryFilterID != ToDoCategory.CATEGORY_ADD_NEW_ID ) {
+//            toDoItemList.clear();
+//            toDoItemList.addAll(getDisplayToDoItemList(categoryFilterID));
+//
+//            tipListAdapter.notifyData(toDoItemList);
+//        }
     }
 
     @Override
