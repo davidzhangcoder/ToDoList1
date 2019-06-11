@@ -26,6 +26,8 @@ import com.todolist.model.ToDoCategory;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 
 public class ToDoMainActivity extends AppCompatActivity
         implements
@@ -53,6 +55,12 @@ public class ToDoMainActivity extends AppCompatActivity
 
     ToDoFragmentAdapter adapter;
 
+    @Inject
+    ToDoFragment toDoFragment;
+
+    @Inject
+    DoneFragment doneFragment;
+
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = this;
@@ -79,16 +87,16 @@ public class ToDoMainActivity extends AppCompatActivity
 
         });
 
+        DaggerToDoMainActivityComponent.builder().build().inject(this);
+
         initViewPagerFragments();
    }
 
     private void initViewPagerFragments() {
 
-        ToDoFragment toDoFragment = null;
-        DoneFragment doneFragment = null;
-
         if( getSupportFragmentManager().findFragmentByTag(ToDoFragment.NAME) == null ) {
-            toDoFragment = ToDoFragment.newInstance();
+            if(toDoFragment==null)
+                toDoFragment = ToDoFragment.newInstance();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add( toDoFragment , ToDoFragment.NAME );
             fragmentTransaction.commit();
@@ -97,7 +105,8 @@ public class ToDoMainActivity extends AppCompatActivity
             toDoFragment = (ToDoFragment) getSupportFragmentManager().findFragmentByTag(ToDoFragment.NAME);
 
         if( getSupportFragmentManager().findFragmentByTag(DoneFragment.NAME) == null ) {
-            doneFragment = DoneFragment.newInstance();
+            if(doneFragment==null)
+                doneFragment = DoneFragment.newInstance();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add( doneFragment , DoneFragment.NAME );
             fragmentTransaction.commit();

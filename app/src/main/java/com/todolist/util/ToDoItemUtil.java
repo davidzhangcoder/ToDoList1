@@ -1,6 +1,6 @@
 package com.todolist.util;
 
-import com.todolist.App;
+import com.todolist.app.App;
 import com.todolist.R;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.ToDoItem;

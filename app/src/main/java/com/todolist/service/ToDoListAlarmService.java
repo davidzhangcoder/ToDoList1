@@ -15,7 +15,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.todolist.App;
+import com.todolist.app.App;
 import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;

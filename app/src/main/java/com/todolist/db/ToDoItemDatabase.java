@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.todolist.App;
+import com.todolist.app.App;
 import com.todolist.R;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;

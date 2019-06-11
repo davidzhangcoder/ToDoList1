@@ -6,11 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.todolist.R;
+import com.todolist.app.App;
+import com.todolist.app.AppComponent;
+import com.todolist.app.AppModule;
+import com.todolist.app.DaggerAppComponent;
 import com.todolist.data.Injection;
 import com.todolist.ui.LazyFragment;
 import com.todolist.ui.adapter.TipListAdapter;
@@ -20,6 +25,8 @@ import com.todolist.model.ToDoItem;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 
 /**
@@ -48,6 +55,11 @@ public class DoneFragment extends LazyFragment implements DoneMainContract.View 
     private boolean isCreated = false;
 
 
+    @Inject
+    TestA a;
+
+
+    @Inject
     public DoneFragment() {
         // Required empty public constructor
     }
@@ -71,11 +83,27 @@ public class DoneFragment extends LazyFragment implements DoneMainContract.View 
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+
+//        AppComponent appComponent = DaggerAppComponent
+//                .builder()
+//                .appModule(new AppModule())
+//                .build();
+        DaggerDoneFragmentComponent
+                .builder()
+                .appComponent(((App)getActivity().getApplication()).getAppComponent())
+                .build()
+                .inject(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+        //Test
+        Log.i("DoneFragment", "================================" + a);
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_done, container, false);
 

@@ -13,12 +13,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.todolist.app.App;
+import com.todolist.app.AppComponent;
+import com.todolist.app.AppModule;
+import com.todolist.app.DaggerAppComponent;
 import com.todolist.data.Injection;
 import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
@@ -33,6 +38,8 @@ import com.todolist.util.ToDoItemUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -64,6 +71,11 @@ public class ToDoFragment extends LazyFragment implements ToDoMainContract.View 
     private boolean isCreated = false;
 
 
+    @Inject
+    TestA a;
+
+
+    @Inject
     public ToDoFragment() {
     }
 
@@ -89,11 +101,27 @@ public class ToDoFragment extends LazyFragment implements ToDoMainContract.View 
             if( getArguments().getLong( ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID , Integer.MIN_VALUE ) != Integer.MIN_VALUE )
                 categoryFilterID = getArguments().getLong( ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID );
         }
+
+//        AppComponent appComponent = DaggerAppComponent
+//                .builder()
+//                .appModule(new AppModule())
+//                .build();
+        DaggerToDoFragmentComponent
+                .builder()
+                .appComponent(((App)getActivity().getApplication()).getAppComponent())
+                .build()
+                .inject(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+        //Test
+        Log.i("ToDoFragment", "================================" + a);
+
+
         View view = inflater.inflate(R.layout.content_tiplist, container, false);
         recyclerView = view.findViewById(R.id.tip_recycler);
 

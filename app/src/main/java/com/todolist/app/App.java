@@ -1,4 +1,4 @@
-package com.todolist;
+package com.todolist.app;
 
 import android.app.AlarmManager;
 import android.app.Application;
@@ -36,6 +36,8 @@ public class App extends Application {
 
     private static AlarmManager alarmManager;
 
+    private AppComponent appComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -49,6 +51,8 @@ public class App extends Application {
         OkHttpUtils.initClient(okHttpClient);
 
         context = getApplicationContext();
+
+        appComponent = DaggerAppComponent.create();
 
         init();
 
@@ -89,4 +93,7 @@ public class App extends Application {
         return alarmManager;
     }
 
+    public AppComponent getAppComponent() {
+        return appComponent;
+    }
 }
