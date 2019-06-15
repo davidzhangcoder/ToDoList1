@@ -1,6 +1,7 @@
 package com.todolist.app;
 
 import com.todolist.todomain.TestA;
+import com.todolist.todomain.ToDoFragmentComponent;
 
 import javax.inject.Singleton;
 
@@ -11,5 +12,7 @@ import dagger.Component;
 public interface AppComponent {
 
     TestA getTestA();
+
+    ToDoFragmentComponent.Builder toDoFragmentComponent();
 
 }

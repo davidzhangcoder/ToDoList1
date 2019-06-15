@@ -102,13 +102,21 @@ public class ToDoFragment extends LazyFragment implements ToDoMainContract.View 
                 categoryFilterID = getArguments().getLong( ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID );
         }
 
-//        AppComponent appComponent = DaggerAppComponent
+//        DaggerToDoFragmentComponent
 //                .builder()
-//                .appModule(new AppModule())
-//                .build();
-        DaggerToDoFragmentComponent
-                .builder()
-                .appComponent(((App)getActivity().getApplication()).getAppComponent())
+//                .appComponent(((App)getActivity().getApplication()).getAppComponent())
+//                .build()
+//                .inject(this);
+
+//        DaggerAppComponent
+//                .builder()
+//                .build()
+//                .toDoFragmentComponent()
+//                .build()
+//                .inject(this);
+
+        ((App)getActivity().getApplication()).getAppComponent()
+                .toDoFragmentComponent()
                 .build()
                 .inject(this);
     }

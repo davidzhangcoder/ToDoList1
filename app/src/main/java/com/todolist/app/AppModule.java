@@ -1,13 +1,14 @@
 package com.todolist.app;
 
 import com.todolist.todomain.TestA;
+import com.todolist.todomain.ToDoFragmentComponent;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(subcomponents = {ToDoFragmentComponent.class} )
 public class AppModule {
 
     @Provides
