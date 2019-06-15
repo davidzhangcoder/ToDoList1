@@ -16,4 +16,5 @@ public interface DoneMainContract {
     interface Presenter extends BasePresenter {
         void reverseDoneAction(ToDoItem toDoItem);
     }
+
 }
