@@ -1,4 +1,4 @@
-package com.todolist.todomain;
+package com.todolist.todomain.fragment.todo;
 
 import android.support.annotation.NonNull;
 
@@ -10,12 +10,12 @@ import com.todolist.model.ToDoItem;
 
 import java.util.List;
 
-public class ToDoMainPresenter implements ToDoMainContract.Presenter {
+public class ToDoFragmentPresenter implements ToDoFragmentContract.Presenter {
 
     private ToDoItemRepository toDoItemRepository;
-    private ToDoMainContract.View view;
+    private ToDoFragmentContract.View view;
 
-    public ToDoMainPresenter(@NonNull ToDoItemRepository toDoItemRepository , @NonNull ToDoMainContract.View view) {
+    public ToDoFragmentPresenter(@NonNull ToDoItemRepository toDoItemRepository , @NonNull ToDoFragmentContract.View view) {
         this.toDoItemRepository = toDoItemRepository;
         this.view = view;
         view.setPresenter( this );

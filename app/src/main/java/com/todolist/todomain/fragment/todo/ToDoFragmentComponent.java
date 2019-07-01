@@ -1,16 +1,12 @@
-package com.todolist.todomain;
+package com.todolist.todomain.fragment.todo;
 
-import com.todolist.app.AppComponent;
-import com.todolist.app.AppModule;
+import com.todolist.di.ActivityScoped;
 import com.todolist.di.FragmentScoped;
 
-import javax.inject.Singleton;
-
-import dagger.Component;
 import dagger.Subcomponent;
 
 @FragmentScoped
-@Subcomponent(modules = {ToDoMainModule.class} )
+@Subcomponent(modules = {ToDoFragmentModule.class} )
 public interface ToDoFragmentComponent {
 
     void inject(ToDoFragment toDoFragment);
@@ -18,6 +14,9 @@ public interface ToDoFragmentComponent {
     @Subcomponent.Builder
     interface Builder { // SubComponent 必须显式地声明 Subcomponent.Builder，parent Component 需要用 Builder 来创建 SubComponent
         ToDoFragmentComponent build();
+
+        //因为ToDoFragmentModule的构建器有参数，所以需要setter方法
+        Builder setToDoFragmentModule(ToDoFragmentModule toDoFragmentModule);
     }
 
 }

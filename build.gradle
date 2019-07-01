@@ -30,4 +30,5 @@ task clean(type: Delete) {
 // Define versions in a single place
 ext {
     guavaVersion = '27.0.1-android'
+    mockitoVersion = '2.7.22'
 }

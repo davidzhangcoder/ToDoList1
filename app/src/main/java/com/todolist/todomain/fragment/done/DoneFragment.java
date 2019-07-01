@@ -1,6 +1,5 @@
-package com.todolist.todomain;
+package com.todolist.todomain.fragment.done;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,13 +12,10 @@ import android.view.ViewGroup;
 
 import com.todolist.R;
 import com.todolist.app.App;
-import com.todolist.app.AppComponent;
-import com.todolist.app.AppModule;
-import com.todolist.app.DaggerAppComponent;
 import com.todolist.data.Injection;
+import com.todolist.todomain.TestA;
 import com.todolist.ui.LazyFragment;
 import com.todolist.ui.adapter.TipListAdapter;
-import com.todolist.db.GenericDao;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.ToDoItem;
 
@@ -37,12 +33,13 @@ import javax.inject.Inject;
  * Use the {@link DoneFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DoneFragment extends LazyFragment implements DoneMainContract.View {
+public class DoneFragment extends LazyFragment implements DoneFragmentContract.View {
 
     public static final String NAME = DoneFragment.class.getName();
 
 
-    private DoneMainContract.Presenter mPresenter;
+    @Inject
+    DoneFragmentContract.Presenter mPresenter;
 
     private RecyclerView recyclerView;
 
@@ -59,7 +56,7 @@ public class DoneFragment extends LazyFragment implements DoneMainContract.View 
     TestA a;
 
 
-    @Inject
+//    @Inject
     public DoneFragment() {
         // Required empty public constructor
     }
@@ -88,9 +85,11 @@ public class DoneFragment extends LazyFragment implements DoneMainContract.View 
 //                .builder()
 //                .appModule(new AppModule())
 //                .build();
+
         DaggerDoneFragmentComponent
                 .builder()
                 .appComponent(((App)getActivity().getApplication()).getAppComponent())
+                .doneFragmentModule(new DoneFragmentModule(this))
                 .build()
                 .inject(this);
     }
@@ -157,7 +156,7 @@ public class DoneFragment extends LazyFragment implements DoneMainContract.View 
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        new DoneMainPresenter(Injection.provideToDoItemRepository(),this);
+//        new DoneFragmentPresenter(Injection.provideToDoItemRepository(),this);
 
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
@@ -168,7 +167,7 @@ public class DoneFragment extends LazyFragment implements DoneMainContract.View 
     }
 
     @Override
-    public void setPresenter(DoneMainContract.Presenter presenter) {
+    public void setPresenter(DoneFragmentContract.Presenter presenter) {
         mPresenter = presenter;
     }
 

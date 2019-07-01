@@ -1,4 +1,4 @@
-package com.todolist.todomain;
+package com.todolist.todomain.fragment.done;
 
 import com.todolist.data.source.GenericDataSource;
 import com.todolist.data.source.ToDoItemDataSource;
@@ -7,12 +7,12 @@ import com.todolist.model.ToDoItem;
 
 import java.util.List;
 
-public class DoneMainPresenter implements DoneMainContract.Presenter {
+public class DoneFragmentPresenter implements DoneFragmentContract.Presenter {
 
     private ToDoItemRepository toDoItemRepository;
-    private DoneMainContract.View view;
+    private DoneFragmentContract.View view;
 
-    public DoneMainPresenter(ToDoItemRepository toDoItemRepository, DoneMainContract.View view) {
+    public DoneFragmentPresenter(ToDoItemRepository toDoItemRepository, DoneFragmentContract.View view) {
         this.toDoItemRepository = toDoItemRepository;
         this.view = view;
 

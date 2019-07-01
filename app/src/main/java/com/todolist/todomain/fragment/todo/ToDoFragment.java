@@ -1,13 +1,11 @@
-package com.todolist.todomain;
+package com.todolist.todomain.fragment.todo;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,16 +19,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.todolist.app.App;
-import com.todolist.app.AppComponent;
-import com.todolist.app.AppModule;
-import com.todolist.app.DaggerAppComponent;
 import com.todolist.data.Injection;
 import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
+
+import com.todolist.todomain.ToDoMainActivity;
+import com.todolist.todomain.fragment.category.CategoryFragment;
+import com.todolist.todomain.TestA;
 import com.todolist.ui.LazyFragment;
 import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.TipListItemTouchHelperCallback;
-import com.todolist.db.GenericDao;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
@@ -43,7 +41,7 @@ import javax.inject.Inject;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class ToDoFragment extends LazyFragment implements ToDoMainContract.View {
+public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.View {
 
     public static final String NAME = ToDoFragment.class.getName();
     public static final int DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE = 1;
@@ -66,7 +64,8 @@ public class ToDoFragment extends LazyFragment implements ToDoMainContract.View 
     private ToDoCategory selectedToDoCategory;
 
 
-    private ToDoMainContract.Presenter mPresenter;
+    @Inject
+    ToDoFragmentContract.Presenter mPresenter;
 
     private boolean isCreated = false;
 
@@ -75,7 +74,7 @@ public class ToDoFragment extends LazyFragment implements ToDoMainContract.View 
     TestA a;
 
 
-    @Inject
+//    @Inject
     public ToDoFragment() {
     }
 
@@ -115,8 +114,17 @@ public class ToDoFragment extends LazyFragment implements ToDoMainContract.View 
 //                .build()
 //                .inject(this);
 
-        ((App)getActivity().getApplication()).getAppComponent()
+//        ((App)getActivity().getApplication())
+//                .getAppComponent()
+//                .toDoFragmentComponent()
+//                .setToDoFragmentModule(new ToDoFragmentModule(this))
+//                .build()
+//                .inject(this);
+
+        ((ToDoMainActivity)getActivity())
+                .getToDoMainActivityComponent()
                 .toDoFragmentComponent()
+                .setToDoFragmentModule(new ToDoFragmentModule(this))
                 .build()
                 .inject(this);
     }
@@ -215,7 +223,7 @@ public class ToDoFragment extends LazyFragment implements ToDoMainContract.View 
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        new ToDoMainPresenter(Injection.provideToDoItemRepository(),this);
+//        new ToDoFragmentPresenter(Injection.provideToDoItemRepository(),this);
 
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
@@ -281,7 +289,7 @@ public class ToDoFragment extends LazyFragment implements ToDoMainContract.View 
     }
 
     @Override
-    public void setPresenter(@NonNull ToDoMainContract.Presenter presenter) {
+    public void setPresenter(@NonNull ToDoFragmentContract.Presenter presenter) {
          this.mPresenter = checkNotNull(presenter);
     }
 

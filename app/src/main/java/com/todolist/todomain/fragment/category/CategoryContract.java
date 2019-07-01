@@ -1,4 +1,4 @@
-package com.todolist.todomain;
+package com.todolist.todomain.fragment.category;
 
 import com.todolist.model.ToDoCategory;
 import com.todolist.ui.BasePresenter;

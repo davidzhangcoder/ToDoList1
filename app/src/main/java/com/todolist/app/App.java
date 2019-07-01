@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
 import com.todolist.context.ContextHolder;
@@ -53,6 +54,9 @@ public class App extends Application {
         context = getApplicationContext();
 
         appComponent = DaggerAppComponent.create();
+
+        //Test
+        Log.i("App", "================================" + appComponent.getTestA());
 
         init();
 

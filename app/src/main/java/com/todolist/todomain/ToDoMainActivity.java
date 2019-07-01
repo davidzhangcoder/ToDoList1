@@ -1,7 +1,6 @@
 package com.todolist.todomain;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -11,16 +10,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.todolist.R;
-import com.todolist.data.Injection;
+import com.todolist.app.App;
 import com.todolist.event.BusFactory;
-import com.todolist.model.ToDoCategory;
+import com.todolist.todomain.fragment.category.CategoryFragment;
+import com.todolist.todomain.fragment.done.DoneFragment;
+import com.todolist.todomain.fragment.todo.ToDoFragment;
+import com.todolist.todomain.fragment.todo.ToDoFragmentAdapter;
 
 
 import java.util.ArrayList;
@@ -61,6 +59,8 @@ public class ToDoMainActivity extends AppCompatActivity
     @Inject
     DoneFragment doneFragment;
 
+    ToDoMainActivityComponent toDoMainActivityComponent;
+
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = this;
@@ -87,7 +87,11 @@ public class ToDoMainActivity extends AppCompatActivity
 
         });
 
-        DaggerToDoMainActivityComponent.builder().build().inject(this);
+        toDoMainActivityComponent = DaggerToDoMainActivityComponent
+                .builder()
+                .appComponent(((App)getApplication()).getAppComponent())
+                .build();
+        toDoMainActivityComponent.inject(this);
 
         initViewPagerFragments();
    }
@@ -154,4 +158,7 @@ public class ToDoMainActivity extends AppCompatActivity
         BusFactory.getBus().unregister(this);
     }
 
+    public ToDoMainActivityComponent getToDoMainActivityComponent() {
+        return toDoMainActivityComponent;
+    }
 }

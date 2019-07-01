@@ -1,4 +1,4 @@
-package com.todolist.todomain;
+package com.todolist.todomain.fragment.todo;
 
 import com.todolist.model.ToDoItem;
 import com.todolist.ui.BasePresenter;
@@ -6,7 +6,7 @@ import com.todolist.ui.BaseView;
 
 import java.util.List;
 
-public interface ToDoMainContract {
+public interface ToDoFragmentContract {
 
     interface View extends BaseView<Presenter>
     {

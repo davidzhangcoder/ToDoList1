@@ -1,6 +1,5 @@
-package com.todolist.todomain;
+package com.todolist.todomain.fragment.category;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,16 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.todolist.app.App;
 import com.todolist.data.Injection;
 import com.todolist.ui.adapter.CategoryListAdapter;
 import com.todolist.R;
-import com.todolist.db.GenericDao;
 import com.todolist.model.IToDoCategory;
 import com.todolist.model.ToDoCategory;
 import com.todolist.ui.dialog.AddCategoryDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class CategoryFragment extends BottomSheetDialogFragment implements CategoryContract.View
 {
@@ -35,7 +36,8 @@ public class CategoryFragment extends BottomSheetDialogFragment implements Categ
 
     private ToDoCategory selectedToDoCategory;
 
-    private CategoryContract.Presenter presenter;
+    @Inject
+    CategoryContract.Presenter presenter;
 
     private List<IToDoCategory> categoryList = new ArrayList<IToDoCategory>();
 
@@ -60,6 +62,12 @@ public class CategoryFragment extends BottomSheetDialogFragment implements Categ
         if (getArguments() != null) {
             selectedToDoCategory = (ToDoCategory)getArguments().getSerializable("selectedToDoCategory");
         }
+        DaggerCategoryComponent
+                .builder()
+                .appComponent(((App)getActivity().getApplication()).getAppComponent())
+                .categoryModule(new CategoryModule(this))
+                .build()
+                .inject(this);
     }
 
     @Override
@@ -109,7 +117,7 @@ public class CategoryFragment extends BottomSheetDialogFragment implements Categ
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        new CategoryPresenter(Injection.provideToDoItemRepository(),this);
+//        new CategoryPresenter(Injection.provideToDoItemRepository(),this);
 
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
