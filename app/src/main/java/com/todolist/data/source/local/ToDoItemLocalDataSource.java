@@ -25,7 +25,7 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
     private ToDoItemDao mToDoItemDao;
 
     // Prevent direct instantiation.
-    private ToDoItemLocalDataSource(@NonNull AppExecutors appExecutors,
+    protected ToDoItemLocalDataSource(@NonNull AppExecutors appExecutors,
                                  @NonNull ToDoItemDao toDoItemDao) {
         mAppExecutors = appExecutors;
         mToDoItemDao = toDoItemDao;
