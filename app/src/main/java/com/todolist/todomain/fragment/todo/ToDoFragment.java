@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.todolist.app.App;
 import com.todolist.data.Injection;
 import com.todolist.tododetail.EditToDoItemActivity;
@@ -155,6 +160,13 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 
         isCreated = true;
         lazyLoad();
+
+
+        AdView mAdView = view.findViewById(R.id.adView);
+//        mAdView.setAdSize(new AdSize((int) dpWidth, 50));
+//        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         return view;
     }

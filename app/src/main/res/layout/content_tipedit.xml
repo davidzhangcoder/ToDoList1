@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/edit_header"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/appbar"
     tools:showIn="@layout/activity_tipedit"
     android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     >
 
 
@@ -392,5 +391,27 @@
         <!--</LinearLayout>-->
     <!--</LinearLayout>-->
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="bottom"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/amdob_adunit_banner">
+        </com.google.android.gms.ads.AdView>
+        <!--<Button-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="aaaaa"-->
+            <!--android:gravity="bottom"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--/>-->
+    </LinearLayout>
 
 </LinearLayout>

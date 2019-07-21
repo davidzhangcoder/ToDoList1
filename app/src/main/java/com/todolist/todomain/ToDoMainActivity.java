@@ -10,8 +10,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.todolist.R;
 import com.todolist.app.App;
 import com.todolist.event.BusFactory;
@@ -19,6 +29,7 @@ import com.todolist.todomain.fragment.category.CategoryFragment;
 import com.todolist.todomain.fragment.done.DoneFragment;
 import com.todolist.todomain.fragment.todo.ToDoFragment;
 import com.todolist.todomain.fragment.todo.ToDoFragmentAdapter;
+import com.todolist.ui.dialog.RewardVideoAndPurchaseDialog;
 
 
 import java.util.ArrayList;
@@ -61,6 +72,8 @@ public class ToDoMainActivity extends AppCompatActivity
 
     ToDoMainActivityComponent toDoMainActivityComponent;
 
+    private RewardedVideoAd rewardedVideoAd;
+
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.context = this;
@@ -79,6 +92,7 @@ public class ToDoMainActivity extends AppCompatActivity
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 //following code make it scroll up to hide actionbar, but not hide Tab
+                //and stretch the viewPager
                 ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
                 layoutParams.setMargins(0, 0, 0, toolbar.getMeasuredHeight() + verticalOffset);
                 viewPager.requestLayout();
@@ -94,7 +108,91 @@ public class ToDoMainActivity extends AppCompatActivity
         toDoMainActivityComponent.inject(this);
 
         initViewPagerFragments();
-   }
+
+        RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
+        rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
+
+
+//        MobileAds.initialize(this, "ca-app-pub-6130191480576260~1951770609");
+//
+//        AdView mAdView = findViewById(R.id.adView);
+////        mAdView.setAdSize(AdSize.BANNER);
+//        Real ID : ca-app-pub-6130191480576260/5998826825
+////        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
+
+
+//        // test
+//        Button button = new Button( this );
+//        button.setText("test button");
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                if( rewardedVideoAd.isLoaded() ) {
+////                    rewardedVideoAd.show();
+////                }
+//                RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
+//                rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
+//            }
+//        });
+//        toolbar.addView( button );
+//
+//
+//        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance( this );
+//        RewardedVideoAdListener rewardedVideoAdListener = new RewardedVideoAdListener(){
+//
+//            @Override
+//            public void onRewardedVideoAdLoaded() {
+//                Toast.makeText(ToDoMainActivity.this,"onRewardedVideoAdLoaded",Toast.LENGTH_SHORT);
+//            }
+//
+//            @Override
+//            public void onRewardedVideoAdOpened() {
+//
+//            }
+//
+//            @Override
+//            public void onRewardedVideoStarted() {
+//
+//            }
+//
+//            @Override
+//            public void onRewardedVideoAdClosed() {
+//                // Load the next rewarded video ad.
+//                loadRewardedVideoAd();
+//            }
+//
+//            @Override
+//            public void onRewarded(RewardItem rewardItem) {
+//                Toast.makeText(ToDoMainActivity.this,"onRewarded",Toast.LENGTH_SHORT);
+//            }
+//
+//            @Override
+//            public void onRewardedVideoAdLeftApplication() {
+//
+//            }
+//
+//            @Override
+//            public void onRewardedVideoAdFailedToLoad(int i) {
+//
+//            }
+//
+//            @Override
+//            public void onRewardedVideoCompleted() {
+//                Toast.makeText(ToDoMainActivity.this,"onRewardedVideoCompleted",Toast.LENGTH_SHORT);
+//            }
+//        };
+//        rewardedVideoAd.setRewardedVideoAdListener( rewardedVideoAdListener );
+//
+//        loadRewardedVideoAd();
+
+    }
+
+    private void loadRewardedVideoAd() {
+        rewardedVideoAd.loadAd(getString(R.string.admob_adunit_rewardvideo),
+                new AdRequest.Builder().build());
+    }
 
     private void initViewPagerFragments() {
 

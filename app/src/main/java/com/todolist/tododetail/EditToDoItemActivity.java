@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.maltaisn.recurpicker.Recurrence;
 import com.maltaisn.recurpicker.RecurrenceFormat;
 import com.maltaisn.recurpicker.RecurrencePickerDialog;
@@ -143,6 +146,15 @@ public class EditToDoItemActivity extends AppCompatActivity
         new EditToDoItemPresenter(Injection.provideToDoItemRepository(),this);
 
         init();
+
+        MobileAds.initialize(this, "ca-app-pub-6130191480576260~1951770609");
+
+        AdView mAdView = findViewById(R.id.adView);
+//        mAdView.setAdSize(AdSize.BANNER);
+//        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
     }
 
     @Override

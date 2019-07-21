@@ -19,4 +19,13 @@
     <string name="category_shopping">Shopping</string>
     <string name="tab_title_todo">To Do</string>
     <string name="tab_title_done">Done</string>
+
+    <string name="admob_app_id">ca-app-pub-6130191480576260~1951770609</string>
+
+    <string name="amdob_adunit_banner">ca-app-pub-3940256099942544/6300978111</string>
+    <!--<string name="amdob_adunit_banner">ca-app-pub-6130191480576260/5998826825</string>-->
+    <!--<string name="admob_adunit_banner_sample">ca-app-pub-3940256099942544/6300978111</string>-->
+
+    <string name="admob_adunit_rewardvideo">ca-app-pub-3940256099942544/5224354917</string>
+    <!--<string name="admob_adunit_rewardvideo_sample">ca-app-pub-3940256099942544/5224354917</string>-->
 </resources>

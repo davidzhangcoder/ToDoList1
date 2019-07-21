@@ -9,11 +9,12 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.google.android.gms.ads.MobileAds;
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
 import com.todolist.context.ContextHolder;
 import com.todolist.model.ToDoCategory;
 import com.todolist.service.ToDoListAlarmService;
-import com.zhy.http.okhttp.OkHttpUtils;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.OkHttpClient;
+
 
 /**
  * Created by wanglei on 2016/12/9.
@@ -43,13 +44,13 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
-                .readTimeout(10000L, TimeUnit.MILLISECONDS)
-                //其他配置
-                .build();
-
-        OkHttpUtils.initClient(okHttpClient);
+//        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+//                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+//                //其他配置
+//                .build();
+//
+//        OkHttpUtils.initClient(okHttpClient);
 
         context = getApplicationContext();
 
@@ -91,6 +92,8 @@ public class App extends Application {
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         doDueAlarmService();
+
+        MobileAds.initialize(this, "ca-app-pub-6130191480576260~1951770609");
     }
 
     public static AlarmManager getAlarmManager() {
