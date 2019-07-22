@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
@@ -30,6 +31,7 @@ import com.todolist.todomain.fragment.done.DoneFragment;
 import com.todolist.todomain.fragment.todo.ToDoFragment;
 import com.todolist.todomain.fragment.todo.ToDoFragmentAdapter;
 import com.todolist.ui.dialog.RewardVideoAndPurchaseDialog;
+import com.todolist.util.AdsUtil;
 
 
 import java.util.ArrayList;
@@ -109,6 +111,7 @@ public class ToDoMainActivity extends AppCompatActivity
 
         initViewPagerFragments();
 
+        //display Reward Video
         RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
         rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
 
@@ -124,6 +127,7 @@ public class ToDoMainActivity extends AppCompatActivity
 
 
 //        // test
+//        InterstitialAd interstitialAd = AdsUtil.setupInterstitialAd(this);
 //        Button button = new Button( this );
 //        button.setText("test button");
 //        button.setOnClickListener(new View.OnClickListener() {
@@ -132,13 +136,18 @@ public class ToDoMainActivity extends AppCompatActivity
 ////                if( rewardedVideoAd.isLoaded() ) {
 ////                    rewardedVideoAd.show();
 ////                }
-//                RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
-//                rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
+//
+////                RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
+////                rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
+//
+//                if( interstitialAd != null && interstitialAd.isLoaded() ) {
+//                    interstitialAd.show();
+//                }
 //            }
 //        });
 //        toolbar.addView( button );
-//
-//
+
+
 //        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance( this );
 //        RewardedVideoAdListener rewardedVideoAdListener = new RewardedVideoAdListener(){
 //

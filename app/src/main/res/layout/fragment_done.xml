@@ -21,7 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/amdob_adunit_banner">
+        ads:adUnitId="@string/admob_adunit_banner">
     </com.google.android.gms.ads.AdView>
 
 </FrameLayout>

@@ -3,7 +3,9 @@ package com.todolist.util;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
@@ -13,6 +15,24 @@ import com.todolist.todomain.ToDoMainActivity;
 
 public class AdsUtil {
 
+
+    public static InterstitialAd setupInterstitialAd( Context context ) {
+        InterstitialAd interstitialAd = new InterstitialAd(context);
+        interstitialAd.setAdUnitId( context.getString(R.string.admon_adunit_interstitial) );
+
+        interstitialAd.loadAd(new AdRequest.Builder().build());
+
+        AdListener adListener = new AdListener() {
+            @Override
+            public void onAdClosed() {
+                interstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+        };
+
+        interstitialAd.setAdListener( adListener );
+
+        return interstitialAd;
+    }
 
     public static RewardedVideoAd setupRewardedVideoAd( Context context ) {
         RewardedVideoAd rewardedVideoAd = MobileAds.getRewardedVideoAdInstance( context );
