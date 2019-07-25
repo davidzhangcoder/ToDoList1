@@ -25,6 +25,7 @@ import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 import com.todolist.ui.dialog.CategorySelectionDialog;
+import com.todolist.util.AdsUtil;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -79,6 +80,7 @@ public class EditToDoItemActivity extends AppCompatActivity
     private ImageView dueTimeImage;
     private ImageView repeatImage;
     private ImageView categoryImage;
+    private AdView mAdView;
 
     private ToDoItem toDoItem;
     private GenericDao db;
@@ -112,6 +114,7 @@ public class EditToDoItemActivity extends AppCompatActivity
         dueTimeImage = findViewById(R.id.dueTimeImage);
         repeatImage = findViewById(R.id.repeatImage);
         categoryImage = findViewById(R.id.categoryImage);
+        mAdView = findViewById(R.id.adView);
 
         Intent i = getIntent();
         toDoItem = (ToDoItem)i.getSerializableExtra( EDITTODOITEMACTIVITY_TODOITEM );
@@ -147,13 +150,25 @@ public class EditToDoItemActivity extends AppCompatActivity
 
         init();
 
-        MobileAds.initialize(this, "ca-app-pub-6130191480576260~1951770609");
+        displayBannerAds(mAdView);
 
-        AdView mAdView = findViewById(R.id.adView);
-//        mAdView.setAdSize(AdSize.BANNER);
-//        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
+//        MobileAds.initialize(this, "ca-app-pub-6130191480576260~1951770609");
+//
+//        AdView mAdView = findViewById(R.id.adView);
+////        mAdView.setAdSize(AdSize.BANNER);
+////        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
+
+    }
+
+    private void displayBannerAds(AdView mAdView) {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+        if(AdsUtil.displayBannerAds())
+            mAdView.setVisibility(View.VISIBLE);
+        else
+            mAdView.setVisibility(View.INVISIBLE);
 
     }
 

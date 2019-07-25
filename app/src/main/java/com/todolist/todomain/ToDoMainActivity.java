@@ -1,12 +1,18 @@
 package com.todolist.todomain;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +38,9 @@ import com.todolist.todomain.fragment.todo.ToDoFragment;
 import com.todolist.todomain.fragment.todo.ToDoFragmentAdapter;
 import com.todolist.ui.dialog.RewardVideoAndPurchaseDialog;
 import com.todolist.util.AdsUtil;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
 
 
 import java.util.ArrayList;
@@ -47,6 +56,8 @@ public class ToDoMainActivity extends AppCompatActivity
         DoneFragment.OnFragmentInteractionListener
 {
     private static final String TAG = ToDoMainActivity.class.getName();
+
+    private final int REQUEST_CODE_CHOOSE=0;
 
     protected Activity context;
 //    private Unbinder unbinder;
@@ -126,26 +137,46 @@ public class ToDoMainActivity extends AppCompatActivity
 //        mAdView.loadAd(adRequest);
 
 
-//        // test
-//        InterstitialAd interstitialAd = AdsUtil.setupInterstitialAd(this);
-//        Button button = new Button( this );
-//        button.setText("test button");
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                if( rewardedVideoAd.isLoaded() ) {
-////                    rewardedVideoAd.show();
-////                }
-//
-////                RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
-////                rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
-//
+        // test
+        InterstitialAd interstitialAd = AdsUtil.setupInterstitialAd(this);
+        Button button = new Button( this );
+        button.setText("test button");
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Rewared Video
+//                if( rewardedVideoAd.isLoaded() ) {
+//                    rewardedVideoAd.show();
+//                }
+
+                //Rewarded Video Dialog
+//                RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
+//                rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
+
+                //Interstitial
 //                if( interstitialAd != null && interstitialAd.isLoaded() ) {
 //                    interstitialAd.show();
 //                }
-//            }
-//        });
-//        toolbar.addView( button );
+
+                //Matisse
+//                if(ContextCompat.checkSelfPermission(ToDoMainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+//                    ActivityCompat.requestPermissions(ToDoMainActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
+//                }else{
+//                    //执行逻辑
+//                    Matisse.from(ToDoMainActivity.this)
+//                            .choose(MimeType.ofAll())
+//                            .countable(true)
+//                            .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
+////                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+//                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+//                            .thumbnailScale(0.85f)
+//                            .imageEngine(new GlideEngine())
+//                            .forResult(REQUEST_CODE_CHOOSE);
+//                }
+
+            }
+        });
+        toolbar.addView( button );
 
 
 //        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance( this );
@@ -196,6 +227,30 @@ public class ToDoMainActivity extends AppCompatActivity
 //
 //        loadRewardedVideoAd();
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //执行逻辑
+                    Matisse.from(ToDoMainActivity.this)
+                            .choose(MimeType.ofAll())
+                            .countable(true)
+                            .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
+//                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                            .thumbnailScale(0.85f)
+                            .imageEngine(new GlideEngine())
+                            .forResult(REQUEST_CODE_CHOOSE);
+                } else {
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+            default:
+        }
     }
 
     private void loadRewardedVideoAd() {

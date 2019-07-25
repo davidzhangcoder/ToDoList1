@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.todolist.R;
 import com.todolist.app.App;
 import com.todolist.data.Injection;
@@ -20,6 +22,7 @@ import com.todolist.ui.LazyFragment;
 import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.ToDoItem;
+import com.todolist.util.AdsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +47,8 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
     DoneFragmentContract.Presenter mPresenter;
 
     private RecyclerView recyclerView;
+
+    private AdView mAdView;
 
     private List<IToDoItem> doneList = new ArrayList<IToDoItem>();
 
@@ -109,26 +114,45 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
         View view = inflater.inflate(R.layout.fragment_done, container, false);
 
         recyclerView = view.findViewById(R.id.done_recycler);
+        mAdView = view.findViewById(R.id.adView);
 
         initRecyclerView( recyclerView );
 
         isCreated = true;
         lazyLoad();
 
-        AdView mAdView = view.findViewById(R.id.adView);
-//        mAdView.setAdSize(new AdSize((int) dpWidth, 50));
-//        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+//        AdView mAdView = view.findViewById(R.id.adView);
+////        mAdView.setAdSize(new AdSize((int) dpWidth, 50));
+////        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
 
         return view;
+    }
+
+    private void displayBannerAds(AdView mAdView) {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        if(AdsUtil.displayBannerAds())
+            mAdView.setVisibility(View.VISIBLE);
+        else
+            mAdView.setVisibility(View.INVISIBLE);
+
     }
 
     @Override
     protected void lazyLoad() {
         if( isCreated && isVisible ) {
             mPresenter.start();
+
+            displayBannerAds(mAdView);
         }
+    }
+
+    @Override
+    protected void onInvisible() {
+        if( isCreated && !isVisible )
+            mAdView.setVisibility(View.INVISIBLE);
     }
 
     private void initRecyclerView( RecyclerView recyclerView )

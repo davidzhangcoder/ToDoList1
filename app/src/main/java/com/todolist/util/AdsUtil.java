@@ -13,8 +13,28 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.todolist.R;
 import com.todolist.todomain.ToDoMainActivity;
 
+import java.util.Random;
+
 public class AdsUtil {
 
+
+    private final static Random BANNER_RANDOM = new Random();
+
+    private final static Random REWARDEDVIDEO_RANDOM = new Random();
+
+    private final static Random INTERSTITIAL_RANDOM = new Random();
+
+    public static boolean displayBannerAds() {
+        return BANNER_RANDOM.nextBoolean();
+    }
+
+    public static boolean displayRewardedVideoAds() {
+        return false;
+    }
+
+    public static boolean displayInterstitialAds() {
+        return false;
+    }
 
     public static InterstitialAd setupInterstitialAd( Context context ) {
         InterstitialAd interstitialAd = new InterstitialAd(context);

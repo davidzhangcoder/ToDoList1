@@ -58,7 +58,7 @@
         app:layout_anchorGravity="bottom|right|end"
          />
 
-    <com.google.android.gms.ads.AdView
+    <com.google.android.gms.ads.doubleclick.PublisherAdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
         android:layout_width="match_parent"
@@ -66,9 +66,9 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/admob_adunit_banner">
-    </com.google.android.gms.ads.AdView>
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/admon_adunit_publisherad">
+    </com.google.android.gms.ads.doubleclick.PublisherAdView>
 
 
 </FrameLayout>

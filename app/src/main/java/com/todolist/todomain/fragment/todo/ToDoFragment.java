@@ -23,6 +23,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.todolist.app.App;
 import com.todolist.data.Injection;
 import com.todolist.tododetail.EditToDoItemActivity;
@@ -37,6 +39,7 @@ import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
+import com.todolist.util.AdsUtil;
 import com.todolist.util.ToDoItemUtil;
 
 import java.util.ArrayList;
@@ -67,6 +70,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     private TextView categoryButton;
     private ImageView categoryButtonImage;
     private ToDoCategory selectedToDoCategory;
+    private PublisherAdView mAdView;
 
 
     @Inject
@@ -154,6 +158,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         ((AppCompatActivity)this.getActivity()).setSupportActionBar(toolbar);
         categoryButton = (TextView)toolbar.findViewById(R.id.categoryButton);
         categoryButtonImage = (ImageView)toolbar.findViewById(R.id.categoryButtonImage);;
+        mAdView = view.findViewById(R.id.adView);
 
         initRecyclerView( recyclerView );
         initCategoryFragment();
@@ -162,20 +167,42 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         lazyLoad();
 
 
-        AdView mAdView = view.findViewById(R.id.adView);
-//        mAdView.setAdSize(new AdSize((int) dpWidth, 50));
-//        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+//        mAdView = view.findViewById(R.id.adView);
+////        mAdView.setAdSize(new AdSize((int) dpWidth, 50));
+////        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
+//        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
+//        if(AdsUtil.displayBannerAds())
+//            mAdView.setVisibility(View.VISIBLE);
+//        else
+//            mAdView.setVisibility(View.INVISIBLE);
 
         return view;
+    }
+
+    private void displayBannerAds(PublisherAdView mAdView) {
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        if(AdsUtil.displayBannerAds())
+            mAdView.setVisibility(View.VISIBLE);
+        else
+            mAdView.setVisibility(View.INVISIBLE);
+
     }
 
     @Override
     protected void lazyLoad() {
         if( isCreated && isVisible ) {
             mPresenter.start();
+
+            displayBannerAds(mAdView);
         }
+    }
+
+    @Override
+    protected void onInvisible() {
+        if( isCreated && !isVisible )
+            mAdView.setVisibility(View.INVISIBLE);
     }
 
     private void initCategoryFragment()

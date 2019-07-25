@@ -83,4 +83,8 @@ dependencies {
     //Admob
     implementation 'com.google.android.gms:play-services-ads:17.2.0'
 
+    //Matisse
+    implementation 'com.zhihu.android:matisse:0.5.1'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+
 }

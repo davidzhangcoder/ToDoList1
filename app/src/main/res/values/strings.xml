@@ -31,4 +31,7 @@
     
     <string name="admon_adunit_interstitial">ca-app-pub-3940256099942544/1033173712</string>
     <!--admon_adunit_Interstitial: sample Id : ca-app-pub-3940256099942544/1033173712-->
+
+    <string name="admon_adunit_publisherad">/6499/example/banner</string>
+    <!--sample Id : /6499/example/banner-->
 </resources>
