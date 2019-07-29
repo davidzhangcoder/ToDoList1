@@ -38,6 +38,7 @@ import com.todolist.todomain.fragment.todo.ToDoFragment;
 import com.todolist.todomain.fragment.todo.ToDoFragmentAdapter;
 import com.todolist.ui.dialog.RewardVideoAndPurchaseDialog;
 import com.todolist.util.AdsUtil;
+import com.todolist.util.SharedPrefUtils;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
@@ -51,11 +52,13 @@ import javax.inject.Inject;
 
 public class ToDoMainActivity extends AppCompatActivity
         implements
+        AdsUtil.RewardedVideoAdCallBack,
         ToDoFragment.OnFragmentInteractionListener ,
         CategoryFragment.OnFragmentInteractionListener ,
         DoneFragment.OnFragmentInteractionListener
 {
     private static final String TAG = ToDoMainActivity.class.getName();
+
 
     private final int REQUEST_CODE_CHOOSE=0;
 
@@ -87,44 +90,52 @@ public class ToDoMainActivity extends AppCompatActivity
 
     private RewardedVideoAd rewardedVideoAd;
 
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.context = this;
+    private RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog;
 
-        if (getLayoutId() > 0) {
-            setContentView(getLayoutId());
+
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    this.context = this;
+
+    if (getLayoutId() > 0) {
+        setContentView(getLayoutId());
+    }
+
+    toolbar = findViewById(R.id.toolbar);
+    tabLayout = findViewById(R.id.tabLayout);
+    viewPager = findViewById(R.id.viewPager);
+
+    appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+    appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+        @Override
+        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            //following code make it scroll up to hide actionbar, but not hide Tab
+            //and stretch the viewPager
+            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
+            layoutParams.setMargins(0, 0, 0, toolbar.getMeasuredHeight() + verticalOffset);
+            viewPager.requestLayout();
+
         }
 
-        toolbar = findViewById(R.id.toolbar);
-        tabLayout = findViewById(R.id.tabLayout);
-        viewPager = findViewById(R.id.viewPager);
+    });
 
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+    toDoMainActivityComponent = DaggerToDoMainActivityComponent
+            .builder()
+            .appComponent(((App)getApplication()).getAppComponent())
+            .build();
+    toDoMainActivityComponent.inject(this);
 
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                //following code make it scroll up to hide actionbar, but not hide Tab
-                //and stretch the viewPager
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
-                layoutParams.setMargins(0, 0, 0, toolbar.getMeasuredHeight() + verticalOffset);
-                viewPager.requestLayout();
+    initViewPagerFragments();
 
-            }
-
-        });
-
-        toDoMainActivityComponent = DaggerToDoMainActivityComponent
-                .builder()
-                .appComponent(((App)getApplication()).getAppComponent())
-                .build();
-        toDoMainActivityComponent.inject(this);
-
-        initViewPagerFragments();
-
-        //display Reward Video
-        RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
-        rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
+    //display Reward Video
+//        if( AdsUtil.displayRewardedVideoAds( this ) )
+    {
+//            String rewaredVideoDate = SharedPrefUtils.getStringData(this, REWARDED_VIDEO_DATE );
+        rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
+        rewardedVideoAd = AdsUtil.setupRewardedVideoAd(this , this );
+//            rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
+    }
 
 
 //        MobileAds.initialize(this, "ca-app-pub-6130191480576260~1951770609");
@@ -137,28 +148,28 @@ public class ToDoMainActivity extends AppCompatActivity
 //        mAdView.loadAd(adRequest);
 
 
-        // test
-        InterstitialAd interstitialAd = AdsUtil.setupInterstitialAd(this);
-        Button button = new Button( this );
-        button.setText("test button");
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Rewared Video
+    // test
+    InterstitialAd interstitialAd = AdsUtil.setupInterstitialAd(this);
+    Button button = new Button( this );
+    button.setText("test button");
+    button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //Rewared Video
 //                if( rewardedVideoAd.isLoaded() ) {
 //                    rewardedVideoAd.show();
 //                }
 
-                //Rewarded Video Dialog
+            //Rewarded Video Dialog
 //                RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
 //                rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
 
-                //Interstitial
+            //Interstitial
 //                if( interstitialAd != null && interstitialAd.isLoaded() ) {
 //                    interstitialAd.show();
 //                }
 
-                //Matisse
+            //Matisse
 //                if(ContextCompat.checkSelfPermission(ToDoMainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
 //                    ActivityCompat.requestPermissions(ToDoMainActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
 //                }else{
@@ -174,9 +185,9 @@ public class ToDoMainActivity extends AppCompatActivity
 //                            .forResult(REQUEST_CODE_CHOOSE);
 //                }
 
-            }
-        });
-        toolbar.addView( button );
+        }
+    });
+    toolbar.addView( button );
 
 
 //        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance( this );
@@ -227,6 +238,16 @@ public class ToDoMainActivity extends AppCompatActivity
 //
 //        loadRewardedVideoAd();
 
+}
+
+    @Override
+    public void doRewardedVideoAd() {
+        if( rewardVideoAndPurchaseDialog != null )
+            rewardVideoAndPurchaseDialog.show( this.getSupportFragmentManager(),"rewardVideoAndPurchaseDialog");
+    }
+
+    public RewardedVideoAd getRewardedVideoAd() {
+        return rewardedVideoAd;
     }
 
     @Override

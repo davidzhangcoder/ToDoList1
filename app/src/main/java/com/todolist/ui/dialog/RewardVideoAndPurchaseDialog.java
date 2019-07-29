@@ -1,24 +1,24 @@
 package com.todolist.ui.dialog;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
 import com.todolist.R;
+import com.todolist.todomain.ToDoMainActivity;
 import com.todolist.util.AdsUtil;
 
 public class RewardVideoAndPurchaseDialog extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        RewardedVideoAd rewardedVideoAd = AdsUtil.setupRewardedVideoAd(getActivity());
+//        RewardedVideoAd rewardedVideoAd = AdsUtil.setupRewardedVideoAd(getActivity() , (ToDoMainActivity)this.getActivity() );
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -30,18 +30,25 @@ public class RewardVideoAndPurchaseDialog extends AppCompatDialogFragment {
                 .setCancelable(true)
                 .create();
 
-        Button rewardVideoButton = (Button)view.findViewById(R.id.rewardVideoButton);
-        rewardVideoButton.setOnClickListener(new View.OnClickListener() {
+        ImageView rewardVideoImageView = (ImageView)view.findViewById(R.id.rewardVideoImage);
+        rewardVideoImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( rewardedVideoAd != null && rewardedVideoAd.isLoaded() )
-                {
-                    rewardedVideoAd.show();
-                    alertDialog.dismiss();
+                if( getActivity() instanceof AdsUtil.RewardedVideoAdCallBack ) {
+                    RewardedVideoAd rewardedVideoAd = ((AdsUtil.RewardedVideoAdCallBack) getActivity()).getRewardedVideoAd();
+                    if (rewardedVideoAd != null && rewardedVideoAd.isLoaded()) {
+                        rewardedVideoAd.show();
+                        alertDialog.dismiss();
+                    }
                 }
             }
         });
 
         return alertDialog;
     }
+
+//    @Override
+//    public void doRewardedVideoAd() {
+//        this.show( this.getFragmentManager(),"rewardVideoAndPurchaseDialog");
+//    }
 }

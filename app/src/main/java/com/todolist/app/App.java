@@ -10,6 +10,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.gms.ads.MobileAds;
+import com.todolist.R;
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
 import com.todolist.context.ContextHolder;
 import com.todolist.model.ToDoCategory;
@@ -93,7 +94,7 @@ public class App extends Application {
 
         doDueAlarmService();
 
-        MobileAds.initialize(this, "ca-app-pub-6130191480576260~1951770609");
+        MobileAds.initialize(this, getResources().getString(R.string.admob_app_id));
     }
 
     public static AlarmManager getAlarmManager() {

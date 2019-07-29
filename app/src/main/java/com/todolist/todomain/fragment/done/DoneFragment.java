@@ -133,7 +133,7 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
     private void displayBannerAds(AdView mAdView) {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-        if(AdsUtil.displayBannerAds())
+        if(AdsUtil.displayBannerAds( this.getActivity() ))
             mAdView.setVisibility(View.VISIBLE);
         else
             mAdView.setVisibility(View.INVISIBLE);

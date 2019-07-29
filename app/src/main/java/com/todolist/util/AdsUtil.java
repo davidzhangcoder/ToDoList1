@@ -13,10 +13,16 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.todolist.R;
 import com.todolist.todomain.ToDoMainActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 public class AdsUtil {
 
+
+    private static final String REWARDED_VIDEO_DATE = "REWARDED_VIDEO_DATE";
 
     private final static Random BANNER_RANDOM = new Random();
 
@@ -24,16 +30,47 @@ public class AdsUtil {
 
     private final static Random INTERSTITIAL_RANDOM = new Random();
 
-    public static boolean displayBannerAds() {
-        return BANNER_RANDOM.nextBoolean();
+    public interface RewardedVideoAdCallBack {
+        public void doRewardedVideoAd();
+
+        public RewardedVideoAd getRewardedVideoAd();
     }
 
-    public static boolean displayRewardedVideoAds() {
-        return false;
+    public static boolean displayBannerAds( Context context ) {
+        return BANNER_RANDOM.nextBoolean() && isAllowAds(context);
     }
 
-    public static boolean displayInterstitialAds() {
-        return false;
+    public static boolean displayRewardedVideoAds( Context context ) {
+        return REWARDEDVIDEO_RANDOM.nextBoolean() && isAllowAds(context);
+    }
+
+    public static boolean displayInterstitialAds( Context context ) {
+        return INTERSTITIAL_RANDOM.nextBoolean() && isAllowAds(context);
+    }
+
+    public static boolean isAllowAds( Context context ) {
+        Calendar rewardedVideoDate = getRewardedVideoDate(context);
+        if( rewardedVideoDate != null && DateUtil.sameDay(rewardedVideoDate , Calendar.getInstance()) ) {
+            return false;
+        }
+        return true;
+    }
+
+    public static Calendar getRewardedVideoDate(  Context context ) {
+        String rewaredVideoDate = SharedPrefUtils.getStringData(context, REWARDED_VIDEO_DATE );
+        if( rewaredVideoDate != null && !rewaredVideoDate.trim().equals("")) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date date = simpleDateFormat.parse( rewaredVideoDate );
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                return calendar;
+            } catch (ParseException e) {
+                return null;
+            }
+        }
+        else
+            return null;
     }
 
     public static InterstitialAd setupInterstitialAd( Context context ) {
@@ -54,7 +91,7 @@ public class AdsUtil {
         return interstitialAd;
     }
 
-    public static RewardedVideoAd setupRewardedVideoAd( Context context ) {
+    public static RewardedVideoAd setupRewardedVideoAd( Context context , RewardedVideoAdCallBack rewardedVideoAdCallBack ) {
         RewardedVideoAd rewardedVideoAd = MobileAds.getRewardedVideoAdInstance( context );
 
         RewardedVideoAdListener rewardedVideoAdListener = new RewardedVideoAdListener(){
@@ -62,6 +99,7 @@ public class AdsUtil {
             @Override
             public void onRewardedVideoAdLoaded() {
                 Toast.makeText(context,"onRewardedVideoAdLoaded",Toast.LENGTH_SHORT);
+                rewardedVideoAdCallBack.doRewardedVideoAd();
             }
 
             @Override

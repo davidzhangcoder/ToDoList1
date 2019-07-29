@@ -181,9 +181,9 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     }
 
     private void displayBannerAds(PublisherAdView mAdView) {
-        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
+        PublisherAdRequest adRequest = new PublisherAdRequest.Builder()/*.addTestDevice("B3EEABB8EE11C2BE770B684D95219ECB")*/.build();
         mAdView.loadAd(adRequest);
-        if(AdsUtil.displayBannerAds())
+        if(AdsUtil.displayBannerAds( this.getActivity() ))
             mAdView.setVisibility(View.VISIBLE);
         else
             mAdView.setVisibility(View.INVISIBLE);

@@ -7,11 +7,15 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/rewardVideoButton"
+
+    <ImageView
+        android:id="@+id/rewardVideoImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reward video"
+        android:background="@drawable/no_ads_1day"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center"
+        android:clickable="true"
         />
 
 </LinearLayout>

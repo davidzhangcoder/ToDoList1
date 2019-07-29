@@ -165,7 +165,7 @@ public class EditToDoItemActivity extends AppCompatActivity
     private void displayBannerAds(AdView mAdView) {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-        if(AdsUtil.displayBannerAds())
+        if(AdsUtil.displayBannerAds( this ))
             mAdView.setVisibility(View.VISIBLE);
         else
             mAdView.setVisibility(View.INVISIBLE);
