@@ -152,14 +152,6 @@ public class EditToDoItemActivity extends AppCompatActivity
 
         displayBannerAds(mAdView);
 
-//        MobileAds.initialize(this, "ca-app-pub-6130191480576260~1951770609");
-//
-//        AdView mAdView = findViewById(R.id.adView);
-////        mAdView.setAdSize(AdSize.BANNER);
-////        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        mAdView.loadAd(adRequest);
-
     }
 
     private void displayBannerAds(AdView mAdView) {

@@ -166,17 +166,6 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         isCreated = true;
         lazyLoad();
 
-
-//        mAdView = view.findViewById(R.id.adView);
-////        mAdView.setAdSize(new AdSize((int) dpWidth, 50));
-////        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
-//        PublisherAdRequest adRequest = new PublisherAdRequest.Builder().build();
-//        mAdView.loadAd(adRequest);
-//        if(AdsUtil.displayBannerAds())
-//            mAdView.setVisibility(View.VISIBLE);
-//        else
-//            mAdView.setVisibility(View.INVISIBLE);
-
         return view;
     }
 

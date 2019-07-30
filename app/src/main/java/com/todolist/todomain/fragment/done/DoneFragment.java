@@ -121,12 +121,6 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
         isCreated = true;
         lazyLoad();
 
-//        AdView mAdView = view.findViewById(R.id.adView);
-////        mAdView.setAdSize(new AdSize((int) dpWidth, 50));
-////        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        mAdView.loadAd(adRequest);
-
         return view;
     }
 

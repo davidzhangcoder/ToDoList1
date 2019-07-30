@@ -18,7 +18,6 @@ public class RewardVideoAndPurchaseDialog extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        RewardedVideoAd rewardedVideoAd = AdsUtil.setupRewardedVideoAd(getActivity() , (ToDoMainActivity)this.getActivity() );
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -47,8 +46,4 @@ public class RewardVideoAndPurchaseDialog extends AppCompatDialogFragment {
         return alertDialog;
     }
 
-//    @Override
-//    public void doRewardedVideoAd() {
-//        this.show( this.getFragmentManager(),"rewardVideoAndPurchaseDialog");
-//    }
 }

@@ -131,22 +131,9 @@ public class ToDoMainActivity extends AppCompatActivity
     //display Reward Video
         if( AdsUtil.displayRewardedVideoAds( this ) )
     {
-//            String rewaredVideoDate = SharedPrefUtils.getStringData(this, REWARDED_VIDEO_DATE );
         rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
         rewardedVideoAd = AdsUtil.setupRewardedVideoAd(this , this );
-//            rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
     }
-
-
-//        MobileAds.initialize(this, "ca-app-pub-6130191480576260~1951770609");
-//
-//        AdView mAdView = findViewById(R.id.adView);
-////        mAdView.setAdSize(AdSize.BANNER);
-//        Real ID : ca-app-pub-6130191480576260/5998826825
-////        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); //Sample ID : ca-app-pub-3940256099942544/6300978111
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        mAdView.loadAd(adRequest);
-
 
     // test
     InterstitialAd interstitialAd = AdsUtil.setupInterstitialAd(this);
@@ -189,55 +176,6 @@ public class ToDoMainActivity extends AppCompatActivity
     });
     toolbar.addView( button );
 
-
-//        rewardedVideoAd = MobileAds.getRewardedVideoAdInstance( this );
-//        RewardedVideoAdListener rewardedVideoAdListener = new RewardedVideoAdListener(){
-//
-//            @Override
-//            public void onRewardedVideoAdLoaded() {
-//                Toast.makeText(ToDoMainActivity.this,"onRewardedVideoAdLoaded",Toast.LENGTH_SHORT);
-//            }
-//
-//            @Override
-//            public void onRewardedVideoAdOpened() {
-//
-//            }
-//
-//            @Override
-//            public void onRewardedVideoStarted() {
-//
-//            }
-//
-//            @Override
-//            public void onRewardedVideoAdClosed() {
-//                // Load the next rewarded video ad.
-//                loadRewardedVideoAd();
-//            }
-//
-//            @Override
-//            public void onRewarded(RewardItem rewardItem) {
-//                Toast.makeText(ToDoMainActivity.this,"onRewarded",Toast.LENGTH_SHORT);
-//            }
-//
-//            @Override
-//            public void onRewardedVideoAdLeftApplication() {
-//
-//            }
-//
-//            @Override
-//            public void onRewardedVideoAdFailedToLoad(int i) {
-//
-//            }
-//
-//            @Override
-//            public void onRewardedVideoCompleted() {
-//                Toast.makeText(ToDoMainActivity.this,"onRewardedVideoCompleted",Toast.LENGTH_SHORT);
-//            }
-//        };
-//        rewardedVideoAd.setRewardedVideoAdListener( rewardedVideoAdListener );
-//
-//        loadRewardedVideoAd();
-
 }
 
     @Override
@@ -274,11 +212,6 @@ public class ToDoMainActivity extends AppCompatActivity
             default:
         }
     }
-
-//    private void loadRewardedVideoAd() {
-//        rewardedVideoAd.loadAd(getString(R.string.admob_adunit_rewardvideo),
-//                new AdRequest.Builder().build());
-//    }
 
     private void initViewPagerFragments() {
 
