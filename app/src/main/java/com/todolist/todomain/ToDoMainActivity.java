@@ -129,7 +129,7 @@ public class ToDoMainActivity extends AppCompatActivity
     initViewPagerFragments();
 
     //display Reward Video
-//        if( AdsUtil.displayRewardedVideoAds( this ) )
+        if( AdsUtil.displayRewardedVideoAds( this ) )
     {
 //            String rewaredVideoDate = SharedPrefUtils.getStringData(this, REWARDED_VIDEO_DATE );
         rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
@@ -246,6 +246,7 @@ public class ToDoMainActivity extends AppCompatActivity
             rewardVideoAndPurchaseDialog.show( this.getSupportFragmentManager(),"rewardVideoAndPurchaseDialog");
     }
 
+    @Override
     public RewardedVideoAd getRewardedVideoAd() {
         return rewardedVideoAd;
     }
@@ -274,10 +275,10 @@ public class ToDoMainActivity extends AppCompatActivity
         }
     }
 
-    private void loadRewardedVideoAd() {
-        rewardedVideoAd.loadAd(getString(R.string.admob_adunit_rewardvideo),
-                new AdRequest.Builder().build());
-    }
+//    private void loadRewardedVideoAd() {
+//        rewardedVideoAd.loadAd(getString(R.string.admob_adunit_rewardvideo),
+//                new AdRequest.Builder().build());
+//    }
 
     private void initViewPagerFragments() {
 
