@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.maltaisn.recurpicker.Recurrence;
 import com.maltaisn.recurpicker.RecurrenceFormat;
@@ -92,6 +93,8 @@ public class EditToDoItemActivity extends AppCompatActivity
 
     private EditToDoItemContract.Presenter presenter;
 
+    private InterstitialAd interstitialAd;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +155,7 @@ public class EditToDoItemActivity extends AppCompatActivity
 
         displayBannerAds(mAdView);
 
+        interstitialAd = AdsUtil.setupInterstitialAd(this);
     }
 
     private void displayBannerAds(AdView mAdView) {
@@ -162,6 +166,17 @@ public class EditToDoItemActivity extends AppCompatActivity
         else
             mAdView.setVisibility(View.INVISIBLE);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if( AdsUtil.displayInterstitialAds(this) ) {
+            if (interstitialAd != null && interstitialAd.isLoaded()) {
+                interstitialAd.show();
+            }
+        }
+
+        super.onBackPressed();
     }
 
     @Override

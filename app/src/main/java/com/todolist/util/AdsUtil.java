@@ -84,6 +84,11 @@ public class AdsUtil {
             public void onAdClosed() {
                 interstitialAd.loadAd(new AdRequest.Builder().build());
             }
+
+            @Override
+            public void onAdLoaded() {
+
+            }
         };
 
         interstitialAd.setAdListener( adListener );
@@ -120,6 +125,11 @@ public class AdsUtil {
 
             @Override
             public void onRewarded(RewardItem rewardItem) {
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String dateString = simpleDateFormat.format( calendar.getTime() );
+                SharedPrefUtils.saveData( context , REWARDED_VIDEO_DATE , dateString);
+
                 Toast.makeText(context,"onRewarded",Toast.LENGTH_SHORT);
             }
 
