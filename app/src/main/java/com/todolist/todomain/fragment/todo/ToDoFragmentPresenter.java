@@ -8,6 +8,7 @@ import com.todolist.data.source.ToDoItemRepository;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ToDoFragmentPresenter implements ToDoFragmentContract.Presenter {
@@ -72,7 +73,7 @@ public class ToDoFragmentPresenter implements ToDoFragmentContract.Presenter {
 
             @Override
             public void onDataNotAvailable() {
-
+                view.showToDoItems( new ArrayList<ToDoItem>() );
             }
         });
     }
