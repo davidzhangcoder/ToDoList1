@@ -51,6 +51,7 @@ public class ToDoItemRepository implements ToDoItemDataSource
 
             @Override
             public void onDataNotAvailable() {
+                callBack.onDataNotAvailable();
                 //ToDo
                 //loadToDoItemsFromRemoteDataSource( categoryID , callBack );
             }
