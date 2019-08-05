@@ -37,7 +37,9 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
                     + COLUMN_RECURRENCE_PERIOD + " INTEGER , "
                     + COLUMN_DONE_INDICATOR + " BOOLEAN , "
                     + COLUMN_CATEGORY + " INTEGER "
-                    + " FOREIGN KEY( " + COLUMN_CATEGORY + ") REFERENCES " + ToDoCategory.TABLE_NAME + " ( " + ToDoCategory.COLUMN_ID + " ) "
+
+                    //ToDo: SQLLite not support "Add Constraint", need keep Data in a temp Table, then drop table, create a new table with foreign key, then add data back and drop temp table
+//                    + " FOREIGN KEY( " + COLUMN_CATEGORY + ") REFERENCES " + ToDoCategory.TABLE_NAME + " ( " + ToDoCategory.COLUMN_ID + " ) "
                     + ")";
 
     private String name;
