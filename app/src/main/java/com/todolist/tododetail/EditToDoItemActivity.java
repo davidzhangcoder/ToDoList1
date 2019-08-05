@@ -133,6 +133,7 @@ public class EditToDoItemActivity extends AppCompatActivity
             selectedRecurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
             toDoItem.setRecurrencePeriod( Recurrence.NONE );
             toDoItem.setToDoCategory( ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID ) );
+            toDoItem.setDone(false);
             selectedToDoCategory = ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID );
         }
         else {

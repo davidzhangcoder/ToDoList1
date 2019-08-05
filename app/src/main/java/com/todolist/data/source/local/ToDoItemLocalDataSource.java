@@ -134,8 +134,7 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                toDoItem.setDone( true );
-                long id = mToDoItemDao.insertToDoItem(toDoItem);
+                 long id = mToDoItemDao.insertToDoItem(toDoItem);
                 mAppExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
