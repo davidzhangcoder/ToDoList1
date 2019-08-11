@@ -30,7 +30,9 @@
         </activity>
 
         <activity android:name=".tododetail.EditToDoItemActivity"
-            android:parentActivityName=".todomain.ToDoMainActivity">
+            android:parentActivityName=".todomain.ToDoMainActivity"
+            android:windowSoftInputMode="adjustPan"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".todomain.ToDoMainActivity" />
