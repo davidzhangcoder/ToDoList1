@@ -17,8 +17,9 @@ import com.todolist.ui.adapter.ToDoImageAdapter;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
+import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
-public class ToDoImageHolder extends BaseViewHolder<String,ToDoImageAdapter> {
+public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> {
 
     private final int REQUEST_CODE_CHOOSE=0;
 
@@ -27,33 +28,40 @@ public class ToDoImageHolder extends BaseViewHolder<String,ToDoImageAdapter> {
     }
 
     @Override
-    public void setUpView(String model, int position, ToDoImageAdapter adapter) {
-        AppCompatImageView appCompatImageView = (AppCompatImageView)getView(R.id.image);
+    public void setUpView(ToDoImage toDoImage, int position, ToDoImageAdapter adapter) {
+        AppCompatImageView appCompatImageView = (AppCompatImageView) getView(R.id.image);
 
-        if( model != null && model.trim().equals("Add") ) {
+        if (toDoImage != null && toDoImage.isAdd()) {
             appCompatImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Matisse
-                if(ContextCompat.checkSelfPermission(adapter.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions((Activity) adapter.getContext(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
-                }else{
-                    //执行逻辑
-                    Matisse.from((Activity) adapter.getContext())
-                            .choose(MimeType.ofAll())
-                            .countable(true)
-                            .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
+                    if (ContextCompat.checkSelfPermission(adapter.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions((Activity) adapter.getContext(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                    } else {
+                        //执行逻辑
+                        Matisse.from((Activity) adapter.getContext())
+                                .choose(MimeType.ofAll())
+                                .capture(true)
+                                .captureStrategy(new CaptureStrategy(true, "cache path"))
+                                .countable(true)
+                                .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
 //                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                            .thumbnailScale(0.85f)
-                            .imageEngine(new GlideEngine())
-                            .forResult(EditToDoItemActivity.REQUEST_CODE_CHOOSE_MATISSE);
-                }
+                                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                                .thumbnailScale(0.85f)
+                                .imageEngine(new GlideEngine())
+                                .forResult(EditToDoItemActivity.REQUEST_CODE_CHOOSE_MATISSE);
+                    }
                 }
             });
-        }
 
-        Glide.with( adapter.getContext() ).load(R.drawable.add_image ).into( appCompatImageView );
+            Glide.with(adapter.getContext()).load(R.drawable.add_image).into(appCompatImageView);
+        } else if (toDoImage.getUri() != null) {
+            Glide
+                    .with(adapter.getContext())
+                    .load(toDoImage.getUri())
+                    .into(appCompatImageView);
+        }
     }
 
 }
