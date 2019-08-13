@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.todolist.R;
 import com.todolist.model.BaseViewHolder;
 import com.todolist.model.ToDoCategoryHodler;
+import com.todolist.model.ToDoImage;
 import com.todolist.model.ToDoImageHolder;
 
 import java.util.ArrayList;
@@ -19,9 +20,9 @@ public class ToDoImageAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private Context mContext;
 
-    private List<String> data = new ArrayList<String>();
+    private List<ToDoImage> data = new ArrayList<ToDoImage>();
 
-    public ToDoImageAdapter(Context mContext , List<String> data) {
+    public ToDoImageAdapter(Context mContext , List<ToDoImage> data) {
         this.mContext = mContext;
         this.data = data;
     }

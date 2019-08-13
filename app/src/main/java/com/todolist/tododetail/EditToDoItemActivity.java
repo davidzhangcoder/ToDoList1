@@ -28,6 +28,7 @@ import com.todolist.R;
 import com.todolist.data.Injection;
 import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoCategory;
+import com.todolist.model.ToDoImage;
 import com.todolist.model.ToDoItem;
 import com.todolist.ui.adapter.ToDoImageAdapter;
 import com.todolist.ui.dialog.CategorySelectionDialog;
@@ -104,6 +105,9 @@ public class EditToDoItemActivity extends AppCompatActivity
     private EditToDoItemContract.Presenter presenter;
 
     private InterstitialAd interstitialAd;
+
+    private List<ToDoImage> imageDataList = new ArrayList<ToDoImage>();
+    private ToDoImageAdapter toDoImageAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -392,13 +396,10 @@ public class EditToDoItemActivity extends AppCompatActivity
                 }
             };
             imageRecylerView.setLayoutManager( gridLayoutManager );
-            List<String> dataList = new ArrayList<String>();
-            dataList.add("Add");
-            dataList.add("Test");
-            dataList.add("Test");
-            dataList.add("Test");
-            dataList.add("Test");
-            ToDoImageAdapter toDoImageAdapter = new ToDoImageAdapter( this , dataList );
+            ToDoImage toDoImage = new ToDoImage();
+            toDoImage.setAdd(true);
+            imageDataList.add( toDoImage );
+            toDoImageAdapter = new ToDoImageAdapter( this , imageDataList );
             imageRecylerView.setAdapter( toDoImageAdapter );
         }
     }
@@ -409,6 +410,13 @@ public class EditToDoItemActivity extends AppCompatActivity
         if (requestCode == REQUEST_CODE_CHOOSE_MATISSE && resultCode == RESULT_OK) {
             List<Uri> mSelected = Matisse.obtainResult(data);
             Log.d("Matisse", "mSelected: " + mSelected);
+
+            if( mSelected != null && mSelected.size() > 0 ) {
+                ToDoImage toDoImage = new ToDoImage();
+                toDoImage.setUri( mSelected.get(0) );
+                imageDataList.add( toDoImage );
+                toDoImageAdapter.notifyDataSetChanged();
+            }
         }
     }
 
