@@ -252,10 +252,12 @@
         android:id="@+id/imageRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/media_grid_spacing"
-        android:paddingTop="@dimen/media_grid_spacing"/>
+        android:paddingLeft="@dimen/todo_grid_spacing"
+        android:paddingRight="@dimen/todo_grid_spacing"
+        android:paddingTop="@dimen/todo_grid_spacing"
+        android:paddingBottom="@dimen/todo_grid_spacing"
+
+        />
 
 
     <!--<LinearLayout-->

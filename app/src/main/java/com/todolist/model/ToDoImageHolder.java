@@ -2,12 +2,16 @@ package com.todolist.model;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.todolist.R;
@@ -31,6 +35,7 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
     public void setUpView(ToDoImage toDoImage, int position, ToDoImageAdapter adapter) {
         AppCompatImageView appCompatImageView = (AppCompatImageView) getView(R.id.image);
 
+        int imageSize = getImageResize( adapter.getContext() );
         if (toDoImage != null && toDoImage.isAdd()) {
             appCompatImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,13 +60,30 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
                 }
             });
 
-            Glide.with(adapter.getContext()).load(R.drawable.add_image).into(appCompatImageView);
+            Glide
+                    .with(adapter.getContext())
+                    .load(R.drawable.add_image)
+                    .override( imageSize , imageSize )
+                    .centerCrop()
+                    .into(appCompatImageView);
         } else if (toDoImage.getUri() != null) {
             Glide
                     .with(adapter.getContext())
                     .load(toDoImage.getUri())
+                    .override( imageSize , imageSize )
+                    .centerCrop()
                     .into(appCompatImageView);
         }
     }
+
+    private int getImageResize(Context context) {
+            int spanCount = 3;
+            int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+            int availableWidth = screenWidth - context.getResources().getDimensionPixelSize(
+                    R.dimen.media_grid_spacing) * (spanCount - 1);
+            int imageSize = availableWidth / spanCount;
+       return imageSize;
+    }
+
 
 }

@@ -30,6 +30,8 @@ import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoImage;
 import com.todolist.model.ToDoItem;
+import com.todolist.ui.GridItemDecoration;
+import com.todolist.ui.MediaGridInset;
 import com.todolist.ui.adapter.ToDoImageAdapter;
 import com.todolist.ui.dialog.CategorySelectionDialog;
 import com.todolist.util.AdsUtil;
@@ -395,6 +397,11 @@ public class EditToDoItemActivity extends AppCompatActivity
                 }
             };
             imageRecylerView.setLayoutManager( gridLayoutManager );
+            gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+            int spacing = getResources().getDimensionPixelSize(R.dimen.todo_grid_spacing);
+            GridItemDecoration gridItemDecoration = new GridItemDecoration( spacing , 0 , this );
+            //MediaGridInset gridItemDecoration = new MediaGridInset( 3, spacing , false );
+            imageRecylerView.addItemDecoration( gridItemDecoration );
             ToDoImage toDoImage = new ToDoImage();
             toDoImage.setAdd(true);
             imageDataList.add( toDoImage );

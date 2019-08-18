@@ -17,6 +17,7 @@
 
     <dimen name="default_martin">8dp</dimen>
 
-    <dimen name="media_grid_spacing">4dp</dimen>
+    <dimen name="todo_grid_spacing">4dp</dimen>
+    <!--4dp-->
 
 </resources>
