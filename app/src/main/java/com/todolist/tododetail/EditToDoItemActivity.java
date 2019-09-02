@@ -397,8 +397,8 @@ public class EditToDoItemActivity extends AppCompatActivity
                     return false;
                 }
             };
-            imageRecylerView.setLayoutManager( gridLayoutManager );
             gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+            imageRecylerView.setLayoutManager( gridLayoutManager );
             int spacing = getResources().getDimensionPixelSize(R.dimen.todo_grid_spacing);
             GridItemDecoration gridItemDecoration = new GridItemDecoration( spacing , 0 , this );
             //MediaGridInset gridItemDecoration = new MediaGridInset( 3, spacing , false );

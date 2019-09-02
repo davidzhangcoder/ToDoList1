@@ -80,7 +80,8 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
             int spanCount = 3;
             int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
             int availableWidth = screenWidth - context.getResources().getDimensionPixelSize(
-                    R.dimen.media_grid_spacing) * (spanCount - 1);
+                    R.dimen.todo_grid_spacing) * (spanCount - 1) - context.getResources().getDimensionPixelSize(
+                    R.dimen.todo_grid_spacing) * 2;
             int imageSize = availableWidth / spanCount;
        return imageSize;
     }
