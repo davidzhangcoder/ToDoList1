@@ -3,10 +3,14 @@ package com.todolist.tododetail;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,15 +28,22 @@ import com.todolist.R;
 import com.todolist.data.Injection;
 import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoCategory;
+import com.todolist.model.ToDoImage;
 import com.todolist.model.ToDoItem;
+import com.todolist.ui.GridItemDecoration;
+import com.todolist.ui.MediaGridInset;
+import com.todolist.ui.adapter.ToDoImageAdapter;
 import com.todolist.ui.dialog.CategorySelectionDialog;
 import com.todolist.util.AdsUtil;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import com.zhihu.matisse.Matisse;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -49,6 +60,8 @@ public class EditToDoItemActivity extends AppCompatActivity
 {
 
     public static String EDITTODOITEMACTIVITY_TODOITEM = "EDITTODOITEMACTIVITY_TODOITEM";
+
+    public static final int REQUEST_CODE_CHOOSE_MATISSE=0;
 
 //    @BindView(R.id.dueDate)
 //    PopuTextView dueDatePopuTextView;
@@ -82,9 +95,9 @@ public class EditToDoItemActivity extends AppCompatActivity
     private ImageView repeatImage;
     private ImageView categoryImage;
     private AdView mAdView;
+    private RecyclerView imageRecylerView;
 
     private ToDoItem toDoItem;
-    private GenericDao db;
 
     private Calendar selectedDate;
 
@@ -94,6 +107,9 @@ public class EditToDoItemActivity extends AppCompatActivity
     private EditToDoItemContract.Presenter presenter;
 
     private InterstitialAd interstitialAd;
+
+    private List<ToDoImage> imageDataList = new ArrayList<ToDoImage>();
+    private ToDoImageAdapter toDoImageAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,7 +133,9 @@ public class EditToDoItemActivity extends AppCompatActivity
         dueTimeImage = findViewById(R.id.dueTimeImage);
         repeatImage = findViewById(R.id.repeatImage);
         categoryImage = findViewById(R.id.categoryImage);
+        reback = findViewById(R.id.edit_reback);
         mAdView = findViewById(R.id.adView);
+        imageRecylerView = findViewById(R.id.imageRecyclerView);
 
         Intent i = getIntent();
         toDoItem = (ToDoItem)i.getSerializableExtra( EDITTODOITEMACTIVITY_TODOITEM );
@@ -133,6 +151,7 @@ public class EditToDoItemActivity extends AppCompatActivity
             selectedRecurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
             toDoItem.setRecurrencePeriod( Recurrence.NONE );
             toDoItem.setToDoCategory( ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID ) );
+            toDoItem.setDone(false);
             selectedToDoCategory = ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID );
         }
         else {
@@ -140,10 +159,6 @@ public class EditToDoItemActivity extends AppCompatActivity
             selectedRecurrence = new Recurrence( toDoItem.getDueDate().getTimeInMillis() , toDoItem.getRecurrencePeriod() );
             selectedToDoCategory = toDoItem.getToDoCategory();
         }
-
-        reback = findViewById(R.id.edit_reback);
-
-        db = new GenericDao(this);
 
         Locale locale = getResources().getConfiguration().locale;
         dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);  // Sun Dec 31, 2017
@@ -153,6 +168,7 @@ public class EditToDoItemActivity extends AppCompatActivity
 
         init();
 
+        //Ads
         displayBannerAds(mAdView);
 
         interstitialAd = AdsUtil.setupInterstitialAd(this);
@@ -371,6 +387,42 @@ public class EditToDoItemActivity extends AppCompatActivity
 
             if( toDoItem.getId() > 0 ) {
                 categoryContainer.setVisibility( View.VISIBLE );
+            }
+        }
+
+        if( imageRecylerView != null) {
+            GridLayoutManager gridLayoutManager = new GridLayoutManager( this , 3) {
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            };
+            gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+            imageRecylerView.setLayoutManager( gridLayoutManager );
+            int spacing = getResources().getDimensionPixelSize(R.dimen.todo_grid_spacing);
+            GridItemDecoration gridItemDecoration = new GridItemDecoration( spacing , 0 , this );
+            //MediaGridInset gridItemDecoration = new MediaGridInset( 3, spacing , false );
+            imageRecylerView.addItemDecoration( gridItemDecoration );
+            ToDoImage toDoImage = new ToDoImage();
+            toDoImage.setAdd(true);
+            imageDataList.add( toDoImage );
+            toDoImageAdapter = new ToDoImageAdapter( this , imageDataList );
+            imageRecylerView.setAdapter( toDoImageAdapter );
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_CHOOSE_MATISSE && resultCode == RESULT_OK) {
+            List<Uri> mSelected = Matisse.obtainResult(data);
+            Log.d("Matisse", "mSelected: " + mSelected);
+
+            if( mSelected != null && mSelected.size() > 0 ) {
+                ToDoImage toDoImage = new ToDoImage();
+                toDoImage.setUri( mSelected.get(0) );
+                imageDataList.add( toDoImage );
+                toDoImageAdapter.notifyDataSetChanged();
             }
         }
     }

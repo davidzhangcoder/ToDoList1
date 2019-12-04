@@ -17,4 +17,7 @@
 
     <dimen name="default_martin">8dp</dimen>
 
+    <dimen name="todo_grid_spacing">8dp</dimen>
+    <!--4dp-->
+
 </resources>
