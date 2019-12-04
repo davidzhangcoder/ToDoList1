@@ -10,7 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/midGrary"
-        android:layout_margin="@dimen/default_martin"
+        android:layout_marginLeft="@dimen/recyclerview_todoitem_list_title_marginleft"
+        android:layout_marginRight="@dimen/recyclerview_todoitem_list_title_marginright"
+        android:layout_marginTop="@dimen/recyclerview_todoitem_list_title_margintop"
+        android:layout_marginBottom="@dimen/recyclerview_todoitem_list_title_marginbottom"
         android:textStyle="bold"
         android:textSize="@dimen/textsize_title"
         />
