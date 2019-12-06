@@ -10,10 +10,10 @@
         android:id="@+id/tipCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="@dimen/recyclerview_todoitem_list_marginleft"
+        android:layout_marginRight="@dimen/recyclerview_todoitem_list_marginright"
+        android:layout_marginTop="@dimen/recyclerview_todoitem_list_margintop"
+        android:layout_marginBottom="@dimen/recyclerview_todoitem_list_marginbottom"
         >
 
         <com.todolist.SwipeLayout

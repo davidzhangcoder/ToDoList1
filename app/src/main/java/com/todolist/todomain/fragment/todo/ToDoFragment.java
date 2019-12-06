@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +34,7 @@ import com.todolist.R;
 import com.todolist.todomain.ToDoMainActivity;
 import com.todolist.todomain.fragment.category.CategoryFragment;
 import com.todolist.todomain.TestA;
+import com.todolist.ui.CustomRecyclerScrollViewListener;
 import com.todolist.ui.LazyFragment;
 import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.TipListItemTouchHelperCallback;
@@ -160,7 +162,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         categoryButtonImage = (ImageView)toolbar.findViewById(R.id.categoryButtonImage);;
         mAdView = view.findViewById(R.id.adView);
 
-        initRecyclerView( recyclerView );
+        initRecyclerView( recyclerView , floatingActionButton );
         initCategoryFragment();
 
         isCreated = true;
@@ -215,7 +217,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         });
     }
 
-    private void initRecyclerView( RecyclerView recyclerView )
+    private void initRecyclerView( RecyclerView recyclerView , FloatingActionButton floatingActionButton )
     {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(true);
@@ -226,6 +228,21 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         ItemTouchHelper.Callback callback = new TipListItemTouchHelperCallback();
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        CustomRecyclerScrollViewListener customRecyclerScrollViewListener = new CustomRecyclerScrollViewListener() {
+            @Override
+            public void show() {
+                floatingActionButton.animate().translationY(0).start();
+            }
+
+            @Override
+            public void hide() {
+                FrameLayout.LayoutParams fl = (FrameLayout.LayoutParams)floatingActionButton.getLayoutParams();
+                floatingActionButton.animate().translationY( floatingActionButton.getHeight() + fl.bottomMargin ).start();
+            }
+        };
+
+        recyclerView.addOnScrollListener( customRecyclerScrollViewListener );
     }
 
     private TipListAdapter.ToDoItemAction getDoneAction()

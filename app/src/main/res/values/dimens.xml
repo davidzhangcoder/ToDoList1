@@ -18,6 +18,15 @@
     <dimen name="default_martin">8dp</dimen>
 
     <dimen name="todo_grid_spacing">8dp</dimen>
+
+    <dimen name="recyclerview_todoitem_list_margintop">4dp</dimen>
+    <dimen name="recyclerview_todoitem_list_marginbottom">4dp</dimen>
+    <dimen name="recyclerview_todoitem_list_marginleft">8dp</dimen>
+    <dimen name="recyclerview_todoitem_list_marginright">8dp</dimen>
+    <dimen name="recyclerview_todoitem_list_title_marginleft">8dp</dimen>
+    <dimen name="recyclerview_todoitem_list_title_marginright">8dp</dimen>
+    <dimen name="recyclerview_todoitem_list_title_margintop">2dp</dimen>
+    <dimen name="recyclerview_todoitem_list_title_marginbottom">2dp</dimen>
     <!--4dp-->
 
 </resources>
