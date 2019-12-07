@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -232,13 +234,13 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         CustomRecyclerScrollViewListener customRecyclerScrollViewListener = new CustomRecyclerScrollViewListener() {
             @Override
             public void show() {
-                floatingActionButton.animate().translationY(0).start();
+                floatingActionButton.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
             }
 
             @Override
             public void hide() {
                 FrameLayout.LayoutParams fl = (FrameLayout.LayoutParams)floatingActionButton.getLayoutParams();
-                floatingActionButton.animate().translationY( floatingActionButton.getHeight() + fl.bottomMargin ).start();
+                floatingActionButton.animate().translationY( floatingActionButton.getHeight() + fl.bottomMargin ).setInterpolator(new AccelerateInterpolator(2.0f)).start();
             }
         };
 
