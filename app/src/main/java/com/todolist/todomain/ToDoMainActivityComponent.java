@@ -10,6 +10,7 @@ import dagger.Component;
 
 @Component(modules = {ToDoMainActivityModule.class} , dependencies = AppComponent.class )
 @ActivityScoped
+//dependence 模式 (依赖模式)， 依赖AppComponent
 public interface ToDoMainActivityComponent {
 
     void inject(ToDoMainActivity toDoMainActivity);

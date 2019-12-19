@@ -3,10 +3,13 @@ package com.todolist.ui.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import com.todolist.R;
 import com.todolist.TipListItemTouchHelperCallback;
@@ -37,6 +40,11 @@ public class TipListAdapter extends RecyclerView.Adapter<BaseViewHolder> impleme
     public final static String CONTENT = "content";
 
     private ToDoItemAction doneAction;
+
+    public interface ToDoItemAction
+    {
+        void doAction(RecyclerView.ViewHolder viewHolder, List<IToDoItem> mData , RecyclerView.Adapter adapter);
+    }
 
     public TipListAdapter(Context context, List<IToDoItem> listTodo) {
         mContext = context;
@@ -118,23 +126,20 @@ public class TipListAdapter extends RecyclerView.Adapter<BaseViewHolder> impleme
 
 
     public void changeToFinish(RecyclerView.ViewHolder holder) {
-        int position = holder.getAdapterPosition();
 
-        if( doneAction != null )
-        {
-            doneAction.doAction( (ToDoItem) mData.get(position) );
-        }
+        doneAction.doAction( holder , mData , this );
 
-        mData.remove(position);
-
-        notifyItemRemoved(position);
+//        int position = holder.getAdapterPosition();
+//
+//        if( doneAction != null )
+//        {
+//            doneAction.doAction( (ToDoItem) mData.get(position) );
+//        }
+//
+//        mData.remove(position);
+//
+//        notifyItemRemoved(position);
     }
-
-    public interface ToDoItemAction
-    {
-        void doAction(ToDoItem toDoItem);
-    }
-
 
     @Override
     public int getItemCount() {

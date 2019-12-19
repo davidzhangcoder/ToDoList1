@@ -56,7 +56,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/textsize_normal" />
 
                     <TextView
@@ -65,18 +65,18 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:textColor="@color/black"
+                        android:textColor="@color/accent"
                         android:text="Date"
-                        android:textSize="@dimen/textsize_normal" />
+                        android:textSize="@dimen/textsize_small" />
 
-                    <TextView
-                        android:id="@+id/tip_category"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/textsize_normal" />
+                    <!--<TextView-->
+                        <!--android:id="@+id/tip_category"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:ellipsize="end"-->
+                        <!--android:maxLines="1"-->
+                        <!--android:textColor="@color/text_secondary"-->
+                        <!--android:textSize="@dimen/textsize_small" />-->
 
                 </LinearLayout>
             </LinearLayout>
