@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/recyclerview_todoitem_list_title_margintop"
         android:layout_marginBottom="@dimen/recyclerview_todoitem_list_title_marginbottom"
         android:textStyle="bold"
-        android:textSize="@dimen/textsize_title"
+        android:textSize="@dimen/textsize_medium"
         />
 
 </LinearLayout>

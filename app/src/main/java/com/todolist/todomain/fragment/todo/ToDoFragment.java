@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +32,7 @@ import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.todolist.app.App;
 import com.todolist.data.Injection;
+import com.todolist.model.TipHolder;
 import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
 
@@ -232,13 +237,22 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         CustomRecyclerScrollViewListener customRecyclerScrollViewListener = new CustomRecyclerScrollViewListener() {
             @Override
             public void show() {
-                floatingActionButton.animate().translationY(0).start();
+//                floatingActionButton.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+
+                if( mAdView.getVisibility() == View.VISIBLE ) {
+                    mAdView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                }
             }
 
             @Override
             public void hide() {
-                FrameLayout.LayoutParams fl = (FrameLayout.LayoutParams)floatingActionButton.getLayoutParams();
-                floatingActionButton.animate().translationY( floatingActionButton.getHeight() + fl.bottomMargin ).start();
+//                FrameLayout.LayoutParams fl = (FrameLayout.LayoutParams)floatingActionButton.getLayoutParams();
+//                floatingActionButton.animate().translationY( floatingActionButton.getHeight() + fl.bottomMargin ).setInterpolator(new AccelerateInterpolator(2.0f)).start();
+
+                if( mAdView.getVisibility() == View.VISIBLE ) {
+                    FrameLayout.LayoutParams mAdVieFrameLayoutw = (FrameLayout.LayoutParams)mAdView.getLayoutParams();
+                    mAdView.animate().translationY( mAdView.getHeight() + mAdVieFrameLayoutw.bottomMargin ).setInterpolator(new AccelerateInterpolator(2.0f)).start();
+                }
             }
         };
 
@@ -249,8 +263,34 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     {
         TipListAdapter.ToDoItemAction doneAction = new TipListAdapter.ToDoItemAction() {
             @Override
-            public void doAction(ToDoItem toDoItem) {
-                ToDoFragment.this.mPresenter.doneAction( toDoItem );
+            public void doAction(RecyclerView.ViewHolder holder, List<IToDoItem> mData , RecyclerView.Adapter adapter ) {
+                Snackbar.make( holder.itemView , "Is Done?", Snackbar.LENGTH_LONG )
+                        .setAction("Yes", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                int position = holder.getAdapterPosition();
+                                ToDoItem toDoItem = (ToDoItem) mData.get(position);
+
+
+                                mData.remove(position);
+
+                                adapter.notifyItemRemoved(position);
+
+                                ToDoFragment.this.mPresenter.doneAction( toDoItem );
+                            }
+                        })
+                        .addCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar transientBottomBar, int event) {
+                                if( event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT ) {
+                                    if( holder instanceof TipHolder) {
+                                        ((CheckBox)((TipHolder)holder).getView(R.id.tip_checkbox)).setChecked(false);
+                                    }
+                                }
+                            }
+                        })
+                        .show();
+
             }
         };
 

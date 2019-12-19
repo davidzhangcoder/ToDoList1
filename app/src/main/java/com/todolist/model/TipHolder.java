@@ -55,8 +55,8 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
 
     @Override
     public void setUpView(ToDoItem toDoItem, int position , final TipListAdapter tipListAdapter) {
-        ((TextView)getView(R.id.tip_content)).setText(toDoItem.getName().toString());
-        ((TextView)getView(R.id.tip_category)).setText(toDoItem.getToDoCategory().getName().toString());
+        ((TextView)getView(R.id.tip_content)).setText(toDoItem.getName().toString() + " - " + toDoItem.getToDoCategory().getName().toString());
+//        ((TextView)getView(R.id.tip_category)).setText(toDoItem.getToDoCategory().getName().toString());
 
         Calendar currentDate = Calendar.getInstance();
 
@@ -68,7 +68,7 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
 
             if( toDoItem.getDueDate() != null && !toDoItem.isDone() ) {
                 if (DateUtil.before(toDoItem.getDueDate(), currentDate)) {
-                    int overDueColor = tipDueDateAndTimeTextView.getContext().getResources().getColor(R.color.overDueColor);
+                    int overDueColor = tipDueDateAndTimeTextView.getContext().getResources().getColor(R.color.red_secondary);
                     tipDueDateAndTimeTextView.setTextColor( overDueColor );
                 } else if (DateUtil.sameDay(toDoItem.getDueDate(), currentDate)) {
                     int colorPrimaryColor = tipDueDateAndTimeTextView.getContext().getResources().getColor(R.color.colorPrimary);

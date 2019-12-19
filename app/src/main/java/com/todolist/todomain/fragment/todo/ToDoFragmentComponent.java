@@ -7,6 +7,7 @@ import dagger.Subcomponent;
 
 @FragmentScoped
 @Subcomponent(modules = {ToDoFragmentModule.class} )
+//inherit 模式
 public interface ToDoFragmentComponent {
 
     void inject(ToDoFragment toDoFragment);
