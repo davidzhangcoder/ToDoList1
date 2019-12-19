@@ -2,6 +2,7 @@ package com.todolist.todomain.fragment.done;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -17,7 +19,9 @@ import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.todolist.R;
 import com.todolist.app.App;
 import com.todolist.data.Injection;
+import com.todolist.model.TipHolder;
 import com.todolist.todomain.TestA;
+import com.todolist.todomain.fragment.todo.ToDoFragment;
 import com.todolist.ui.LazyFragment;
 import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.model.IToDoItem;
@@ -163,8 +167,37 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
     {
         TipListAdapter.ToDoItemAction doneAction = new TipListAdapter.ToDoItemAction() {
             @Override
-            public void doAction(ToDoItem toDoItem) {
-                DoneFragment.this.mPresenter.reverseDoneAction( toDoItem );
+            public void doAction( RecyclerView.ViewHolder holder, List<IToDoItem> mData , RecyclerView.Adapter adapter ) {
+
+                Snackbar.make( holder.itemView , "Not Finish Yet?", Snackbar.LENGTH_LONG )
+                        .setAction("Yes", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                int position = holder.getAdapterPosition();
+
+                                ToDoItem toDoItem = (ToDoItem) mData.get(position);
+
+                                mData.remove(position);
+
+                                adapter.notifyItemRemoved(position);
+
+                                DoneFragment.this.mPresenter.reverseDoneAction( toDoItem );
+                            }
+                        })
+                        .addCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar transientBottomBar, int event) {
+                                if( event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT ) {
+                                    if( holder instanceof TipHolder) {
+                                        ((CheckBox)((TipHolder)holder).getView(R.id.tip_checkbox)).setChecked(false);
+                                    }
+                                }
+                            }
+                        })
+                        .show();
+
+
+//                DoneFragment.this.mPresenter.reverseDoneAction( toDoItem );
             }
         };
 
