@@ -35,6 +35,20 @@ public class ToDoFragmentPresenter implements ToDoFragmentContract.Presenter {
 
             }
         });
+
+        toDoItemRepository.loadToDoCategorys(new ToDoItemDataSource.LoadToDoCategorysCallBack() {
+            @Override
+            public void onToDoCategorysLoaded(List<ToDoCategory> toDoCategorys) {
+                view.setToDoCategorys(toDoCategorys);
+
+                view.initialCategorySpinner();
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
     }
 
     @Override

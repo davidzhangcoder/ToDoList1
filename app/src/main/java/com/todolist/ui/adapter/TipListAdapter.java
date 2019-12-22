@@ -129,16 +129,6 @@ public class TipListAdapter extends RecyclerView.Adapter<BaseViewHolder> impleme
 
         doneAction.doAction( holder , mData , this );
 
-//        int position = holder.getAdapterPosition();
-//
-//        if( doneAction != null )
-//        {
-//            doneAction.doAction( (ToDoItem) mData.get(position) );
-//        }
-//
-//        mData.remove(position);
-//
-//        notifyItemRemoved(position);
     }
 
     @Override
