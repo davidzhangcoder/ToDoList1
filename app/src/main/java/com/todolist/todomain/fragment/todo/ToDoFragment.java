@@ -2,9 +2,9 @@ package com.todolist.todomain.fragment.todo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,26 +12,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
-import com.todolist.app.App;
-import com.todolist.data.Injection;
 import com.todolist.model.TipHolder;
 import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
@@ -41,6 +37,7 @@ import com.todolist.todomain.fragment.category.CategoryFragment;
 import com.todolist.todomain.TestA;
 import com.todolist.ui.CustomRecyclerScrollViewListener;
 import com.todolist.ui.LazyFragment;
+import com.todolist.ui.adapter.CategoryAdapter;
 import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.model.IToDoItem;
@@ -66,6 +63,8 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 
     private FloatingActionButton floatingActionButton;
 
+    private Spinner categorySpinner;
+
     private OnFragmentInteractionListener mListener;
 
     private List<IToDoItem> toDoItemList = new ArrayList<IToDoItem>();
@@ -73,9 +72,10 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     private TipListAdapter tipListAdapter;
 
     private long categoryFilterID = ToDoCategory.CATEGORY_ALL_ID;
+    private List<ToDoCategory> toDoCategorys = new ArrayList<ToDoCategory>();
 
-    private TextView categoryButton;
-    private ImageView categoryButtonImage;
+//    private TextView categoryButton;
+//    private ImageView categoryButtonImage;
     private ToDoCategory selectedToDoCategory;
     private PublisherAdView mAdView;
 
@@ -160,20 +160,44 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         floatingActionButton = view.findViewById(R.id.addToDo);
         floatingActionButton.setOnClickListener( tipEditOnEditorActionListener );
 
+                //build ToolBar that inside at ToDoMainActivity
         Toolbar toolbar = (Toolbar)this.getActivity().findViewById(R.id.toolbar);
         inflater.inflate(R.layout.toolbar_layout, toolbar, true);
         ((AppCompatActivity)this.getActivity()).setSupportActionBar(toolbar);
-        categoryButton = (TextView)toolbar.findViewById(R.id.categoryButton);
-        categoryButtonImage = (ImageView)toolbar.findViewById(R.id.categoryButtonImage);;
+        categorySpinner = (Spinner) toolbar.findViewById(R.id.categorySpinner);
+//        categoryButton = (TextView)toolbar.findViewById(R.id.categoryButton);
+//        categoryButtonImage = (ImageView)toolbar.findViewById(R.id.categoryButtonImage);;
+
+        //Ads View
         mAdView = view.findViewById(R.id.adView);
 
+        //Initial
         initRecyclerView( recyclerView , floatingActionButton );
         initCategoryFragment();
+        initialCategorySpinner();
+
+        //Initial Menu ( comment out following if fragment need to append some menu item in, it is necessary to display menu in Fragment )
+        //this.setHasOptionsMenu( true );
 
         isCreated = true;
         lazyLoad();
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_todofragment, menu);
+
+        MenuItem item = menu.findItem(R.id.filterBySpinner);
+        Spinner spinner = (Spinner) item.getActionView();
+        spinner.setPrompt("Filter By:");
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(),
+                R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
     }
 
     private void displayBannerAds(PublisherAdView mAdView) {
@@ -201,6 +225,13 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
             mAdView.setVisibility(View.INVISIBLE);
     }
 
+    public void initialCategorySpinner() {
+        if( categorySpinner != null ) {
+            SpinnerAdapter adapter = new CategoryAdapter(this.getContext(), toDoCategorys);
+            categorySpinner.setAdapter(adapter);
+        }
+    }
+
     private void initCategoryFragment()
     {
         if( selectedToDoCategory == null ) {
@@ -211,15 +242,15 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
             selectedToDoCategory = allToDoCategory;
         }
 
-        categoryButtonImage.setColorFilter(getResources().getColor(R.color.white));
-        categoryButton.setText( selectedToDoCategory.getName() );
-        categoryButton.setTypeface(categoryButton.getTypeface(), Typeface.BOLD);
-        categoryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.doDisplayCategoryDialog();
-            }
-        });
+//        categoryButtonImage.setColorFilter(getResources().getColor(R.color.white));
+//        categoryButton.setText( selectedToDoCategory.getName() );
+//        categoryButton.setTypeface(categoryButton.getTypeface(), Typeface.BOLD);
+//        categoryButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mPresenter.doDisplayCategoryDialog();
+//            }
+//        });
     }
 
     private void initRecyclerView( RecyclerView recyclerView , FloatingActionButton floatingActionButton )
@@ -250,7 +281,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 //                floatingActionButton.animate().translationY( floatingActionButton.getHeight() + fl.bottomMargin ).setInterpolator(new AccelerateInterpolator(2.0f)).start();
 
                 if( mAdView.getVisibility() == View.VISIBLE ) {
-                    FrameLayout.LayoutParams mAdVieFrameLayoutw = (FrameLayout.LayoutParams)mAdView.getLayoutParams();
+                    CoordinatorLayout.LayoutParams mAdVieFrameLayoutw = (CoordinatorLayout.LayoutParams)mAdView.getLayoutParams();
                     mAdView.animate().translationY( mAdView.getHeight() + mAdVieFrameLayoutw.bottomMargin ).setInterpolator(new AccelerateInterpolator(2.0f)).start();
                 }
             }
@@ -362,20 +393,24 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         categoryFragment.show( this.getFragmentManager(), null);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //我们根据requestCode判断是哪个子Fragment传回的数据
-        //从data中拿到传回的数据
-        if(resultCode == DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE) {
-            selectedToDoCategory = (ToDoCategory) data.getExtras().get(CategoryFragment.KEY_SELECTED_TODOCATEGORY);
-            categoryButton.setText(selectedToDoCategory.getName());
-            mPresenter.doGetToDoItemsByCategory(selectedToDoCategory.getId());
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        //我们根据requestCode判断是哪个子Fragment传回的数据
+//        //从data中拿到传回的数据
+//        if(resultCode == DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE) {
+//            selectedToDoCategory = (ToDoCategory) data.getExtras().get(CategoryFragment.KEY_SELECTED_TODOCATEGORY);
+//            categoryButton.setText(selectedToDoCategory.getName());
+//            mPresenter.doGetToDoItemsByCategory(selectedToDoCategory.getId());
+//        }
+//    }
 
     @Override
     public void setPresenter(@NonNull ToDoFragmentContract.Presenter presenter) {
          this.mPresenter = checkNotNull(presenter);
+    }
+
+    public void setToDoCategorys(List<ToDoCategory> toDoCategorys) {
+        this.toDoCategorys = toDoCategorys;
     }
 
     public interface OnFragmentInteractionListener {

@@ -1,5 +1,6 @@
 package com.todolist.todomain.fragment.todo;
 
+import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 import com.todolist.ui.BasePresenter;
 import com.todolist.ui.BaseView;
@@ -17,6 +18,10 @@ public interface ToDoFragmentContract {
         void showToDoDetail();
 
         void showCategoryDialog();
+
+        void setToDoCategorys(List<ToDoCategory> toDoCategorys);
+
+        void initialCategorySpinner();
     }
 
     interface Presenter extends BasePresenter
