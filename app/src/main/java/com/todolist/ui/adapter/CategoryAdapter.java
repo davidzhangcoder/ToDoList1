@@ -2,6 +2,7 @@ package com.todolist.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +20,25 @@ public class CategoryAdapter extends ArrayAdapter implements SpinnerAdapter{
 
     private Context context;
 
-    private List<ToDoCategory> toDoCategoryLisr;
+    private List<ToDoCategory> toDoCategoryList;
 
-    public CategoryAdapter(Context context, List<ToDoCategory> toDoCategoryLisr) {
-        super(context , R.layout.item_category_title , R.id.categoryName , toDoCategoryLisr);
+    private ToDoCategory selectedToDoCategory;
+
+    public CategoryAdapter(Context context, List<ToDoCategory> toDoCategoryList , ToDoCategory selectedToDoCategory ) {
+        super(context , R.layout.item_category_title , R.id.categoryName , toDoCategoryList);
         this.context = context;
-        this.toDoCategoryLisr = toDoCategoryLisr;
+        this.toDoCategoryList = toDoCategoryList;
+        this.selectedToDoCategory = selectedToDoCategory;
     }
 
     @Override
     public int getCount() {
-        return toDoCategoryLisr.size();
+        return toDoCategoryList.size();
     }
 
     @Override
     public ToDoCategory getItem(int position) {
-        return toDoCategoryLisr.get(position);
+        return toDoCategoryList.get(position);
     }
 
     @Override
@@ -85,7 +89,13 @@ public class CategoryAdapter extends ArrayAdapter implements SpinnerAdapter{
         View categoryImageCheck = viewHolder.categoryImageCheck;
         // Populate the data into the template view using the data object
         categoryName.setText(toDoCategory.getName());
-        categoryImageCheck.setVisibility(View.VISIBLE);
+        if( selectedToDoCategory != null && selectedToDoCategory.getId() == toDoCategory.getId() ) {
+            categoryImageCheck.setVisibility(View.VISIBLE);
+        }
+        else {
+            categoryImageCheck.setVisibility(View.INVISIBLE);
+        }
+
         // Return the completed view to render on screen
         return convertView;
     }
@@ -101,5 +111,7 @@ public class CategoryAdapter extends ArrayAdapter implements SpinnerAdapter{
         }
     }
 
-
+    public void setSelectedToDoCategory(ToDoCategory selectedToDoCategory) {
+        this.selectedToDoCategory = selectedToDoCategory;
+    }
 }

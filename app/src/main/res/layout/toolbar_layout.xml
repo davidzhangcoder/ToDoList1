@@ -35,7 +35,7 @@
         android:spinnerMode="dialog"
         android:prompt="@string/hello_blank_fragment"
         android:background="@null"
-        android:gravity="right"
+        android:gravity="center_vertical|right"
         />
 
 </LinearLayout>
