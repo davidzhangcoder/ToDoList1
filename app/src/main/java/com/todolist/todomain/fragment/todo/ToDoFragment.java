@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
@@ -173,7 +174,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 
         //Initial
         initRecyclerView( recyclerView , floatingActionButton );
-        initCategoryFragment();
+//        initCategoryFragment();
         initialCategorySpinner();
 
         //Initial Menu ( comment out following if fragment need to append some menu item in, it is necessary to display menu in Fragment )
@@ -227,8 +228,24 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 
     public void initialCategorySpinner() {
         if( categorySpinner != null ) {
-            SpinnerAdapter adapter = new CategoryAdapter(this.getContext(), toDoCategorys);
+            if( selectedToDoCategory == null && toDoCategorys != null && toDoCategorys.size() != 0 )
+                selectedToDoCategory = toDoCategorys.get( 0 );
+            SpinnerAdapter adapter = new CategoryAdapter(this.getContext(), toDoCategorys , selectedToDoCategory);
             categorySpinner.setAdapter(adapter);
+            categorySpinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ((CategoryAdapter)adapter).setSelectedToDoCategory(toDoCategorys.get(position));
+                    selectedToDoCategory=toDoCategorys.get(position);
+                    mPresenter.doGetToDoItemsByCategory(selectedToDoCategory.getId());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
         }
     }
 

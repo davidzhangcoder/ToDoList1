@@ -1,55 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/categoryContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:background="@color/colorPrimary"
-    android:layout_marginBottom="5dp"
-    tools:layout_editor_absoluteY="25dp">
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="?attr/selectableItemBackground"
+    >
 
     <TextView
         android:id="@+id/categoryName"
-        style="@style/ToDoListOptionItemTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/white"
-        android:textSize="@dimen/textsize_medium"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/textsize_normal"
+        tools:text="Test" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/categoryImageCheck"
-        style="@style/ToDoListOptionCheckStyle"
+        style="@style/ToDoListOptionCheckStyleForEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="16dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.964"
-        app:layout_constraintStart_toEndOf="@+id/categoryName"
-        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription"
         tools:visibility="visible" />
 
-    <!--<View-->
-    <!--android:id="@+id/view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="2dp"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_marginBottom="5dp"-->
-    <!--android:background="#A9A9A9"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintHorizontal_bias="0.0"-->
-    <!--app:layout_constraintStart_toStartOf="parent" />-->
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
