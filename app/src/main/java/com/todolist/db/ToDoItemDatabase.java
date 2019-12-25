@@ -90,8 +90,8 @@ public class ToDoItemDatabase extends SQLiteOpenHelper {
 //        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
 //                + ") Values( null ,'" + App.getContext().getString(R.string.category_all) + "')");
 
-        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
-                + ") Values( " + ToDoCategory.CATEGORY_DEFAULT_ID + " ,'" + App.getContext().getString(R.string.category_default) + "')");
+//        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+//                + ") Values( " + ToDoCategory.CATEGORY_DEFAULT_ID + " ,'" + App.getContext().getString(R.string.category_default) + "')");
 
         db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
                 + ") Values( null ,'" + App.getContext().getString(R.string.category_working) + "')");
@@ -107,6 +107,9 @@ public class ToDoItemDatabase extends SQLiteOpenHelper {
 
         db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
                 + ") Values( null ,'" + App.getContext().getString(R.string.category_shopping) + "')");
+
+        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+                + ") Values( null ,'" + App.getContext().getString(R.string.category_other) + "')");
     }
 
 }

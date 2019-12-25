@@ -17,8 +17,13 @@
     <string name="category_meeting">Meeting</string>
     <string name="category_appointment">Appointment</string>
     <string name="category_shopping">Shopping</string>
+    <string name="category_other">Other</string>
     <string name="tab_title_todo">To Do</string>
     <string name="tab_title_done">Done</string>
+
+    <string name="error_todo_name">Please enter a Name</string>
+    <string name="error_todo_duedate">Please enter a Due Date</string>
+    <string name="error_todo_category">Please select a Category</string>
 
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
     <!--APP ID : ca-app-pub-6130191480576260~1951770609-->

@@ -64,23 +64,27 @@ public class CategorySelectionDialog extends AppCompatDialogFragment
         categoryList.addAll( ToDoCategory.getToDoCategorys() );
 
         CategoryListAdapter categoryListAdapter = new CategoryListAdapter( this.getContext(), categoryList , null );
-        for( IToDoCategory toDoCategory : categoryList ) {
-            if( ((ToDoCategory) toDoCategory).getId() == CategorySelectionDialog.this.getCallback().getSelectedCategory().getId()
+        for (IToDoCategory toDoCategory : categoryList) {
+            if (CategorySelectionDialog.this.getCallback().getSelectedCategory() != null
+                    && ((ToDoCategory) toDoCategory).getId() == CategorySelectionDialog.this.getCallback().getSelectedCategory().getId()
                     ) {
                 ((ToDoCategory) toDoCategory).setSelected(true);
-                categoryListAdapter.setSelectedToDoCategory( toDoCategory );
+                categoryListAdapter.setSelectedToDoCategory(toDoCategory);
             }
             ((ToDoCategory) toDoCategory).setWorkflow(ToDoCategory.WORKFLOW.EDIT);
         }
+
         CategoryListAdapter.ItemCallBack itemCallBack = new CategoryListAdapter.ItemCallBack() {
             @Override
             public void doItemClickCallBack(IToDoCategory iToDoCategory) {
-                ((ToDoCategory)categoryListAdapter.getSelectedToDoCategory()).setSelected( false );
+                if( categoryListAdapter.getSelectedToDoCategory() != null )
+                    ((ToDoCategory)categoryListAdapter.getSelectedToDoCategory()).setSelected( false );
                 ((ToDoCategory)iToDoCategory).setSelected( true );
                 categoryListAdapter.setSelectedToDoCategory(iToDoCategory);
                 categoryListAdapter.notifyDataSetChanged();
             }
         };
+
         categoryListAdapter.setItemCallBack( itemCallBack );
         recyclerView.setAdapter( categoryListAdapter );
     }

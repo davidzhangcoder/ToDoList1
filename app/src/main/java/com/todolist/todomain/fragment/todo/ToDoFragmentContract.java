@@ -19,9 +19,7 @@ public interface ToDoFragmentContract {
 
         void showCategoryDialog();
 
-        void setToDoCategorys(List<ToDoCategory> toDoCategorys);
-
-        void initialCategorySpinner();
+        void initialCategorySpinner( List<ToDoCategory> toDoCategorys );
     }
 
     interface Presenter extends BasePresenter
