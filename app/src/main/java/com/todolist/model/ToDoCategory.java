@@ -16,13 +16,13 @@ public class ToDoCategory implements Serializable , IToDoItemType , IToDoCategor
     private WORKFLOW workflow;
 
 
-    public static final int CATEGORY_DEFAULT_ID = 0;
+//    public static final int CATEGORY_DEFAULT_ID = 0;
 
     public static final int CATEGORY_ADD_NEW_ID = -1;
     public static final String CATEGORY_ADD_NEW_NAME = "Add New Category";
 
     public static final int CATEGORY_ALL_ID = -2;
-    public static final String CATEGORY_ALL_NAME = "All Lists";
+    public static final String CATEGORY_ALL_NAME = "All";
 
 
 

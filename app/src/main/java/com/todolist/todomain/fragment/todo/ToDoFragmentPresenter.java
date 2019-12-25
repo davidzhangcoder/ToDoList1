@@ -39,9 +39,7 @@ public class ToDoFragmentPresenter implements ToDoFragmentContract.Presenter {
         toDoItemRepository.loadToDoCategorys(new ToDoItemDataSource.LoadToDoCategorysCallBack() {
             @Override
             public void onToDoCategorysLoaded(List<ToDoCategory> toDoCategorys) {
-                view.setToDoCategorys(toDoCategorys);
-
-                view.initialCategorySpinner();
+                view.initialCategorySpinner( toDoCategorys );
             }
 
             @Override

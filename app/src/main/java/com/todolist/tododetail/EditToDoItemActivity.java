@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -150,9 +151,9 @@ public class EditToDoItemActivity extends AppCompatActivity
             selectedDate = startDate;
             selectedRecurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
             toDoItem.setRecurrencePeriod( Recurrence.NONE );
-            toDoItem.setToDoCategory( ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID ) );
+//            toDoItem.setToDoCategory( ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID ) );
             toDoItem.setDone(false);
-            selectedToDoCategory = ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID );
+//            selectedToDoCategory = ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID );
         }
         else {
             selectedDate = toDoItem.getDueDate();
@@ -201,6 +202,23 @@ public class EditToDoItemActivity extends AppCompatActivity
         this.presenter.start();
     }
 
+    private boolean validate( ToDoItem toDoItem ) {
+        boolean hasError = false;
+        if( TextUtils.isEmpty( toDoItem.getName() ) ) {
+            materialEditTextToDoItemName.setError( this.getResources().getString(R.string.error_todo_name) );
+            hasError = true;
+        }
+        if( toDoItem.getDueDate() == null ) {
+            materialEditTextDueDate.setError( this.getResources().getString(R.string.error_todo_duedate) );
+            hasError = true;
+        }
+        if( toDoItem.getToDoCategory() == null ) {
+            category.setError( this.getResources().getString(R.string.error_todo_category) );
+            hasError = true;
+        }
+        return hasError;
+    }
+
     private void init()
     {
         reback.setOnClickListener(new View.OnClickListener() {
@@ -220,6 +238,10 @@ public class EditToDoItemActivity extends AppCompatActivity
                 String name = materialEditTextToDoItemName.getText().toString();
                 toDoItem.setName( name );
 
+                if( validate( toDoItem )) {
+                    return;
+                }
+
                 presenter.createOrUpdateToDoItem(toDoItem);
 
 //                ContentValues values = new ContentValues();
@@ -238,7 +260,6 @@ public class EditToDoItemActivity extends AppCompatActivity
 //                    db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
 //                }
 
-                finish();
             }
         });
 
@@ -383,7 +404,8 @@ public class EditToDoItemActivity extends AppCompatActivity
                 }
             });
 
-            category.setText( selectedToDoCategory.getName() );
+            if( selectedToDoCategory != null )
+                category.setText( selectedToDoCategory.getName() );
 
             if( toDoItem.getId() > 0 ) {
                 categoryContainer.setVisibility( View.VISIBLE );

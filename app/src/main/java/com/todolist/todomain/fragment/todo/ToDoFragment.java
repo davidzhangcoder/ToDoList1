@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -175,13 +176,13 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         //Initial
         initRecyclerView( recyclerView , floatingActionButton );
 //        initCategoryFragment();
-        initialCategorySpinner();
+//        initialCategorySpinner();
 
         //Initial Menu ( comment out following if fragment need to append some menu item in, it is necessary to display menu in Fragment )
         //this.setHasOptionsMenu( true );
 
         isCreated = true;
-        lazyLoad();
+//        lazyLoad();
 
         return view;
     }
@@ -226,8 +227,16 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
             mAdView.setVisibility(View.INVISIBLE);
     }
 
-    public void initialCategorySpinner() {
-        if( categorySpinner != null ) {
+    public void initialCategorySpinner( List<ToDoCategory> toDoCategorys ) {
+        if( categorySpinner != null && toDoCategorys != null ) {
+
+            ToDoCategory allToDoCategory = new ToDoCategory();
+            allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
+            allToDoCategory.setName( ToDoCategory.CATEGORY_ALL_NAME );
+            toDoCategorys.add( 0 , allToDoCategory );
+
+
+            this.toDoCategorys = toDoCategorys;
             if( selectedToDoCategory == null && toDoCategorys != null && toDoCategorys.size() != 0 )
                 selectedToDoCategory = toDoCategorys.get( 0 );
             SpinnerAdapter adapter = new CategoryAdapter(this.getContext(), toDoCategorys , selectedToDoCategory);
@@ -373,11 +382,16 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
-//        if( isCreated && isVisible )
-//            mPresenter.start();
+        if( isCreated && isVisible )
+            mPresenter.start();
 
 //        if( categoryFilterID != ToDoCategory.CATEGORY_ADD_NEW_ID ) {
 //            toDoItemList.clear();
@@ -410,8 +424,8 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         categoryFragment.show( this.getFragmentManager(), null);
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        //我们根据requestCode判断是哪个子Fragment传回的数据
 //        //从data中拿到传回的数据
 //        if(resultCode == DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE) {
@@ -419,15 +433,11 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 //            categoryButton.setText(selectedToDoCategory.getName());
 //            mPresenter.doGetToDoItemsByCategory(selectedToDoCategory.getId());
 //        }
-//    }
+    }
 
     @Override
     public void setPresenter(@NonNull ToDoFragmentContract.Presenter presenter) {
          this.mPresenter = checkNotNull(presenter);
-    }
-
-    public void setToDoCategorys(List<ToDoCategory> toDoCategorys) {
-        this.toDoCategorys = toDoCategorys;
     }
 
     public interface OnFragmentInteractionListener {
