@@ -20,6 +20,7 @@
     <string name="category_other">Other</string>
     <string name="tab_title_todo">To Do</string>
     <string name="tab_title_done">Done</string>
+    <string name="filter_by_category">Filter By category</string>
 
     <string name="error_todo_name">Please enter a Name</string>
     <string name="error_todo_duedate">Please enter a Due Date</string>

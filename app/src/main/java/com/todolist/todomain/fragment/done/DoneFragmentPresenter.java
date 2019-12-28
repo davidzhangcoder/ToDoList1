@@ -3,8 +3,10 @@ package com.todolist.todomain.fragment.done;
 import com.todolist.data.source.GenericDataSource;
 import com.todolist.data.source.ToDoItemDataSource;
 import com.todolist.data.source.ToDoItemRepository;
+import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DoneFragmentPresenter implements DoneFragmentContract.Presenter {
@@ -32,6 +34,19 @@ public class DoneFragmentPresenter implements DoneFragmentContract.Presenter {
 
             }
         });
+
+        toDoItemRepository.loadToDoCategorys(new ToDoItemDataSource.LoadToDoCategorysCallBack() {
+            @Override
+            public void onToDoCategorysLoaded(List<ToDoCategory> toDoCategorys) {
+                view.initialCategorySpinner( toDoCategorys );
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
+
     }
 
     @Override
@@ -49,4 +64,20 @@ public class DoneFragmentPresenter implements DoneFragmentContract.Presenter {
             }
         });
     }
+
+    @Override
+    public void doGetToDoItemsByCategory(long categoryID) {
+        toDoItemRepository.loadToDoItems(categoryID, new ToDoItemDataSource.LoadToDoItemsCallBack() {
+            @Override
+            public void onToDoItemsLoaded(List<ToDoItem> toDos) {
+                view.showToDoItems(toDos);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                view.showToDoItems( new ArrayList<ToDoItem>() );
+            }
+        });
+    }
+
 }

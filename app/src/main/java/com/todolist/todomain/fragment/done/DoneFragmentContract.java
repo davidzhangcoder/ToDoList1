@@ -1,5 +1,6 @@
 package com.todolist.todomain.fragment.done;
 
+import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 import com.todolist.ui.BasePresenter;
 import com.todolist.ui.BaseView;
@@ -11,10 +12,14 @@ public interface DoneFragmentContract {
         void showToDoItems(List<ToDoItem> toDoItemList);
 
         void refreshTabs();
+
+        void initialCategorySpinner( List<ToDoCategory> toDoCategorys );
     }
 
     interface Presenter extends BasePresenter {
         void reverseDoneAction(ToDoItem toDoItem);
+
+        void doGetToDoItemsByCategory(long categoryID);
     }
 
 }

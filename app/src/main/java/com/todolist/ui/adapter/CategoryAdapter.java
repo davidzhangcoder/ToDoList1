@@ -52,6 +52,7 @@ public class CategoryAdapter extends ArrayAdapter implements SpinnerAdapter{
         ToDoCategory toDoCategory = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
+            //此方法getView的layout用于显示Spinner的Text field
             convertView = LayoutInflater.from(context).inflate(R.layout.item_category_title, parent, false);
         }
 
@@ -75,6 +76,7 @@ public class CategoryAdapter extends ArrayAdapter implements SpinnerAdapter{
         ToDoCategory toDoCategory = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
+            //此方法getDropDownView的layout用于显示Spinner的Drop Down或Dialog中的Item
             convertView = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false);
         }
 
