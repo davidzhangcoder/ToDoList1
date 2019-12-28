@@ -4,13 +4,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -20,9 +25,11 @@ import com.todolist.R;
 import com.todolist.app.App;
 import com.todolist.data.Injection;
 import com.todolist.model.TipHolder;
+import com.todolist.model.ToDoCategory;
 import com.todolist.todomain.TestA;
 import com.todolist.todomain.fragment.todo.ToDoFragment;
 import com.todolist.ui.LazyFragment;
+import com.todolist.ui.adapter.CategoryAdapter;
 import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.ToDoItem;
@@ -50,9 +57,16 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
     @Inject
     DoneFragmentContract.Presenter mPresenter;
 
+    private Spinner categorySpinner;
+
     private RecyclerView recyclerView;
 
     private AdView mAdView;
+
+
+    private List<ToDoCategory> toDoCategorys = new ArrayList<ToDoCategory>();
+
+    private ToDoCategory selectedToDoCategory;
 
     private List<IToDoItem> doneList = new ArrayList<IToDoItem>();
 
@@ -120,6 +134,12 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
         recyclerView = view.findViewById(R.id.done_recycler);
         mAdView = view.findViewById(R.id.adView);
 
+        //build ToolBar that inside at ToDoMainActivity
+        Toolbar toolbar = (Toolbar)this.getActivity().findViewById(R.id.toolbar);
+        inflater.inflate(R.layout.toolbar_layout, toolbar, true);
+        ((AppCompatActivity)this.getActivity()).setSupportActionBar(toolbar);
+        categorySpinner = (Spinner) toolbar.findViewById(R.id.categorySpinner);
+
         initRecyclerView( recyclerView );
 
         isCreated = true;
@@ -151,6 +171,37 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
     protected void onInvisible() {
         if( isCreated && !isVisible )
             mAdView.setVisibility(View.INVISIBLE);
+    }
+
+    public void initialCategorySpinner( List<ToDoCategory> toDoCategorys ) {
+        if( categorySpinner != null && toDoCategorys != null ) {
+
+            ToDoCategory allToDoCategory = new ToDoCategory();
+            allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
+            allToDoCategory.setName( ToDoCategory.CATEGORY_ALL_NAME );
+            toDoCategorys.add( 0 , allToDoCategory );
+
+
+            this.toDoCategorys = toDoCategorys;
+            if( selectedToDoCategory == null && toDoCategorys != null && toDoCategorys.size() != 0 )
+                selectedToDoCategory = toDoCategorys.get( 0 );
+            SpinnerAdapter adapter = new CategoryAdapter(this.getContext(), toDoCategorys , selectedToDoCategory);
+            categorySpinner.setAdapter(adapter);
+            categorySpinner.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ((CategoryAdapter)adapter).setSelectedToDoCategory(toDoCategorys.get(position));
+                    selectedToDoCategory=toDoCategorys.get(position);
+                    mPresenter.doGetToDoItemsByCategory(selectedToDoCategory.getId());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+        }
     }
 
     private void initRecyclerView( RecyclerView recyclerView )
@@ -207,6 +258,9 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
     @Override
     public void onResume() {
         super.onResume();
+
+        if( isCreated && isVisible )
+            mPresenter.start();
 
 //        mPresenter.start();
     }
