@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.todolist.context.ContextHolder;
 import com.todolist.model.ToDoCategory;
+import com.todolist.model.ToDoImage;
 import com.todolist.model.ToDoItem;
 
 import java.util.ArrayList;
@@ -123,6 +124,14 @@ public class ToDoItemDao
         values.put(ToDoItem.COLUMN_CATEGORY, toDoItem.getToDoCategory().getId() );
         long id = db.addContent(ToDoItem.TABLE_NAME, values);
         toDoItem.setId(id);
+
+        for( ToDoImage toDoImage : toDoItem.getToDoImageList() ) {
+            ContentValues valuesToDoImage = new ContentValues();
+            valuesToDoImage.put(ToDoImage.COLUMN_URL, toDoImage.getUri().getPath());
+            valuesToDoImage.put(ToDoImage.COLUMN_TODOITEM, id);
+            db.addContent(ToDoImage.TABLE_NAME, valuesToDoImage);
+        }
+
         return id;
     }
 
@@ -135,7 +144,20 @@ public class ToDoItemDao
         values.put(ToDoItem.COLUMN_DUE_TIMESTAMP, toDoItem.getDueTimestamp());
         values.put(ToDoItem.COLUMN_RECURRENCE_PERIOD, toDoItem.getRecurrencePeriod());
         values.put(ToDoItem.COLUMN_CATEGORY, toDoItem.getToDoCategory().getId() );
-        return db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
+        boolean retBollean = db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
+
+        if( toDoItem.getToDoImageList() != null && toDoItem.getToDoImageList().size() > 0 ) {
+            db.deleteContent( ToDoImage.TABLE_NAME , ToDoImage.COLUMN_TODOITEM + " = ? ", new String[]{ String.valueOf(toDoItem.getId()) } );
+
+            for( ToDoImage toDoImage : toDoItem.getToDoImageList() ) {
+                ContentValues valuesToDoImage = new ContentValues();
+                valuesToDoImage.put(ToDoImage.COLUMN_URL, toDoImage.getUri().getPath());
+                valuesToDoImage.put(ToDoImage.COLUMN_TODOITEM, toDoItem.getId());
+                db.addContent(ToDoImage.TABLE_NAME, valuesToDoImage);
+            }
+        }
+
+        return retBollean;
     }
 
     public List<ToDoCategory> loadToDoCategorys() {

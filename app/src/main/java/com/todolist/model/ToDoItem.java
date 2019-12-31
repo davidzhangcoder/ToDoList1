@@ -55,6 +55,7 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
 
     private Calendar dueDate;
     private Calendar remindDate;
+    private List<ToDoImage> toDoImageList = new ArrayList<ToDoImage>();
 
 
     public String getName() {
@@ -127,6 +128,14 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
 
     public void setRemindDate(Calendar remindDate) {
         this.remindDate = remindDate;
+    }
+
+    public List<ToDoImage> getToDoImageList() {
+        return toDoImageList;
+    }
+
+    public void setToDoImageList(List<ToDoImage> toDoImageList) {
+        this.toDoImageList = toDoImageList;
     }
 
     @Override

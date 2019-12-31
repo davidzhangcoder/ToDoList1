@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.todolist.app.App;
 import com.todolist.R;
 import com.todolist.model.ToDoCategory;
+import com.todolist.model.ToDoImage;
 import com.todolist.model.ToDoItem;
 
 public class ToDoItemDatabase extends SQLiteOpenHelper {
@@ -14,7 +15,7 @@ public class ToDoItemDatabase extends SQLiteOpenHelper {
     private final static String DB_NAME = "todo_list_db";
 
 
-    public final static int DB_VERSION = 3;
+    public final static int DB_VERSION = 1;
 
 
 
@@ -31,6 +32,14 @@ public class ToDoItemDatabase extends SQLiteOpenHelper {
         return mInstance;
     }
 
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+
+        if(!db.isReadOnly()) { // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -42,6 +51,9 @@ public class ToDoItemDatabase extends SQLiteOpenHelper {
         //Version 2
         db.execSQL(ToDoCategory.CREATE_TABLE);
         initCategory( db );
+
+        //Version 3
+        db.execSQL(ToDoImage.CREATE_TABLE);
     }
 
     @Override
@@ -56,14 +68,17 @@ public class ToDoItemDatabase extends SQLiteOpenHelper {
 
         switch( oldVersion )
         {
-            case 1:
+            case 1: {
                 db.execSQL(ToDoCategory.CREATE_TABLE);
-                initCategory( db );
-                break;
-            case 2:
+                initCategory(db);
                 String addCategoryIDInToDoITemSQL = "ALTER TABLE " + ToDoItem.TABLE_NAME + " ADD COLUMN " + ToDoItem.COLUMN_CATEGORY + " INTEGER ";
-                db.execSQL( addCategoryIDInToDoITemSQL );
+                db.execSQL(addCategoryIDInToDoITemSQL);
                 break;
+            }
+            case 2: {
+                db.execSQL(ToDoImage.CREATE_TABLE);
+                break;
+            }
             default: {
                 try {
                     db.beginTransaction();

@@ -440,11 +440,15 @@ public class EditToDoItemActivity extends AppCompatActivity
             List<Uri> mSelected = Matisse.obtainResult(data);
             Log.d("Matisse", "mSelected: " + mSelected);
 
+            toDoItem.getToDoImageList().clear();;
             if( mSelected != null && mSelected.size() > 0 ) {
-                ToDoImage toDoImage = new ToDoImage();
-                toDoImage.setUri( mSelected.get(0) );
-                imageDataList.add( toDoImage );
-                toDoImageAdapter.notifyDataSetChanged();
+                for( Uri uri : mSelected ) {
+                    ToDoImage toDoImage = new ToDoImage();
+                    toDoImage.setUri( uri );
+                    imageDataList.add(toDoImage);
+                    toDoItem.getToDoImageList().add( toDoImage );
+                    toDoImageAdapter.notifyDataSetChanged();
+                }
             }
         }
     }
