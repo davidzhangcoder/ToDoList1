@@ -1,6 +1,7 @@
 package com.todolist.db;
 
 import android.content.ContentValues;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.todolist.context.ContextHolder;
@@ -33,7 +34,8 @@ public class ToDoItemDao
         for(Iterator<Map<String, String>> it = resultList.iterator(); it.hasNext() ; ) {
             Map<String, String> result = it.next();
             ToDoItem toDoItem = new ToDoItem();
-            toDoItem.setId(Long.parseLong(result.get(ToDoItem.COLUMN_ID)));
+            long toDoItemID = Long.parseLong(result.get(ToDoItem.COLUMN_ID));
+            toDoItem.setId( toDoItemID );
             toDoItem.setName(result.get(ToDoItem.COLUMN_NAME));
             if( result.get(ToDoItem.COLUMN_DUE_TIMESTAMP) != null && !result.get(ToDoItem.COLUMN_DUE_TIMESTAMP).trim().equalsIgnoreCase("") ) {
                 toDoItem.setDueTimestamp(Long.parseLong(result.get(ToDoItem.COLUMN_DUE_TIMESTAMP)));
@@ -58,6 +60,27 @@ public class ToDoItemDao
             }
             if( result.get(ToDoItem.COLUMN_DONE_INDICATOR) != null && !result.get(ToDoItem.COLUMN_DONE_INDICATOR).trim().equalsIgnoreCase("") ) {
                 toDoItem.setDone(Boolean.getBoolean( result.get(ToDoItem.COLUMN_DONE_INDICATOR) ));
+            }
+
+            String toDoImageSelection = ToDoImage.COLUMN_TODOITEM + "=?";
+            String[] toDoImageParameter = new String[]{ String.valueOf( toDoItemID ) };
+            List<Map<String, String>> toDoImageResultList = db.getListData( ToDoImage.TABLE_NAME , toDoImageSelection , toDoImageParameter ,  ToDoImage.COLUMN_ID + " ASC " );
+            if( toDoImageResultList != null && toDoImageResultList.size() > 0 ) {
+                for(Iterator<Map<String, String>> toDoImageResultIt = toDoImageResultList.iterator(); toDoImageResultIt.hasNext() ; ) {
+                    Map<String, String> toDoImageResult = toDoImageResultIt.next();
+                    ToDoImage toDoImage = new ToDoImage();
+
+                    long toDoImageId = Long.parseLong( toDoImageResult.get( ToDoImage.COLUMN_ID ) );
+                    String urlString = toDoImageResult.get( ToDoImage.COLUMN_URL );
+                    long toDoItemIDFromToDoImage = Long.parseLong( toDoImageResult.get( ToDoImage.COLUMN_TODOITEM ) );
+
+                    toDoImage.setId( toDoImageId );
+                    toDoImage.setToDoItemId( toDoItemIDFromToDoImage );
+                    Uri uri = Uri.parse( urlString );
+                    toDoImage.setUri( uri );
+                    toDoImage.setUriString( urlString );
+                    toDoItem.getToDoImageList().add( toDoImage );
+                }
             }
 
             toDoItemList.add( toDoItem );
@@ -127,7 +150,7 @@ public class ToDoItemDao
 
         for( ToDoImage toDoImage : toDoItem.getToDoImageList() ) {
             ContentValues valuesToDoImage = new ContentValues();
-            valuesToDoImage.put(ToDoImage.COLUMN_URL, toDoImage.getUri().getPath());
+            valuesToDoImage.put(ToDoImage.COLUMN_URL, toDoImage.getUri().toString());
             valuesToDoImage.put(ToDoImage.COLUMN_TODOITEM, id);
             db.addContent(ToDoImage.TABLE_NAME, valuesToDoImage);
         }
@@ -151,7 +174,7 @@ public class ToDoItemDao
 
             for( ToDoImage toDoImage : toDoItem.getToDoImageList() ) {
                 ContentValues valuesToDoImage = new ContentValues();
-                valuesToDoImage.put(ToDoImage.COLUMN_URL, toDoImage.getUri().getPath());
+                valuesToDoImage.put(ToDoImage.COLUMN_URL, toDoImage.getUri().toString());
                 valuesToDoImage.put(ToDoImage.COLUMN_TODOITEM, toDoItem.getId());
                 db.addContent(ToDoImage.TABLE_NAME, valuesToDoImage);
             }

@@ -159,6 +159,10 @@ public class EditToDoItemActivity extends AppCompatActivity
             selectedDate = toDoItem.getDueDate();
             selectedRecurrence = new Recurrence( toDoItem.getDueDate().getTimeInMillis() , toDoItem.getRecurrencePeriod() );
             selectedToDoCategory = toDoItem.getToDoCategory();
+            for( ToDoImage toDoImage : toDoItem.getToDoImageList() ) {
+                toDoImage.setUri( Uri.parse( toDoImage.getUriString() ));
+            }
+            imageDataList.addAll( toDoItem.getToDoImageList() );
         }
 
         Locale locale = getResources().getConfiguration().locale;
@@ -427,7 +431,7 @@ public class EditToDoItemActivity extends AppCompatActivity
             imageRecylerView.addItemDecoration( gridItemDecoration );
             ToDoImage toDoImage = new ToDoImage();
             toDoImage.setAdd(true);
-            imageDataList.add( toDoImage );
+            imageDataList.add( 0 , toDoImage );
             toDoImageAdapter = new ToDoImageAdapter( this , imageDataList );
             imageRecylerView.setAdapter( toDoImageAdapter );
         }
@@ -440,7 +444,6 @@ public class EditToDoItemActivity extends AppCompatActivity
             List<Uri> mSelected = Matisse.obtainResult(data);
             Log.d("Matisse", "mSelected: " + mSelected);
 
-            toDoItem.getToDoImageList().clear();;
             if( mSelected != null && mSelected.size() > 0 ) {
                 for( Uri uri : mSelected ) {
                     ToDoImage toDoImage = new ToDoImage();

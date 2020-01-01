@@ -2,7 +2,9 @@ package com.todolist.model;
 
 import android.net.Uri;
 
-public class ToDoImage {
+import java.io.Serializable;
+
+public class ToDoImage implements Serializable {
 
     public static final String TABLE_NAME = "todo_image";
 
@@ -24,7 +26,12 @@ public class ToDoImage {
 
     private boolean isAdd;
 
-    private Uri uri;
+    private transient Uri uri;
+    private String uriString;
+
+    private long id;
+
+    private long toDoItemId;
 
 
     public boolean isAdd() {
@@ -43,4 +50,27 @@ public class ToDoImage {
         this.uri = uri;
     }
 
+    public String getUriString() {
+        return uriString;
+    }
+
+    public void setUriString(String uriString) {
+        this.uriString = uriString;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getToDoItemId() {
+        return toDoItemId;
+    }
+
+    public void setToDoItemId(long toDoItemId) {
+        this.toDoItemId = toDoItemId;
+    }
 }
