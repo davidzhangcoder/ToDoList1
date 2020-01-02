@@ -459,7 +459,7 @@ public class EditToDoItemActivity extends AppCompatActivity
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         dueTimeContainer.setVisibility( View.VISIBLE );
-        repeatContainer.setVisibility( View.VISIBLE );
+//        repeatContainer.setVisibility( View.VISIBLE );
         categoryContainer.setVisibility( View.VISIBLE );
         resetFocusFraction();
 
