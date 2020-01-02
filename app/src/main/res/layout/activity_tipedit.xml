@@ -27,7 +27,9 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="left"
-                android:src="@mipmap/reback"/>
+                android:scaleX="1.2"
+                android:scaleY="1.2"
+                android:src="@drawable/ic_clear_white_24dp"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -41,9 +43,12 @@
             <ImageView
                 android:id="@+id/edit_confirmation"
                 android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="right"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
                 android:clickable="true"
                 android:src="@drawable/check"/>
 

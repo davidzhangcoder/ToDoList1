@@ -23,7 +23,7 @@ public class DoneFragmentPresenter implements DoneFragmentContract.Presenter {
 
     @Override
     public void start() {
-        toDoItemRepository.loadDoneItems(new ToDoItemDataSource.LoadToDoItemsCallBack() {
+        toDoItemRepository.loadDoneItems(ToDoCategory.CATEGORY_ALL_ID , new ToDoItemDataSource.LoadToDoItemsCallBack() {
             @Override
             public void onToDoItemsLoaded(List<ToDoItem> toDos) {
                 view.showToDoItems( toDos );
@@ -67,7 +67,7 @@ public class DoneFragmentPresenter implements DoneFragmentContract.Presenter {
 
     @Override
     public void doGetToDoItemsByCategory(long categoryID) {
-        toDoItemRepository.loadToDoItems(categoryID, new ToDoItemDataSource.LoadToDoItemsCallBack() {
+        toDoItemRepository.loadDoneItems(categoryID, new ToDoItemDataSource.LoadToDoItemsCallBack() {
             @Override
             public void onToDoItemsLoaded(List<ToDoItem> toDos) {
                 view.showToDoItems(toDos);

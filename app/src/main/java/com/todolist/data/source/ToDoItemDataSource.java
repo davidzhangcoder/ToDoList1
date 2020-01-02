@@ -35,7 +35,7 @@ public interface ToDoItemDataSource extends GenericDataSource{
     public void reverseCompletedToDo(@NonNull ToDoItem toDoItem , @NonNull GenericToDoCallBack callBack);
 
 
-    public void loadDoneItems(LoadToDoItemsCallBack callBack);
+    public void loadDoneItems(@NonNull long categoryID , @NonNull LoadToDoItemsCallBack callBack);
 
 
     public void loadToDoCategorys(LoadToDoCategorysCallBack callBack);

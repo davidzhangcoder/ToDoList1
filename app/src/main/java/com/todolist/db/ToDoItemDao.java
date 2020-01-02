@@ -59,7 +59,7 @@ public class ToDoItemDao
                 toDoItem.setToDoCategory(ToDoCategory.getToDoCategory(Long.parseLong( result.get(ToDoItem.COLUMN_CATEGORY) )));
             }
             if( result.get(ToDoItem.COLUMN_DONE_INDICATOR) != null && !result.get(ToDoItem.COLUMN_DONE_INDICATOR).trim().equalsIgnoreCase("") ) {
-                toDoItem.setDone(Boolean.getBoolean( result.get(ToDoItem.COLUMN_DONE_INDICATOR) ));
+                toDoItem.setDone( result.get(ToDoItem.COLUMN_DONE_INDICATOR).equalsIgnoreCase("1") );
             }
 
             String toDoImageSelection = ToDoImage.COLUMN_TODOITEM + "=?";

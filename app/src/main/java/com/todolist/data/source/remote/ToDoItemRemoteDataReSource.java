@@ -63,7 +63,7 @@ public class ToDoItemRemoteDataReSource implements ToDoItemDataSource
     }
 
 
-    public void loadDoneItems(LoadToDoItemsCallBack callBack) {
+    public void loadDoneItems(@NonNull long categoryID , @NonNull LoadToDoItemsCallBack callBack) {
 
     }
 

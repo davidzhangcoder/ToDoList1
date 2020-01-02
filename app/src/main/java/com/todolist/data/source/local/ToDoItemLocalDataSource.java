@@ -77,12 +77,15 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
     }
 
     @Override
-    public void loadDoneItems( LoadToDoItemsCallBack callBack ) {
+    public void loadDoneItems( long categoryID , LoadToDoItemsCallBack callBack ) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 final List<ToDoItem> toDoItems = new ArrayList<ToDoItem>();
-                toDoItems.addAll( mToDoItemDao.loadToDoItems( ToDoItem.COLUMN_DONE_INDICATOR + ">?" , new String[]{"0"} ) );
+                if( categoryID == ToDoCategory.CATEGORY_ALL_ID )
+                    toDoItems.addAll( mToDoItemDao.loadToDoItems( ToDoItem.COLUMN_DONE_INDICATOR + ">?" , new String[]{"0"} ) );
+                else
+                    toDoItems.addAll( mToDoItemDao.loadToDoItems( ToDoItem.COLUMN_DONE_INDICATOR + ">? and " + ToDoItem.COLUMN_CATEGORY + " == ? " , new String[]{"0" , categoryID+""} ) );
                 mAppExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {

@@ -240,7 +240,7 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
                             public void onDismissed(Snackbar transientBottomBar, int event) {
                                 if( event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT ) {
                                     if( holder instanceof TipHolder) {
-                                        ((CheckBox)((TipHolder)holder).getView(R.id.tip_checkbox)).setChecked(false);
+                                        ((CheckBox)((TipHolder)holder).getView(R.id.tip_checkbox)).setChecked(true);
                                     }
                                 }
                             }

@@ -77,8 +77,8 @@ public class ToDoItemRepository implements ToDoItemDataSource
     }
 
     @Override
-    public void loadDoneItems(LoadToDoItemsCallBack callBack) {
-        mLocalDataSource.loadDoneItems(new LoadToDoItemsCallBack() {
+    public void loadDoneItems(long categoryID , LoadToDoItemsCallBack callBack) {
+        mLocalDataSource.loadDoneItems(categoryID , new LoadToDoItemsCallBack() {
             @Override
             public void onToDoItemsLoaded(List<ToDoItem> toDos) {
                 callBack.onToDoItemsLoaded( toDos );
@@ -86,6 +86,7 @@ public class ToDoItemRepository implements ToDoItemDataSource
 
             @Override
             public void onDataNotAvailable() {
+                callBack.onDataNotAvailable();
                 //ToDo
                 //loadToDoItemsFromRemoteDataSource( categoryID , callBack );
             }
