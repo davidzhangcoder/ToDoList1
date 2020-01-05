@@ -1,10 +1,12 @@
 package com.todolist.model;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class ToDoImage implements Serializable {
+public class ToDoImage implements Parcelable {
 
     public static final String TABLE_NAME = "todo_image";
 
@@ -26,8 +28,8 @@ public class ToDoImage implements Serializable {
 
     private boolean isAdd;
 
-    private transient Uri uri;
-    private String uriString;
+    private Uri uri;
+//    private String uriString;
 
     private long id;
 
@@ -50,13 +52,13 @@ public class ToDoImage implements Serializable {
         this.uri = uri;
     }
 
-    public String getUriString() {
-        return uriString;
-    }
-
-    public void setUriString(String uriString) {
-        this.uriString = uriString;
-    }
+//    public String getUriString() {
+//        return uriString;
+//    }
+//
+//    public void setUriString(String uriString) {
+//        this.uriString = uriString;
+//    }
 
     public long getId() {
         return id;
@@ -73,4 +75,39 @@ public class ToDoImage implements Serializable {
     public void setToDoItemId(long toDoItemId) {
         this.toDoItemId = toDoItemId;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte(this.isAdd ? (byte) 1 : (byte) 0);
+        dest.writeParcelable(this.uri, flags);
+        dest.writeLong(this.id);
+        dest.writeLong(this.toDoItemId);
+    }
+
+    public ToDoImage() {
+    }
+
+    protected ToDoImage(Parcel in) {
+        this.isAdd = in.readByte() != 0;
+        this.uri = in.readParcelable(Uri.class.getClassLoader());
+        this.id = in.readLong();
+        this.toDoItemId = in.readLong();
+    }
+
+    public static final Parcelable.Creator<ToDoImage> CREATOR = new Parcelable.Creator<ToDoImage>() {
+        @Override
+        public ToDoImage createFromParcel(Parcel source) {
+            return new ToDoImage(source);
+        }
+
+        @Override
+        public ToDoImage[] newArray(int size) {
+            return new ToDoImage[size];
+        }
+    };
 }

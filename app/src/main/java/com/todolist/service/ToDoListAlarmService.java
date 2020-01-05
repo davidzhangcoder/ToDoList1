@@ -141,7 +141,7 @@ public class ToDoListAlarmService extends Service{
 
         Bundle bundle = new Bundle();
         bundle.putString("test" , "aaaaa");
-        bundle.putSerializable( EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM , toDoItem );
+        bundle.putParcelable( EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM , toDoItem );
         intent.putExtra("data",bundle);
 
 //        intent.putExtra("test1" , "11111" );

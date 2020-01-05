@@ -1,5 +1,8 @@
 package com.todolist.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.todolist.context.ContextHolder;
 import com.todolist.db.GenericDao;
 
@@ -10,8 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
-{
+public class ToDoItem implements IToDoItemType, IToDoItem, Parcelable {
 
     public static final String TABLE_NAME = "todo_item";
 
@@ -158,4 +160,56 @@ public class ToDoItem implements Serializable, IToDoItemType, IToDoItem
     public void setToDoCategory(ToDoCategory toDoCategory) {
         this.toDoCategory = toDoCategory;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeLong(this.id);
+        dest.writeLong(this.dueTimestamp);
+        dest.writeLong(this.remindTimestamp);
+        dest.writeString(this.childTask);
+        dest.writeString(this.remark);
+        dest.writeByte(this.isDone ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.recurrencePeriod);
+        dest.writeSerializable(this.toDoCategory);
+        dest.writeSerializable(this.dueDate);
+        dest.writeSerializable(this.remindDate);
+        dest.writeList(this.toDoImageList);
+    }
+
+    public ToDoItem() {
+    }
+
+    protected ToDoItem(Parcel in) {
+        this.name = in.readString();
+        this.id = in.readLong();
+        this.dueTimestamp = in.readLong();
+        this.remindTimestamp = in.readLong();
+        this.childTask = in.readString();
+        this.remark = in.readString();
+        this.isDone = in.readByte() != 0;
+        this.recurrencePeriod = in.readInt();
+        this.toDoCategory = (ToDoCategory) in.readSerializable();
+        this.dueDate = (Calendar) in.readSerializable();
+        this.remindDate = (Calendar) in.readSerializable();
+        this.toDoImageList = new ArrayList<ToDoImage>();
+        in.readList(this.toDoImageList, ToDoImage.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<ToDoItem> CREATOR = new Parcelable.Creator<ToDoItem>() {
+        @Override
+        public ToDoItem createFromParcel(Parcel source) {
+            return new ToDoItem(source);
+        }
+
+        @Override
+        public ToDoItem[] newArray(int size) {
+            return new ToDoItem[size];
+        }
+    };
 }
