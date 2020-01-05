@@ -139,7 +139,7 @@ public class EditToDoItemActivity extends AppCompatActivity
         imageRecylerView = findViewById(R.id.imageRecyclerView);
 
         Intent i = getIntent();
-        toDoItem = (ToDoItem)i.getSerializableExtra( EDITTODOITEMACTIVITY_TODOITEM );
+        toDoItem = (ToDoItem)i.getParcelableExtra( EDITTODOITEMACTIVITY_TODOITEM );
 
         Bundle data = i.getBundleExtra("data");
         if( data != null )
@@ -159,9 +159,9 @@ public class EditToDoItemActivity extends AppCompatActivity
             selectedDate = toDoItem.getDueDate();
             selectedRecurrence = new Recurrence( toDoItem.getDueDate().getTimeInMillis() , toDoItem.getRecurrencePeriod() );
             selectedToDoCategory = toDoItem.getToDoCategory();
-            for( ToDoImage toDoImage : toDoItem.getToDoImageList() ) {
-                toDoImage.setUri( Uri.parse( toDoImage.getUriString() ));
-            }
+//            for( ToDoImage toDoImage : toDoItem.getToDoImageList() ) {
+//                toDoImage.setUri( Uri.parse( toDoImage.getUriString() ));
+//            }
             imageDataList.addAll( toDoItem.getToDoImageList() );
         }
 

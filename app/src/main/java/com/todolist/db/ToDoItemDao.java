@@ -78,7 +78,7 @@ public class ToDoItemDao
                     toDoImage.setToDoItemId( toDoItemIDFromToDoImage );
                     Uri uri = Uri.parse( urlString );
                     toDoImage.setUri( uri );
-                    toDoImage.setUriString( urlString );
+//                    toDoImage.setUriString( urlString );
                     toDoItem.getToDoImageList().add( toDoImage );
                 }
             }
