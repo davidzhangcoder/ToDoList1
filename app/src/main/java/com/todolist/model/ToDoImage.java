@@ -76,6 +76,7 @@ public class ToDoImage implements Parcelable {
         this.toDoItemId = toDoItemId;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
