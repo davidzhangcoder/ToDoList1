@@ -38,7 +38,7 @@
     </style>
 
 
-    <style name="ToDoListOptionCheckStyle" >
+    <style name="ToDoListOptionCheckStyle">
         <!--<item name="toDoListOptionItemSelectedColor">@color/colorPrimary</item>-->
         <item name="android:src">@drawable/todolist_ic_check</item>
         <item name="tint">?attr/toDoListOptionItemSelectedColor</item>
@@ -59,6 +59,9 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

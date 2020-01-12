@@ -28,6 +28,7 @@
     <dimen name="recyclerview_todoitem_list_title_marginright">8dp</dimen>
     <dimen name="recyclerview_todoitem_list_title_margintop">2dp</dimen>
     <dimen name="recyclerview_todoitem_list_title_marginbottom">2dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
     <!--4dp-->
 
 </resources>

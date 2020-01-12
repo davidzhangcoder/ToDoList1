@@ -3,6 +3,7 @@ package com.todolist.model;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -15,8 +16,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.todolist.R;
+import com.todolist.imagedetail.ImageFullScreenActivity;
 import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.todomain.ToDoMainActivity;
+import com.todolist.todomain.fragment.todo.ToDoFragment;
 import com.todolist.ui.adapter.ToDoImageAdapter;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -73,6 +76,15 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
                     .override( imageSize , imageSize )
                     .centerCrop()
                     .into(appCompatImageView);
+
+            appCompatImageView.setOnClickListener( new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(adapter.getContext(), ImageFullScreenActivity.class);
+                    intent.putExtra(ImageFullScreenActivity.KEY,toDoImage);
+                    adapter.getContext().startActivity(intent);
+                }
+            });
         }
     }
 
