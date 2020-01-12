@@ -36,10 +36,12 @@
 
     <string name="admob_adunit_rewardvideo">ca-app-pub-3940256099942544/5224354917</string>
     <!--<string name="admob_adunit_rewardvideo_sample">ca-app-pub-3940256099942544/5224354917</string>-->
-    
+
     <string name="admon_adunit_interstitial">ca-app-pub-3940256099942544/1033173712</string>
     <!--admon_adunit_Interstitial: sample Id : ca-app-pub-3940256099942544/1033173712-->
 
     <string name="admon_adunit_publisherad">/6499/example/banner</string>
+    <string name="title_activity_image_full_screen">ImageFullScreenActivity</string>
+    <string name="action_settings">Settings</string>
     <!--sample Id : /6499/example/banner-->
 </resources>
