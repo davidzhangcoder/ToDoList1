@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.todolist.app.App;
+import com.todolist.db.ToDoItemDao;
 import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
@@ -80,7 +81,7 @@ public class ToDoListAlarmService extends Service{
         doDectectToDoDue();
 
         //Test
-        Toast.makeText(App.getContext(), "开启", Toast.LENGTH_LONG).show();
+        Toast.makeText(App.getContext(), "开启 : ToDoListAlarmService - onStartCommand", Toast.LENGTH_LONG).show();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -115,15 +116,24 @@ public class ToDoListAlarmService extends Service{
                 current.add( Calendar.HOUR_OF_DAY  , 1);
                 long to = current.getTimeInMillis();
 
-                GenericDao db = new GenericDao(App.getContext());
-                List<Map<String, String>> resultList = db.getListData( ToDoItem.TABLE_NAME , ToDoItem.COLUMN_DUE_TIMESTAMP + " between ? and ? " , new String[]{ String.valueOf(from) , String.valueOf(to) } , ToDoItem.COLUMN_DUE_TIMESTAMP + " ASC " );
+                ToDoItemDao toDoItemDao = new ToDoItemDao();
+                List<ToDoItem> toDoItemList = toDoItemDao.loadToDoItems( ToDoItem.COLUMN_DUE_TIMESTAMP + " between ? and ? " , new String[]{ String.valueOf(from) , String.valueOf(to) } );
 
-                for( Map<String, String> map : resultList )
-                {
-                    if( map.get(ToDoItem.COLUMN_DUE_TIMESTAMP) != null && !map.get(ToDoItem.COLUMN_DUE_TIMESTAMP).trim().equalsIgnoreCase("") ) {
-                        doAlarm( Long.parseLong(map.get(ToDoItem.COLUMN_DUE_TIMESTAMP)) , Long.parseLong(map.get(ToDoItem.COLUMN_ID)) );
+                for( ToDoItem toDoItem : toDoItemList ) {
+                    if( toDoItem.getDueDate() != null && toDoItem.getDueTimestamp() != 0 ) {
+                        doAlarm( toDoItem.getDueTimestamp() , toDoItem );
                     }
                 }
+
+//                GenericDao db = new GenericDao(App.getContext());
+//                List<Map<String, String>> resultList = db.getListData( ToDoItem.TABLE_NAME , ToDoItem.COLUMN_DUE_TIMESTAMP + " between ? and ? " , new String[]{ String.valueOf(from) , String.valueOf(to) } , ToDoItem.COLUMN_DUE_TIMESTAMP + " ASC " );
+//
+//                for( Map<String, String> map : resultList )
+//                {
+//                    if( map.get(ToDoItem.COLUMN_DUE_TIMESTAMP) != null && !map.get(ToDoItem.COLUMN_DUE_TIMESTAMP).trim().equalsIgnoreCase("") ) {
+//                        doAlarm( Long.parseLong(map.get(ToDoItem.COLUMN_DUE_TIMESTAMP)) , Long.parseLong(map.get(ToDoItem.COLUMN_ID)) );
+//                    }
+//                }
 
             }
         };
@@ -131,9 +141,9 @@ public class ToDoListAlarmService extends Service{
         return runnable;
     }
 
-    private void doAlarm( long time , long id )
+    private void doAlarm( long time , ToDoItem toDoItem )
     {
-        ToDoItem toDoItem = null;//ToDoItem.getToDoItem( id );
+//        ToDoItem toDoItem = null;//ToDoItem.getToDoItem( id );
 
         Intent intent = new Intent(App.getContext(),ToDoListAlarmBroadCastReceiver.class);
         intent.setAction( getResources().getString(R.string.alarmAction) );
