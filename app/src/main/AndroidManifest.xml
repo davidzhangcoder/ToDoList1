@@ -36,6 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".tododetail.EditToDoItemActivity"
             android:parentActivityName=".todomain.ToDoMainActivity"
@@ -55,7 +56,7 @@
 
         <activity
             android:name=".imagedetail.ImageFullScreenActivity"
-            android:theme="@style/AppTheme"></activity>
+            ></activity>
     </application>
 
 </manifest>
