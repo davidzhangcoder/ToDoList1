@@ -31,6 +31,9 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
 
+    private static String channelId = "ToDoListChannelID";
+    private static String channelName = "ToDoListChannelName";
+
     private MediaPlayer mMediaPlayer = null;
 
     // 状态栏提示要用的
@@ -57,7 +60,7 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
         try {
 
             AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+//            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 
             // 使用来电铃声的铃声路径
             Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
@@ -95,15 +98,15 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
 //        m_Manager.notify( 1023 , noti );
 
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-            String channelId="chat";
-            String channelName="聊天信息";
+//            String channelId="chat";
+//            String channelName="聊天信息";
             int importance= NotificationManager.IMPORTANCE_HIGH;
             createNotificationChannel(context,channelId,channelName,importance);
 
-            channelId="subscribe";
-            channelName="订阅消息";
-            importance=NotificationManager.IMPORTANCE_DEFAULT;
-            createNotificationChannel(context,channelId,channelName,importance);
+//            channelId="subscribe";
+//            channelName="订阅消息";
+//            importance=NotificationManager.IMPORTANCE_DEFAULT;
+//            createNotificationChannel(context,channelId,channelName,importance);
         }
 
         sendChatMsg( context , toDoItem );
@@ -121,16 +124,16 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
     public void sendChatMsg(Context context , ToDoItem toDoItem) {
 
         NotificationManager manager=(NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-//            NotificationChannel channel=manager.getNotificationChannel("chat");//因为是NotificationManager创建的Channel，所以通过mannager能获取
-//            if(channel.getImportance()==NotificationManager.IMPORTANCE_NONE){
-//                Intent intent=new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
-//                intent.putExtra(Settings.EXTRA_APP_PACKAGE,getPackageName());
-//                intent.putExtra(Settings.EXTRA_CHANNEL_ID,channel.getId());
-//                startActivity(intent);
-//                Toast.makeText(this,"请手动打开权限",Toast.LENGTH_SHORT).show();
-//            }
-        }
+//        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+////            NotificationChannel channel=manager.getNotificationChannel("chat");//因为是NotificationManager创建的Channel，所以通过mannager能获取
+////            if(channel.getImportance()==NotificationManager.IMPORTANCE_NONE){
+////                Intent intent=new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+////                intent.putExtra(Settings.EXTRA_APP_PACKAGE,getPackageName());
+////                intent.putExtra(Settings.EXTRA_CHANNEL_ID,channel.getId());
+////                startActivity(intent);
+////                Toast.makeText(this,"请手动打开权限",Toast.LENGTH_SHORT).show();
+////            }
+//        }
 
         Intent intent=new Intent(context,EditToDoItemActivity.class);
 
@@ -154,7 +157,7 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
         PendingIntent pi = stackBuilder.getPendingIntent(uniqueInt, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        Notification notification= new NotificationCompat.Builder(context,"chat")
+        Notification notification= new NotificationCompat.Builder(context,channelId)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(toDoItem.getName())
