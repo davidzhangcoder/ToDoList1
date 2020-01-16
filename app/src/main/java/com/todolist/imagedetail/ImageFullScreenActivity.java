@@ -26,21 +26,23 @@ public class ImageFullScreenActivity extends AppCompatActivity {
     private ToDoImage toDoImage;
 
     private AppCompatImageView appCompatImageView;
+    private ImageView imageDetailBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_full_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 
         Intent i = getIntent();
         toDoImage = i.getParcelableExtra( KEY );
         AppCompatImageView appCompatImageView = (AppCompatImageView) findViewById(R.id.imagefullscreen);
+        imageDetailBack = (ImageView)findViewById(R.id.imageDetailBack);
 
         if( toDoImage != null ) {
-            int screenWidth = getResources().getDisplayMetrics().widthPixels;
-            int screenHeight = getResources().getDisplayMetrics().heightPixels;
+//            int screenWidth = getResources().getDisplayMetrics().widthPixels;
+//            int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
             Glide
                     .with(this.getApplicationContext())
@@ -74,6 +76,13 @@ public class ImageFullScreenActivity extends AppCompatActivity {
 //                    .centerCrop()
                     .into(appCompatImageView);
         }
+
+        imageDetailBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
