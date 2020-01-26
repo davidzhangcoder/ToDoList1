@@ -12,8 +12,10 @@ import dagger.Component;
 import dagger.Provides;
 
 @Component(modules = {AppModule.class})
-@Singleton
+@Singleton //Module的scope要和Component一致
 public interface AppComponent {
+
+    //依赖模式，依赖模式要显式的暴露，提供给子Component的注入类
 
     TestA getTestA();
 

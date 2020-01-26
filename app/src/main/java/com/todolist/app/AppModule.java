@@ -17,7 +17,7 @@ import dagger.Provides;
 public class AppModule {
 
     @Provides
-    @Singleton
+    @Singleton //Module的scope要和Component一致
     TestA provideTestA(){
         return new TestA();
     }
