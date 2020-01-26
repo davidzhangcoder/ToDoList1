@@ -23,6 +23,15 @@ public class DateUtil
                 cal1.get( Calendar.DAY_OF_MONTH ) < cal2.get( Calendar.DAY_OF_MONTH ) ) {
             bBefore = true;
         }
+        else if( cal1.get( Calendar.YEAR ) == cal2.get( Calendar.YEAR )
+                &&
+                cal1.get( Calendar.MONTH ) == cal2.get( Calendar.MONTH )
+                &&
+                cal1.get( Calendar.DAY_OF_MONTH ) == cal2.get( Calendar.DAY_OF_MONTH )
+                &&
+                cal1.getTimeInMillis() < cal2.getTimeInMillis() ) {
+            bBefore = true;
+        }
         return bBefore;
     }
 
