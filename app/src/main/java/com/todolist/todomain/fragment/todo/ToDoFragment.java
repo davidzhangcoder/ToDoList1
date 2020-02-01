@@ -76,6 +76,8 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     private long categoryFilterID = ToDoCategory.CATEGORY_ALL_ID;
     private List<ToDoCategory> toDoCategorys = new ArrayList<ToDoCategory>();
 
+    private Snackbar snackbar;
+
 //    private TextView categoryButton;
 //    private ImageView categoryButtonImage;
     private ToDoCategory selectedToDoCategory;
@@ -321,32 +323,43 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         TipListAdapter.ToDoItemAction doneAction = new TipListAdapter.ToDoItemAction() {
             @Override
             public void doAction(RecyclerView.ViewHolder holder, List<IToDoItem> mData , RecyclerView.Adapter adapter ) {
-                Snackbar.make( holder.itemView , "Is Done?", Snackbar.LENGTH_LONG )
-                        .setAction("Yes", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                int position = holder.getAdapterPosition();
-                                ToDoItem toDoItem = (ToDoItem) mData.get(position);
+
+                if( holder instanceof  TipHolder ) {
+                    CheckBox checkBox = (CheckBox) ((TipHolder) holder).getView(R.id.tip_checkbox);
+                    if( checkBox.isChecked() ) {
+                        snackbar = Snackbar.make(holder.itemView, "Is Done?", Snackbar.LENGTH_LONG)
+                                .setAction("Yes", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        int position = holder.getAdapterPosition();
+                                        ToDoItem toDoItem = (ToDoItem) mData.get(position);
 
 
-                                mData.remove(position);
+                                        mData.remove(position);
 
-                                adapter.notifyItemRemoved(position);
+                                        adapter.notifyItemRemoved(position);
 
-                                ToDoFragment.this.mPresenter.doneAction( toDoItem );
-                            }
-                        })
-                        .addCallback(new Snackbar.Callback() {
-                            @Override
-                            public void onDismissed(Snackbar transientBottomBar, int event) {
-                                if( event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT ) {
-                                    if( holder instanceof TipHolder) {
-                                        ((CheckBox)((TipHolder)holder).getView(R.id.tip_checkbox)).setChecked(false);
+                                        ToDoFragment.this.mPresenter.doneAction(toDoItem);
                                     }
-                                }
-                            }
-                        })
-                        .show();
+                                })
+                                .addCallback(new Snackbar.Callback() {
+                                    @Override
+                                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT || event == Snackbar.Callback.DISMISS_EVENT_CONSECUTIVE) {
+                                            if (holder instanceof TipHolder) {
+                                                ((CheckBox) ((TipHolder) holder).getView(R.id.tip_checkbox)).setChecked(false);
+                                            }
+                                        }
+                                    }
+                                });
+
+                        snackbar.show();
+                    }
+                    else {
+                        if( snackbar != null )
+                            snackbar.dismiss();
+                    }
+                }
 
             }
         };
