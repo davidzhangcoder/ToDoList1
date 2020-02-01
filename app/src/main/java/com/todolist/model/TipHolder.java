@@ -80,26 +80,27 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
         getView(R.id.tipCardView).setOnClickListener( tipListAdapter.getClickListener(position) );
 //        getView(R.id.tip_content).setOnClickListener(tipListAdapter.getClickListener(position));
 
-        ((CheckBox)getView(R.id.tip_checkbox)).setChecked( toDoItem.isDone() );
+        CheckBox checkBox = ((CheckBox)getView(R.id.tip_checkbox));
+        checkBox.setChecked( toDoItem.isDone() );
 
-        getView(R.id.tip_checkbox).setOnClickListener(new View.OnClickListener() {
+        checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tipListAdapter.changeToFinish(TipHolder.this);
+                  tipListAdapter.changeToFinish(TipHolder.this);
             }
         });
 
-        ((SwipeLayout)getView(R.id.tip_layout)).setListener(new SwipeLayout.OperatorListener() {
-            @Override
-            public void onDelete() {
-                tipListAdapter.deleteItem(TipHolder.this.getAdapterPosition());
-            }
-
-            @Override
-            public void onEdit() {
-
-            }
-        });
+//        ((SwipeLayout)getView(R.id.tip_layout)).setListener(new SwipeLayout.OperatorListener() {
+//            @Override
+//            public void onDelete() {
+//                tipListAdapter.deleteItem(TipHolder.this.getAdapterPosition());
+//            }
+//
+//            @Override
+//            public void onEdit() {
+//
+//            }
+//        });
     }
 
     @Override

@@ -57,28 +57,31 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
 
     private void doNotify(Context context , ToDoItem toDoItem) {
 
-        try {
+        // Comment out following, to use customerized sound
+//        try {
+//
+//            AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+////            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+//
+//            // 使用来电铃声的铃声路径
+//            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+//            // 如果为空，才构造，不为空，说明之前有构造过
+//            if(mMediaPlayer == null)
+//                mMediaPlayer = new MediaPlayer();
+//            mMediaPlayer.setDataSource(context, uri);
+//            mMediaPlayer.setLooping(true); //循环播放
+//            mMediaPlayer.prepare();
+//            mMediaPlayer.start();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-            AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-//            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        // Comment out following, to use customerized vibration
+//        Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+//        // 等待3秒，震动3秒，从第0个索引开始，一直循环
+//        vibrator.vibrate(new long[]{1000, 3000}, 0);
 
-            // 使用来电铃声的铃声路径
-            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-            // 如果为空，才构造，不为空，说明之前有构造过
-            if(mMediaPlayer == null)
-                mMediaPlayer = new MediaPlayer();
-            mMediaPlayer.setDataSource(context, uri);
-            mMediaPlayer.setLooping(true); //循环播放
-            mMediaPlayer.prepare();
-            mMediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
-        // 等待3秒，震动3秒，从第0个索引开始，一直循环
-        vibrator.vibrate(new long[]{1000, 3000}, 0);
-
+        // available to remove following
 //        // 无论是否震动、响铃，都有状态栏提示
 //        m_Manager = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
 //        m_Manager.cancel(1023);
@@ -98,11 +101,13 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
 //        m_Manager.notify( 1023 , noti );
 
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+            // available to remove following
 //            String channelId="chat";
 //            String channelName="聊天信息";
             int importance= NotificationManager.IMPORTANCE_HIGH;
             createNotificationChannel(context,channelId,channelName,importance);
 
+            // available to remove following
 //            channelId="subscribe";
 //            channelName="订阅消息";
 //            importance=NotificationManager.IMPORTANCE_DEFAULT;
@@ -124,6 +129,7 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
     public void sendChatMsg(Context context , ToDoItem toDoItem) {
 
         NotificationManager manager=(NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
+        // available to remove following
 //        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
 ////            NotificationChannel channel=manager.getNotificationChannel("chat");//因为是NotificationManager创建的Channel，所以通过mannager能获取
 ////            if(channel.getImportance()==NotificationManager.IMPORTANCE_NONE){
@@ -137,6 +143,7 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
 
         Intent intent=new Intent(context,EditToDoItemActivity.class);
 
+        // available to remove following
 //        Bundle bundle = new Bundle();
 //        bundle.putString("test" , "aaaaa");
 //        bundle.putSerializable( EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM , toDoItem );
@@ -158,11 +165,13 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
 
 
         Notification notification= new NotificationCompat.Builder(context,channelId)
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_launcher_background) //设置通知小ICON
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(toDoItem.getName())
                 .setContentText(dateString)
-                .setNumber(1)//设置角标的数量
+//                .setNumber(1)//设置角标的数量
+                .setAutoCancel(true) //设置这个标志当用户单击面板就可以让通知将自动取消
+                .setDefaults(Notification.DEFAULT_ALL) //设置默认的提示音，振动方式，灯光
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setContentIntent(pi)
                 .build();
