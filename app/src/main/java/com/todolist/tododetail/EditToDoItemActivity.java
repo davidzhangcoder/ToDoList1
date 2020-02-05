@@ -64,6 +64,8 @@ public class EditToDoItemActivity extends AppCompatActivity
 
     public static final int REQUEST_CODE_CHOOSE_MATISSE=0;
 
+    private static final int MAX_IMAGE_COUNT = 6;
+
 //    @BindView(R.id.dueDate)
 //    PopuTextView dueDatePopuTextView;
 //
@@ -429,9 +431,12 @@ public class EditToDoItemActivity extends AppCompatActivity
             GridItemDecoration gridItemDecoration = new GridItemDecoration( spacing , 0 , this );
             //MediaGridInset gridItemDecoration = new MediaGridInset( 3, spacing , false );
             imageRecylerView.addItemDecoration( gridItemDecoration );
+
             ToDoImage toDoImage = new ToDoImage();
             toDoImage.setAdd(true);
-            imageDataList.add( 0 , toDoImage );
+            if( imageDataList.size() < MAX_IMAGE_COUNT )
+                imageDataList.add( 0 , toDoImage );
+
             toDoImageAdapter = new ToDoImageAdapter( this , imageDataList );
             imageRecylerView.setAdapter( toDoImageAdapter );
         }
@@ -444,12 +449,18 @@ public class EditToDoItemActivity extends AppCompatActivity
             List<Uri> mSelected = Matisse.obtainResult(data);
             Log.d("Matisse", "mSelected: " + mSelected);
 
+            // mSelected should had only one item
             if( mSelected != null && mSelected.size() > 0 ) {
                 for( Uri uri : mSelected ) {
                     ToDoImage toDoImage = new ToDoImage();
                     toDoImage.setUri( uri );
                     imageDataList.add(toDoImage);
                     toDoItem.getToDoImageList().add( toDoImage );
+                    toDoImageAdapter.notifyDataSetChanged();
+                }
+
+                if( imageDataList.size() > MAX_IMAGE_COUNT ) {
+                    imageDataList.remove( 0 );
                     toDoImageAdapter.notifyDataSetChanged();
                 }
             }
