@@ -53,7 +53,7 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
                                 .capture(true)
                                 .captureStrategy(new CaptureStrategy(true, "cache path"))
                                 .countable(true)
-                                .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
+//                                .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
 //                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                                 .thumbnailScale(0.85f)
