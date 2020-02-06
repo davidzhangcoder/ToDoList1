@@ -5,4 +5,5 @@
     android:name="com.todolist.imagedetail.ImageFullScreenActivityFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_below="@+id/appbar"
     tools:layout="@layout/fragment_image_full_screen" />

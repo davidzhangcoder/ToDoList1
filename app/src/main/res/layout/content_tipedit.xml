@@ -248,16 +248,26 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/imageRecyclerView"
+    <!--add RelativeLayout in here to avoid only display one Row-->
+    <!--ScrollView嵌套RecyclerView用多了，有些时候就会发现RecyclerView的数据只显示一行-->
+    <!--其实只需要在 RecyclerView外层单独加上RelativeLayout或者LinearLayout，RecyclerView就能正常显示-->
+    <!--只是这个时候滑动冲突可能会导致RecyclerView没有滑动惯性了，就需要给RecyclerView设置属性-->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/todo_grid_spacing"
-        android:paddingRight="@dimen/todo_grid_spacing"
-        android:paddingTop="@dimen/todo_grid_spacing"
-        android:paddingBottom="@dimen/todo_grid_spacing"
+        android:layout_height="match_parent">
 
-        />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/imageRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/todo_grid_spacing"
+            android:paddingRight="@dimen/todo_grid_spacing"
+            android:paddingTop="@dimen/todo_grid_spacing"
+            android:paddingBottom="@dimen/todo_grid_spacing"
+
+            />
+
+    </RelativeLayout>
 
 
     <!--<LinearLayout-->
