@@ -63,12 +63,18 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
                 }
             });
 
-            Glide
-                    .with(adapter.getContext())
-                    .load(R.drawable.add_image)
-                    .override( imageSize , imageSize )
-                    .centerCrop()
-                    .into(appCompatImageView);
+            // Glide not support load vector drawable, so using Imageview to load directly
+//            Glide
+//                    .with(adapter.getContext())
+//                    .load(R.drawable.ic_multiple_image_view_add)
+//                    .override( imageSize , imageSize )
+//                    .centerCrop()
+//                    .into(appCompatImageView);
+
+            appCompatImageView.setImageResource( R.drawable.ic_multiple_image_view_add );
+            appCompatImageView.getLayoutParams().height=imageSize;
+            appCompatImageView.getLayoutParams().width=imageSize;
+
         } else if (toDoImage.getUri() != null) {
             Glide
                     .with(adapter.getContext())
