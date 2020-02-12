@@ -37,6 +37,7 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
     @Override
     public void setUpView(ToDoImage toDoImage, int position, ToDoImageAdapter adapter) {
         AppCompatImageView appCompatImageView = (AppCompatImageView) getView(R.id.image);
+        AppCompatImageView deleteImageView = (AppCompatImageView) getView(R.id.delete_image_view);
 
         int imageSize = getImageResize( adapter.getContext() );
         if (toDoImage != null && toDoImage.isAdd()) {
@@ -75,6 +76,9 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
             appCompatImageView.getLayoutParams().height=imageSize;
             appCompatImageView.getLayoutParams().width=imageSize;
 
+            ImageView imageView = (ImageView)getView(R.id.delete_image_view);
+            imageView.setVisibility(View.INVISIBLE);
+
         } else if (toDoImage.getUri() != null) {
             Glide
                     .with(adapter.getContext())
@@ -89,6 +93,22 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
                     Intent intent = new Intent(adapter.getContext(), ImageFullScreenActivity.class);
                     intent.putExtra(ImageFullScreenActivity.KEY,toDoImage);
                     adapter.getContext().startActivity(intent);
+                }
+            });
+
+            deleteImageView.setOnClickListener( new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    adapter.deleteElement( position );
+
+                    if( adapter.getData() != null
+                            && adapter.getData().size() > 0
+                            && !adapter.getData().get( 0 ).isAdd()
+                            && adapter.getData().size() < EditToDoItemActivity.MAX_IMAGE_COUNT ) {
+                        ToDoImage toDoImage = new ToDoImage();
+                        toDoImage.setAdd(true);
+                        adapter.addElement( toDoImage , 0 );
+                    }
                 }
             });
         }

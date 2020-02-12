@@ -1,6 +1,5 @@
 package com.todolist.tododetail;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -20,19 +19,16 @@ import android.widget.RelativeLayout;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 import com.maltaisn.recurpicker.Recurrence;
 import com.maltaisn.recurpicker.RecurrenceFormat;
 import com.maltaisn.recurpicker.RecurrencePickerDialog;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.todolist.R;
 import com.todolist.data.Injection;
-import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoImage;
 import com.todolist.model.ToDoItem;
 import com.todolist.ui.GridItemDecoration;
-import com.todolist.ui.MediaGridInset;
 import com.todolist.ui.adapter.ToDoImageAdapter;
 import com.todolist.ui.dialog.CategorySelectionDialog;
 import com.todolist.util.AdsUtil;
@@ -44,6 +40,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,7 +61,7 @@ public class EditToDoItemActivity extends AppCompatActivity
 
     public static final int REQUEST_CODE_CHOOSE_MATISSE=0;
 
-    private static final int MAX_IMAGE_COUNT = 6;
+    public static final int MAX_IMAGE_COUNT = 6;
 
 //    @BindView(R.id.dueDate)
 //    PopuTextView dueDatePopuTextView;
@@ -167,6 +164,11 @@ public class EditToDoItemActivity extends AppCompatActivity
             imageDataList.addAll( toDoItem.getToDoImageList() );
         }
 
+        ToDoImage toDoImage = new ToDoImage();
+        toDoImage.setAdd(true);
+        if( imageDataList.size() < MAX_IMAGE_COUNT )
+            imageDataList.add( 0 , toDoImage );
+
         Locale locale = getResources().getConfiguration().locale;
         dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);  // Sun Dec 31, 2017
         formatter = new RecurrenceFormat(this, dateFormatLong);
@@ -247,6 +249,17 @@ public class EditToDoItemActivity extends AppCompatActivity
                 if( validate( toDoItem )) {
                     return;
                 }
+
+                if( imageDataList != null ) {
+                    for(Iterator<ToDoImage> it = imageDataList.iterator(); it.hasNext() ; ) {
+                        ToDoImage toDoImage = it.next();
+                        if( toDoImage.isAdd() ) {
+                            it.remove();
+                            break;
+                        }
+                    }
+                }
+                toDoItem.setToDoImageList( imageDataList );
 
                 presenter.createOrUpdateToDoItem(toDoItem);
 
@@ -432,11 +445,6 @@ public class EditToDoItemActivity extends AppCompatActivity
             //MediaGridInset gridItemDecoration = new MediaGridInset( 3, spacing , false );
             imageRecylerView.addItemDecoration( gridItemDecoration );
 
-            ToDoImage toDoImage = new ToDoImage();
-            toDoImage.setAdd(true);
-            if( imageDataList.size() < MAX_IMAGE_COUNT )
-                imageDataList.add( 0 , toDoImage );
-
             toDoImageAdapter = new ToDoImageAdapter( this , imageDataList );
             imageRecylerView.setAdapter( toDoImageAdapter );
         }
@@ -454,14 +462,11 @@ public class EditToDoItemActivity extends AppCompatActivity
                 for( Uri uri : mSelected ) {
                     ToDoImage toDoImage = new ToDoImage();
                     toDoImage.setUri( uri );
-                    imageDataList.add(toDoImage);
-                    toDoItem.getToDoImageList().add( toDoImage );
-                    toDoImageAdapter.notifyDataSetChanged();
+                    toDoImageAdapter.addElement( toDoImage );
                 }
 
                 if( imageDataList.size() > MAX_IMAGE_COUNT ) {
-                    imageDataList.remove( 0 );
-                    toDoImageAdapter.notifyDataSetChanged();
+                    toDoImageAdapter.deleteElement( 0 );
                 }
             }
         }
