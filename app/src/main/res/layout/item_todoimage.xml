@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_badge"
         >
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/delete_image_view"
             android:layout_width="25dip"
             android:layout_height="25dip"

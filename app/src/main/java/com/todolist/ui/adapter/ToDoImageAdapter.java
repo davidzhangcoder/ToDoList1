@@ -16,7 +16,10 @@ import com.todolist.model.ToDoImageHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoImageAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+public class ToDoImageAdapter extends RecyclerView.Adapter<BaseViewHolder>
+    implements
+        IAdapterAction<ToDoImage>
+{
 
     private Context mContext;
 
@@ -46,5 +49,27 @@ public class ToDoImageAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     public Context getContext() {
         return mContext;
+    }
+
+    public List<ToDoImage> getData() {
+        return data;
+    }
+
+    @Override
+    public void addElement(ToDoImage element) {
+        getData().add( element );
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void addElement(ToDoImage element, int position) {
+        getData().add( position , element );
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void deleteElement(int position) {
+        getData().remove( position );
+        notifyDataSetChanged();
     }
 }
