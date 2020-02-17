@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.maltaisn.recurpicker.Recurrence;
 import com.todolist.app.App;
 import com.todolist.db.ToDoItemDao;
 import com.todolist.tododetail.EditToDoItemActivity;
@@ -22,6 +23,8 @@ import com.todolist.R;
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
 import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoItem;
+import com.todolist.util.AlarmUtil;
+import com.todolist.util.DateUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -112,16 +115,38 @@ public class ToDoListAlarmService extends Service{
 
                 Calendar current = Calendar.getInstance();
                 long from = current.getTimeInMillis();
+                Calendar fromCalendar = current;
 
-                current.add( Calendar.HOUR_OF_DAY  , 1);
+                current.add( Calendar.SECOND  , App.INITIAL_SECONDS );
                 long to = current.getTimeInMillis();
+                Calendar toCalendar = Calendar.getInstance();
+                toCalendar.set( current.get( Calendar.YEAR ) ,
+                        current.get( Calendar.MONTH ) ,
+                        current.get( Calendar.DATE ) ,
+                        current.get( Calendar.HOUR_OF_DAY ) ,
+                        current.get( Calendar.MINUTE ) ,
+                        current.get( Calendar.SECOND )
+                    );
 
                 ToDoItemDao toDoItemDao = new ToDoItemDao();
-                List<ToDoItem> toDoItemList = toDoItemDao.loadToDoItems( ToDoItem.COLUMN_DUE_TIMESTAMP + " between ? and ? " , new String[]{ String.valueOf(from) , String.valueOf(to) } );
+                String sql = " ( ( " + ToDoItem.COLUMN_DUE_TIMESTAMP + " between ? and ? )  or ( " + ToDoItem.COLUMN_DUE_TIMESTAMP + " < ? and  " + ToDoItem.COLUMN_RECURRENCE_PERIOD + " != ? ) ) " +
+                        " and " + ToDoItem.COLUMN_DONE_INDICATOR + " == ? ";
+                String[] parameter = new String[]{ String.valueOf(from) , String.valueOf(to) , String.valueOf(from) , String.valueOf( Recurrence.NONE ) , String.valueOf( 0 )};
+                List<ToDoItem> toDoItemList = toDoItemDao.loadToDoItems( sql , parameter );
 
                 for( ToDoItem toDoItem : toDoItemList ) {
-                    if( toDoItem.getDueDate() != null && toDoItem.getDueTimestamp() != 0 ) {
-                        doAlarm( toDoItem.getDueTimestamp() , toDoItem );
+                    if( toDoItem.getDueDate() != null && toDoItem.getDueTimestamp() != 0 && DateUtil.isHourAndMinutesInRange( toDoItem.getDueDate() , fromCalendar , toCalendar ) ) {
+                        if( DateUtil.sameDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
+                            AlarmUtil.doAlarm( toDoItem.getDueTimestamp() , toDoItem );
+                        else if( ( toDoItem.getRecurrencePeriod() == Recurrence.DAILY )
+                                || ( toDoItem.getRecurrencePeriod() == Recurrence.WEEKLY && DateUtil.isSameWeekDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
+                                || ( toDoItem.getRecurrencePeriod() == Recurrence.MONTHLY && DateUtil.isSameMonthDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
+                                || ( toDoItem.getRecurrencePeriod() == Recurrence.YEARLY && DateUtil.isSameYearDay( toDoItem.getDueDate() , Calendar.getInstance() ) ) ) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.set( Calendar.HOUR_OF_DAY , toDoItem.getDueDate().get( Calendar.HOUR_OF_DAY ) );
+                            calendar.set( Calendar.MINUTE , toDoItem.getDueDate().get( Calendar.MINUTE ) );
+                            AlarmUtil.doAlarm( calendar.getTimeInMillis() , toDoItem );
+                        }
                     }
                 }
 
@@ -141,49 +166,49 @@ public class ToDoListAlarmService extends Service{
         return runnable;
     }
 
-    private void doAlarm( long time , ToDoItem toDoItem )
-    {
-//        ToDoItem toDoItem = null;//ToDoItem.getToDoItem( id );
-
-        Intent intent = new Intent(App.getContext(),ToDoListAlarmBroadCastReceiver.class);
-        intent.setAction( getResources().getString(R.string.alarmAction) );
-//        intent.putExtra(EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM,toDoItem);
-
-        Bundle bundle = new Bundle();
-        bundle.putString("test" , "aaaaa");
-        bundle.putParcelable( EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM , toDoItem );
-        intent.putExtra("data",bundle);
-
-//        intent.putExtra("test1" , "11111" );
-
-        int uniqueInt = (int)toDoItem.getId(); //(int) (System.currentTimeMillis() & 0xfffffff);
-
-//        if( isPendingIntentAvailable( App.getContext() , uniqueInt , intent ) )
-//            return;
-
-        PendingIntent pendingIntent=PendingIntent.getBroadcast(App.getContext(),uniqueInt, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-//        //Test
-        Handler handler = new Handler( Looper.getMainLooper() );
-        handler.post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy hh:mm:ss", getResources().getConfiguration().locale);
-                        String date = dateFormatLong.format( time );
-                        Toast.makeText(App.getContext(), toDoItem + " " + pendingIntent +" " + date , Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            App.getAlarmManager().setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time , pendingIntent);
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-            App.getAlarmManager().setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
-        else
-            App.getAlarmManager().set( AlarmManager.RTC_WAKEUP , time , pendingIntent );
-    }
+//    private void doAlarm( long time , ToDoItem toDoItem )
+//    {
+////        ToDoItem toDoItem = null;//ToDoItem.getToDoItem( id );
+//
+//        Intent intent = new Intent(App.getContext(),ToDoListAlarmBroadCastReceiver.class);
+//        intent.setAction( getResources().getString(R.string.alarmAction) );
+////        intent.putExtra(EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM,toDoItem);
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString("test" , "aaaaa");
+//        bundle.putParcelable( EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM , toDoItem );
+//        intent.putExtra("data",bundle);
+//
+////        intent.putExtra("test1" , "11111" );
+//
+//        int uniqueInt = (int)toDoItem.getId(); //(int) (System.currentTimeMillis() & 0xfffffff);
+//
+////        if( isPendingIntentAvailable( App.getContext() , uniqueInt , intent ) )
+////            return;
+//
+//        PendingIntent pendingIntent=PendingIntent.getBroadcast(App.getContext(),uniqueInt, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+////        //Test
+//        Handler handler = new Handler( Looper.getMainLooper() );
+//        handler.post(
+//                new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy hh:mm:ss", getResources().getConfiguration().locale);
+//                        String date = dateFormatLong.format( time );
+//                        Toast.makeText(App.getContext(), toDoItem + " " + pendingIntent +" " + date , Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//        );
+//
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+//            App.getAlarmManager().setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time , pendingIntent);
+//        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+//            App.getAlarmManager().setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+//        else
+//            App.getAlarmManager().set( AlarmManager.RTC_WAKEUP , time , pendingIntent );
+//    }
 
     public static boolean isPendingIntentAvailable(Context context , int requestCode , Intent i ) {
         PendingIntent pi = PendingIntent.getBroadcast(context, requestCode, i, PendingIntent.FLAG_NO_CREATE);

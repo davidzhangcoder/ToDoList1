@@ -6,7 +6,7 @@ import com.todolist.ui.BaseView;
 
 public interface EditToDoItemContract {
     interface View extends BaseView<Presenter> {
-        void showAfterCreateOrUpdateToDoItem();
+        void showAfterCreateOrUpdateToDoItem(ToDoItem toDo);
     }
 
     interface Presenter extends BasePresenter {

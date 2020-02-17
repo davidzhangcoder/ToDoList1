@@ -24,7 +24,7 @@ public class EditToDoItemPresenter implements EditToDoItemContract.Presenter {
          GenericDataSource.GenericToDoCallBack callBack = new GenericDataSource.GenericToDoCallBack() {
                 @Override
                 public void onCompleted(ToDoItem toDo) {
-                    view.showAfterCreateOrUpdateToDoItem();
+                    view.showAfterCreateOrUpdateToDoItem(toDo);
                 }
 
                 @Override

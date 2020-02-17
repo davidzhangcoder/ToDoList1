@@ -1,5 +1,6 @@
 package com.todolist.util;
 
+import com.maltaisn.recurpicker.Recurrence;
 import com.todolist.app.App;
 import com.todolist.R;
 import com.todolist.model.IToDoItem;
@@ -44,7 +45,36 @@ public class ToDoItemUtil {
 //                newToDoItem.setTitleCategory( ToDoItemTitle.TAG_TITLE_CATEGORY_OVERDUE );
 //                newToDoItem.setTitle( App.getContext().getResources().getString(R.string.overdue) );
 //                retList.add( 0 , newToDoItem );
-                overdueDateList.add( toDoItem );
+
+                Calendar toCalendar = Calendar.getInstance();
+                toCalendar.add( Calendar.DATE , 1 );
+                toCalendar.set( Calendar.HOUR_OF_DAY , 23 );
+                toCalendar.set( Calendar.MINUTE , 59 );
+                toCalendar.set( Calendar.SECOND , 59 );
+
+                if( toDoItem.getRecurrencePeriod() == -1 )
+                    overdueDateList.add( toDoItem );
+                else {
+                    if ( toDoItem.getRecurrencePeriod() == Recurrence.DAILY && DateUtil.isHourAndMinutesInRange( toDoItem.getDueDate() , currentDate , toCalendar ) )
+                        currentDateList.add(toDoItem);
+                    else if (toDoItem.getRecurrencePeriod() == Recurrence.WEEKLY
+                            && DateUtil.isSameWeekDay(toDoItem.getDueDate(), Calendar.getInstance())
+                            && DateUtil.isHourAndMinutesInRange( toDoItem.getDueDate() , currentDate , toCalendar )
+                            )
+                        currentDateList.add(toDoItem);
+                    else if (toDoItem.getRecurrencePeriod() == Recurrence.MONTHLY
+                            && DateUtil.isSameMonthDay(toDoItem.getDueDate(), Calendar.getInstance())
+                            && DateUtil.isHourAndMinutesInRange( toDoItem.getDueDate() , currentDate , toCalendar )
+                            )
+                        currentDateList.add(toDoItem);
+                    else if (toDoItem.getRecurrencePeriod() == Recurrence.YEARLY
+                            && DateUtil.isSameYearDay(toDoItem.getDueDate(), Calendar.getInstance())
+                            && DateUtil.isHourAndMinutesInRange( toDoItem.getDueDate() , currentDate , toCalendar )
+                            )
+                        currentDateList.add(toDoItem);
+                    else
+                        overdueDateList.add( toDoItem );
+                }
             }
             else if( DateUtil.sameDay(toDoItem.getDueDate(),currentDate))
             {
