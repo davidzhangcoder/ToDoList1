@@ -8,6 +8,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.maltaisn.recurpicker.Recurrence;
 import com.todolist.R;
 import com.todolist.SwipeLayout;
 import com.todolist.ui.adapter.TipListAdapter;
@@ -76,6 +77,26 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
                 }
             }
         }
+
+        TextView recurrenceTextView  = (TextView)getView(R.id.tip_recurrence);
+        recurrenceTextView.setVisibility(View.GONE);
+        if( toDoItem.getRecurrencePeriod() == Recurrence.DAILY ) {
+            recurrenceTextView.setText(R.string.everyday);
+            recurrenceTextView.setVisibility(View.VISIBLE);
+        }
+        else if( toDoItem.getRecurrencePeriod() == Recurrence.WEEKLY ) {
+            recurrenceTextView.setText(R.string.everyweek);
+            recurrenceTextView.setVisibility(View.VISIBLE);
+        }
+        else if( toDoItem.getRecurrencePeriod() == Recurrence.MONTHLY ) {
+            recurrenceTextView.setText(R.string.everymonth);
+            recurrenceTextView.setVisibility(View.VISIBLE);
+        }
+        else if( toDoItem.getRecurrencePeriod() == Recurrence.YEARLY ) {
+            recurrenceTextView.setText(R.string.everyyear);
+            recurrenceTextView.setVisibility(View.VISIBLE);
+        }
+
 
         getView(R.id.tipCardView).setOnClickListener( tipListAdapter.getClickListener(position) );
 //        getView(R.id.tip_content).setOnClickListener(tipListAdapter.getClickListener(position));

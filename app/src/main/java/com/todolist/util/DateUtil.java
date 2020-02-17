@@ -5,6 +5,53 @@ import java.util.Calendar;
 public class DateUtil
 {
 
+    public static boolean isHourAndMinutesInRange( Calendar cal , Calendar from , Calendar to ) {
+        int hour = cal.get( Calendar.HOUR_OF_DAY );
+        int minute = cal.get( Calendar.MINUTE );
+
+        int hourFrom = from.get( Calendar.HOUR_OF_DAY );
+        int minuteFrom = from.get( Calendar.MINUTE );
+
+        int hourTo = to.get( Calendar.HOUR_OF_DAY );
+        int minuteTo = to.get( Calendar.MINUTE );
+
+        if( hourFrom <= hour && hour <= hourTo
+                && minuteFrom <= minute && minute <= minuteTo)
+            return true;
+
+        return false;
+    }
+
+    public static boolean isSameYearDay( Calendar cal1, Calendar cal2 ) {
+        if( cal1 == null || cal2 == null )
+            return false;
+
+        if( cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) )
+            return true;
+
+        return false;
+    }
+
+    public static boolean isSameMonthDay( Calendar cal1, Calendar cal2 ) {
+        if( cal1 == null || cal2 == null )
+            return false;
+
+        if( cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH) )
+            return true;
+
+        return false;
+    }
+
+    public static boolean isSameWeekDay( Calendar cal1, Calendar cal2 ) {
+        if( cal1 == null || cal2 == null )
+            return false;
+
+        if( cal1.get(Calendar.DAY_OF_WEEK) == cal2.get(Calendar.DAY_OF_WEEK) )
+            return true;
+
+        return false;
+    }
+
     public static boolean before(Calendar cal1, Calendar cal2 )
     {
         boolean bBefore = false;

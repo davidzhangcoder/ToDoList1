@@ -24,6 +24,7 @@ import com.maltaisn.recurpicker.RecurrenceFormat;
 import com.maltaisn.recurpicker.RecurrencePickerDialog;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.todolist.R;
+import com.todolist.app.App;
 import com.todolist.data.Injection;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoImage;
@@ -32,6 +33,7 @@ import com.todolist.ui.GridItemDecoration;
 import com.todolist.ui.adapter.ToDoImageAdapter;
 import com.todolist.ui.dialog.CategorySelectionDialog;
 import com.todolist.util.AdsUtil;
+import com.todolist.util.AlarmUtil;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.zhihu.matisse.Matisse;
@@ -577,7 +579,11 @@ public class EditToDoItemActivity extends AppCompatActivity
     }
 
     @Override
-    public void showAfterCreateOrUpdateToDoItem() {
+    public void showAfterCreateOrUpdateToDoItem(ToDoItem toDo) {
+        long diff = toDo.getDueTimestamp() - Calendar.getInstance().getTimeInMillis();
+        if( toDo.getDueTimestamp() != 0 && diff <= 60 * 1000 ) {
+            AlarmUtil.doAlarm( toDoItem.getDueTimestamp() , toDoItem );
+        }
         finish();
     }
 }

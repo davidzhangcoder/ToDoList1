@@ -43,5 +43,9 @@
     <string name="admon_adunit_publisherad">/6499/example/banner</string>
     <string name="title_activity_image_full_screen">ImageFullScreenActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="everyday">Every Day</string>
+    <string name="everyweek">Every Week</string>
+    <string name="everymonth">Every Month</string>
+    <string name="everyyear">Every Year</string>
     <!--sample Id : /6499/example/banner-->
 </resources>

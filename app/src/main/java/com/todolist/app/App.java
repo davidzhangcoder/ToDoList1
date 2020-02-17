@@ -14,6 +14,7 @@ import com.todolist.R;
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
 import com.todolist.context.ContextHolder;
 import com.todolist.model.ToDoCategory;
+import com.todolist.model.ToDoItem;
 import com.todolist.service.ToDoListAlarmService;
 
 
@@ -33,7 +34,9 @@ public class App extends Application {
 
     private final int HOUR_IN_MILLS = 60 * 60 * 1000;
 
-    public static final int INITIAL_SECONDS_IN_MILLS = 10 * 1000;
+    public static final int INITIAL_SECONDS = 60;
+
+    public static final int INITIAL_SECONDS_IN_MILLS = INITIAL_SECONDS * 1000;
 
     private static Context context;
 
@@ -104,4 +107,5 @@ public class App extends Application {
     public AppComponent getAppComponent() {
         return appComponent;
     }
+
 }
