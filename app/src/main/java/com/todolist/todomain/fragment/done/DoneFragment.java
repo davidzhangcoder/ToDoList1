@@ -172,7 +172,8 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
 
             //Move displayBannerAds(mAdView) to onAttach(), because it needs getActivity() to return context
             //getActivity() returns null before when onAttach() invoked
-            //displayBannerAds(mAdView);
+            if( getActivity() != null )
+                displayBannerAds(mAdView);
         }
     }
 
@@ -286,10 +287,6 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        if( isCreated && isVisible ) {
-            displayBannerAds(mAdView);
-        }
 
 //        new DoneFragmentPresenter(Injection.provideToDoItemRepository(),this);
 
