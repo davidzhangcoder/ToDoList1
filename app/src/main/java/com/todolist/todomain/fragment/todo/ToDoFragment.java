@@ -219,9 +219,8 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         if( isCreated && isVisible ) {
             mPresenter.start();
 
-            //Move displayBannerAds(mAdView) to onAttach(), because it needs getActivity() to return context
-            //getActivity() returns null before when onAttach() invoked
-            //displayBannerAds(mAdView);
+            if( getActivity() != null )
+                displayBannerAds(mAdView);
         }
     }
 
