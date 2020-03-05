@@ -161,11 +161,18 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
     }
 
     @Override
+    public void onAttachFragment(Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+    }
+
+    @Override
     protected void lazyLoad() {
         if( isCreated && isVisible ) {
             mPresenter.start();
 
-            displayBannerAds(mAdView);
+            //Move displayBannerAds(mAdView) to onAttach(), because it needs getActivity() to return context
+            //getActivity() returns null before when onAttach() invoked
+            //displayBannerAds(mAdView);
         }
     }
 
@@ -279,6 +286,10 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        if( isCreated && isVisible ) {
+            displayBannerAds(mAdView);
+        }
 
 //        new DoneFragmentPresenter(Injection.provideToDoItemRepository(),this);
 

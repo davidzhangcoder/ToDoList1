@@ -20,7 +20,7 @@ public class GenericDao implements IDatabaseOperate
     }
 
     @Override
-    public long addContent(String tableName, ContentValues values) {
+    public synchronized long addContent(String tableName, ContentValues values) {
         boolean flag = false;
         SQLiteDatabase database = null;
         long id = -1;

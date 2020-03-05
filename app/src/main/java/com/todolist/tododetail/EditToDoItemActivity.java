@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -90,6 +91,7 @@ public class EditToDoItemActivity extends AppCompatActivity
     private RelativeLayout dueTimeContainer;
     private RelativeLayout repeatContainer;
     private RelativeLayout categoryContainer;
+    private RelativeLayout doneContainer;
 
     private ImageView imageView;
     private ImageView dueDateImage;
@@ -98,6 +100,7 @@ public class EditToDoItemActivity extends AppCompatActivity
     private ImageView categoryImage;
     private AdView mAdView;
     private RecyclerView imageRecylerView;
+    private SwitchCompat isdoneSwitchCompat;
 
     private ToDoItem toDoItem;
 
@@ -127,6 +130,7 @@ public class EditToDoItemActivity extends AppCompatActivity
         dueTimeContainer = findViewById(R.id.dueTimeContainer);
         repeatContainer = findViewById(R.id.repeatContainer);
         categoryContainer = findViewById(R.id.categoryContainer);
+        doneContainer = findViewById(R.id.doneContainer);
 
         repeat = findViewById(R.id.repeatText);
         category = findViewById(R.id.categoryText);
@@ -138,6 +142,7 @@ public class EditToDoItemActivity extends AppCompatActivity
         reback = findViewById(R.id.edit_reback);
         mAdView = findViewById(R.id.adView);
         imageRecylerView = findViewById(R.id.imageRecyclerView);
+        isdoneSwitchCompat = (SwitchCompat)findViewById(R.id.isdoneSwitchCompat);
 
         Intent i = getIntent();
         toDoItem = (ToDoItem)i.getParcelableExtra( EDITTODOITEMACTIVITY_TODOITEM );
@@ -263,6 +268,10 @@ public class EditToDoItemActivity extends AppCompatActivity
                 }
                 toDoItem.setToDoImageList( imageDataList );
 
+                if( isdoneSwitchCompat != null  && isdoneSwitchCompat.getVisibility() == View.VISIBLE && isdoneSwitchCompat.isChecked()) {
+                    toDoItem.setDone(true);
+                }
+
                 presenter.createOrUpdateToDoItem(toDoItem);
 
 //                ContentValues values = new ContentValues();
@@ -283,6 +292,17 @@ public class EditToDoItemActivity extends AppCompatActivity
 
             }
         });
+
+        if( toDoItem.getId() <= 0 ) {
+            doneContainer.setVisibility(View.GONE);
+            toDoItem.setDone(false);
+        }
+        else {
+            doneContainer.setVisibility(View.VISIBLE);
+            if( isdoneSwitchCompat != null && toDoItem.isDone() ){
+                isdoneSwitchCompat.setChecked(true);
+            }
+        }
 
         if( materialEditTextToDoItemName != null ) {
             materialEditTextToDoItemName.setAccentTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
