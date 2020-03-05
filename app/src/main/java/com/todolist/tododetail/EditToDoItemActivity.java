@@ -601,7 +601,7 @@ public class EditToDoItemActivity extends AppCompatActivity
     @Override
     public void showAfterCreateOrUpdateToDoItem(ToDoItem toDo) {
         long diff = toDo.getDueTimestamp() - Calendar.getInstance().getTimeInMillis();
-        if( toDo.getDueTimestamp() != 0 && diff <= 60 * 1000 ) {
+        if( toDo.getDueTimestamp() != 0 && Math.abs(diff) <= 60 * 1000 ) {
             AlarmUtil.doAlarm( toDoItem.getDueTimestamp() , toDoItem );
         }
         finish();
