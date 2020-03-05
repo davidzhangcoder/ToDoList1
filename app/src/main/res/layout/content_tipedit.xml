@@ -39,6 +39,37 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/doneContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_padding"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/doneText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="0dp"
+            android:text="Done?"
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="17sp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textStyle="bold"
+            />
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/isdoneSwitchCompat"
+            android:layout_toRightOf="@id/doneText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
