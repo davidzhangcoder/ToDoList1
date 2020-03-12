@@ -21,3 +21,18 @@
 #-renamesourcefileattribute SourceFile
 
 -dontwarn com.squareup.picasso.**
+
+-dontwarn com.google.**
+-dontwarn org.apache.**
+-dontwarn com.sap.**
+-dontwarn au.com.bytecode.**
+-dontwarn org.joda.**
+-dontwarn android.content.**
+-dontwarn android.graphics.**
+-dontwarn android.util.**
+-dontwarn android.view.**
+
+-dontwarn javax.servlet.**
+-dontwarn jcifs.http.**
+-dontwarn org.codehaus.**
+-dontwarn com.squareup.okhttp.**

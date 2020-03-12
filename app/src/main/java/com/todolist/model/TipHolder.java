@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.maltaisn.recurpicker.Recurrence;
 import com.todolist.R;
 import com.todolist.SwipeLayout;
+import com.todolist.app.App;
 import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.util.DateUtil;
@@ -62,7 +63,7 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
         Calendar currentDate = Calendar.getInstance();
 
         if( toDoItem.getDueDate() != null ) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy hh:mm aaa");// HH:mm:ss
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(App.getContext().getResources().getString(R.string.date_format));// HH:mm:ss
             String dateString = simpleDateFormat.format( toDoItem.getDueDate().getTime() );
             TextView tipDueDateAndTimeTextView = ((TextView)getView(R.id.tip_dueDateAndTime));
             tipDueDateAndTimeTextView.setText( dateString );
