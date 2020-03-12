@@ -15,36 +15,31 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
-import com.todolist.model.TipHolder;
-import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
-
+import com.todolist.TipListItemTouchHelperCallback;
+import com.todolist.model.IToDoItem;
+import com.todolist.model.TipHolder;
+import com.todolist.model.ToDoCategory;
+import com.todolist.model.ToDoItem;
+import com.todolist.tododetail.EditToDoItemActivity;
+import com.todolist.todomain.TestA;
 import com.todolist.todomain.ToDoMainActivity;
 import com.todolist.todomain.fragment.category.CategoryFragment;
-import com.todolist.todomain.TestA;
 import com.todolist.ui.CustomRecyclerScrollViewListener;
 import com.todolist.ui.LazyFragment;
 import com.todolist.ui.adapter.CategoryAdapter;
 import com.todolist.ui.adapter.TipListAdapter;
-import com.todolist.TipListItemTouchHelperCallback;
-import com.todolist.model.IToDoItem;
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
 import com.todolist.util.AdsUtil;
 import com.todolist.util.ToDoItemUtil;
 
@@ -189,20 +184,20 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         return view;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_todofragment, menu);
-
-        MenuItem item = menu.findItem(R.id.filterBySpinner);
-        Spinner spinner = (Spinner) item.getActionView();
-        spinner.setPrompt("Filter By:");
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(),
-                R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapter);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.menu_todofragment, menu);
+//
+//        MenuItem item = menu.findItem(R.id.filterBySpinner);
+//        Spinner spinner = (Spinner) item.getActionView();
+//        spinner.setPrompt("Filter By:");
+//
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(),
+//                R.array.spinner_list_item_array, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//
+//        spinner.setAdapter(adapter);
+//    }
 
     private void displayBannerAds(PublisherAdView mAdView) {
         PublisherAdRequest adRequest = new PublisherAdRequest.Builder()/*.addTestDevice("B3EEABB8EE11C2BE770B684D95219ECB")*/.build();
