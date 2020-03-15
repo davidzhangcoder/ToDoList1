@@ -21,6 +21,15 @@
     <string name="tab_title_todo">To Do</string>
     <string name="tab_title_done">Done</string>
     <string name="filter_by_category">Filter By category</string>
+    <string name="category_all_display">All</string>
+    <string name="category_default_display">Default</string>
+    <string name="category_working_display">Working</string>
+    <string name="category_learning_display">Learning</string>
+    <string name="category_meeting_display">Meeting</string>
+    <string name="category_appointment_display">Appointment</string>
+    <string name="category_shopping_display">Shopping</string>
+    <string name="category_other_display">Other</string>
+
 
     <string name="error_todo_name">Please enter a Name</string>
     <string name="error_todo_duedate">Please enter a Due Date</string>

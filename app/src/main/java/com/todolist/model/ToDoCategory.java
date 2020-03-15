@@ -1,7 +1,9 @@
 package com.todolist.model;
 
+import com.todolist.R;
 import com.todolist.context.ContextHolder;
 import com.todolist.db.GenericDao;
+import com.todolist.util.ToDoItemUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class ToDoCategory implements Serializable , IToDoItemType , IToDoCategor
     public static final String CATEGORY_ADD_NEW_NAME = "Add New Category";
 
     public static final int CATEGORY_ALL_ID = -2;
-    public static final String CATEGORY_ALL_NAME = "All";
+    public static final String CATEGORY_ALL_NAME = ContextHolder.getContext().getResources().getString( R.string.category_all_display );
 
 
 
@@ -91,7 +93,7 @@ public class ToDoCategory implements Serializable , IToDoItemType , IToDoCategor
 
         ToDoCategory toDoCategory = new ToDoCategory();
         toDoCategory.setId( Long.parseLong(result.get(COLUMN_ID)) );
-        toDoCategory.setName( result.get(COLUMN_NAME) );
+        toDoCategory.setName( ToDoItemUtil.getCategoryName( result ) );
 
         return toDoCategory;
     }
@@ -107,7 +109,7 @@ public class ToDoCategory implements Serializable , IToDoItemType , IToDoCategor
             Map<String, String> result = it.next();
             ToDoCategory toDoCategory = new ToDoCategory();
             toDoCategory.setId(Long.parseLong(result.get(COLUMN_ID)));
-            toDoCategory.setName(result.get(COLUMN_NAME));
+            toDoCategory.setName( ToDoItemUtil.getCategoryName( result ) );
 
             toDoCategoryList.add( toDoCategory );
         }

@@ -10,17 +10,26 @@
     <string name="nodate">无日期</string>
     <string name="alarmAction">alarmAction</string>
 
-    <string name="category_all">全部</string>
-    <string name="category_default">默认</string>
-    <string name="category_working">工作</string>
-    <string name="category_learning">学习</string>
-    <string name="category_meeting">会议</string>
-    <string name="category_appointment">预约</string>
-    <string name="category_shopping">购物</string>
-    <string name="category_other">其他</string>
+    <string name="category_all">All</string>
+    <string name="category_default">Default</string>
+    <string name="category_working">Working</string>
+    <string name="category_learning">Learning</string>
+    <string name="category_meeting">Meeting</string>
+    <string name="category_appointment">Appointment</string>
+    <string name="category_shopping">Shopping</string>
+    <string name="category_other">Other</string>
     <string name="tab_title_todo">待做</string>
     <string name="tab_title_done">已完成</string>
     <string name="filter_by_category">请选择类别</string>
+    <string name="category_all_display">全部</string>
+    <string name="category_default_display">默认</string>
+    <string name="category_working_display">工作</string>
+    <string name="category_learning_display">学习</string>
+    <string name="category_meeting_display">会议</string>
+    <string name="category_appointment_display">预约</string>
+    <string name="category_shopping_display">购物</string>
+    <string name="category_other_display">其他</string>
+
 
     <string name="error_todo_name">请输入待做事项的名称</string>
     <string name="error_todo_duedate">请输入预期完成日期</string>
