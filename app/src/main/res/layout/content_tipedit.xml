@@ -26,14 +26,14 @@
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/toDoItemName"
             app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="What is going to be Done?"
+            app:met_floatingLabelText="@string/toDoItemName"
             app:met_floatingLabelAlwaysShown="true"
             app:met_floatingLabelTextSize="17sp"
             app:met_floatingLabelTextColor="@color/colorPrimary"
             app:met_primaryColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter ToDo Task Name"
+            android:hint="@string/toDoItemNameHint"
             android:text=""
             />
     </LinearLayout>
@@ -53,7 +53,7 @@
             android:layout_marginLeft="0dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="0dp"
-            android:text="Done?"
+            android:text="@string/doneText"
             android:layout_alignParentLeft="true"
             android:textColor="@color/colorPrimary"
             android:textSize="17sp"
@@ -93,7 +93,7 @@
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/dueDate"
             app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="Due Date"
+            app:met_floatingLabelText="@string/dueDate"
             app:met_floatingLabelAlwaysShown="true"
             app:met_floatingLabelTextSize="17sp"
             app:met_floatingLabelTextColor="@color/colorPrimary"
@@ -101,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/dueDateImage"
-            android:hint="Enter Due Date Here"
+            android:hint="@string/dueDateHint"
             android:focusable="false"
             android:inputType="text"
             android:text=""
@@ -151,7 +151,7 @@
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/dueTime"
             app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="Due Time"
+            app:met_floatingLabelText="@string/dueTime"
             app:met_floatingLabelAlwaysShown="true"
             app:met_floatingLabelTextSize="17sp"
             app:met_floatingLabelTextColor="@color/colorPrimary"
@@ -220,7 +220,7 @@
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/repeatText"
             app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="Repeat"
+            app:met_floatingLabelText="@string/repeatText"
             app:met_floatingLabelAlwaysShown="true"
             app:met_floatingLabelTextSize="17sp"
             app:met_floatingLabelTextColor="@color/colorPrimary"
@@ -262,7 +262,7 @@
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/categoryText"
             app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="Category"
+            app:met_floatingLabelText="@string/categoryText"
             app:met_floatingLabelAlwaysShown="true"
             app:met_floatingLabelTextSize="17sp"
             app:met_floatingLabelTextColor="@color/colorPrimary"

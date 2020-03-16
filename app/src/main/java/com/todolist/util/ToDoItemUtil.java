@@ -3,7 +3,9 @@ package com.todolist.util;
 import com.maltaisn.recurpicker.Recurrence;
 import com.todolist.app.App;
 import com.todolist.R;
+import com.todolist.context.ContextHolder;
 import com.todolist.model.IToDoItem;
+import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 import com.todolist.model.ToDoItemTitle;
 
@@ -11,8 +13,39 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ToDoItemUtil {
+
+    public static String getCategoryName( Map<String, String> result) {
+        String name = "";
+        if( result.get(ToDoCategory.COLUMN_NAME) != null
+                && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_all ) ) )
+            name = ContextHolder.getContext().getString(R.string.category_all_display );
+        else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_default ) ) )
+            name = ContextHolder.getContext().getString(R.string.category_default_display );
+        else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_working ) ) )
+            name = ContextHolder.getContext().getString(R.string.category_working_display );
+        else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_learning ) ) )
+            name = ContextHolder.getContext().getString(R.string.category_learning_display );
+        else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_meeting ) ) )
+            name = ContextHolder.getContext().getString(R.string.category_meeting_display );
+        else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_appointment ) ) )
+            name = ContextHolder.getContext().getString(R.string.category_appointment_display );
+        else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_shopping ) ) )
+            name = ContextHolder.getContext().getString(R.string.category_shopping_display );
+        else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_other ) ) )
+            name = ContextHolder.getContext().getString(R.string.category_other_display );
+
+        return name;
+    }
 
     public static List<IToDoItem> getToDoItemGroupByDueTime(List<ToDoItem> toDoItemList )
     {

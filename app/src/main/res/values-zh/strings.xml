@@ -10,17 +10,36 @@
     <string name="nodate">无日期</string>
     <string name="alarmAction">alarmAction</string>
 
-    <string name="category_all">全部</string>
-    <string name="category_default">默认</string>
-    <string name="category_working">工作</string>
-    <string name="category_learning">学习</string>
-    <string name="category_meeting">会议</string>
-    <string name="category_appointment">预约</string>
-    <string name="category_shopping">购物</string>
-    <string name="category_other">其他</string>
+    <string name="category_all">All</string>
+    <string name="category_default">Default</string>
+    <string name="category_working">Working</string>
+    <string name="category_learning">Learning</string>
+    <string name="category_meeting">Meeting</string>
+    <string name="category_appointment">Appointment</string>
+    <string name="category_shopping">Shopping</string>
+    <string name="category_other">Other</string>
     <string name="tab_title_todo">待做</string>
     <string name="tab_title_done">已完成</string>
     <string name="filter_by_category">请选择类别</string>
+    <string name="category_all_display">全部</string>
+    <string name="category_default_display">默认</string>
+    <string name="category_working_display">工作</string>
+    <string name="category_learning_display">学习</string>
+    <string name="category_meeting_display">会议</string>
+    <string name="category_appointment_display">预约</string>
+    <string name="category_shopping_display">购物</string>
+    <string name="category_other_display">其他</string>
+
+
+    <string name="toDoItemName">待做事项的名称</string>
+    <string name="toDoItemNameHint">请输入：</string>
+    <string name="doneText">是否完成？</string>
+    <string name="dueDate">预定完成日期</string>
+    <string name="dueDateHint">请输入：</string>
+    <string name="dueTime">预定完成时间</string>
+    <string name="repeatText">重复</string>
+    <string name="categoryText">类别</string>
+
 
     <string name="error_todo_name">请输入待做事项的名称</string>
     <string name="error_todo_duedate">请输入预期完成日期</string>
@@ -47,6 +66,36 @@
     <string name="everyweek">每周</string>
     <string name="everymonth">每月</string>
     <string name="everyyear">每年</string>
+
+    <string name="done">完成</string>
+    <string name="cancel">取消</string>
+
+    <plurals comment="Text for a daily recurrence. The number argument is the frequency. The | character is required to separate the part the goes before the number and the part that goes after for user input labels, but it is never shown." name="rp_format_day">
+        <item quantity="one">Every | days</item>
+        <item quantity="few">Every |%d days</item>
+        <item quantity="many">Every |%d days</item>
+        <item quantity="other">每天</item>
+    </plurals>
+    <plurals comment="Text for a monthly recurrence. The number argument is the frequency. The | character is required to separate the part the goes before the number and the part that goes after for user input labels, but it is never shown." name="rp_format_month">
+        <item quantity="one">Every |month</item>
+        <item quantity="few">Every |%d months</item>
+        <item quantity="many">Every |%d months</item>
+        <item quantity="other">每月</item>
+    </plurals>
+    <plurals comment="Text for a weekly recurrence. The number argument is the frequency. The | character is required to separate the part the goes before the number and the part that goes after for user input labels, but it is never shown." name="rp_format_week">
+        <item quantity="one">Every |week</item>
+        <item quantity="few">Every |%d weeks</item>
+        <item quantity="many">Every |%d weeks</item>
+        <item quantity="other">每周</item>
+    </plurals>
+    <plurals comment="Text for a yearly recurrence. The number argument is the frequency. The | character is required to separate the part the goes before the number and the part that goes after for user input labels, but it is never shown." name="rp_format_year">
+        <item quantity="one">Every |year</item>
+        <item quantity="few">Every |%d years</item>
+        <item quantity="many">Every |%d years</item>
+        <item quantity="other">每年</item>
+    </plurals>
+    <string comment="Text for no recurrence." name="rp_format_none">单次</string>
+    <string comment="Text of button to confirm the recurrence view." name="rp_done">@string/done</string>
 
     <string name="date_format">EEE, yyyy年MM月d日 hh:mm aaa</string>
 

@@ -35,7 +35,7 @@ public class CategorySelectionDialog extends AppCompatDialogFragment
         AlertDialog alertDialog = builder
                 .setView(view)
                 .setCancelable(true)
-                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString( R.string.done ), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
@@ -47,7 +47,7 @@ public class CategorySelectionDialog extends AppCompatDialogFragment
                             CategorySelectionDialog.this.getCallback().onCategorySelected( (ToDoCategory)((CategoryListAdapter)recyclerView.getAdapter()).getSelectedToDoCategory() );
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString( R.string.cancel ), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
