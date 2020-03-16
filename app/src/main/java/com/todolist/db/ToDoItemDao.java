@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.todolist.R;
 import com.todolist.context.ContextHolder;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoImage;
@@ -100,7 +101,31 @@ public class ToDoItemDao
             Map<String, String> result = it.next();
             ToDoCategory toDoCategory = new ToDoCategory();
             toDoCategory.setId(Long.parseLong(result.get(ToDoCategory.COLUMN_ID)));
-            toDoCategory.setName(result.get(ToDoCategory.COLUMN_NAME));
+
+            if( result.get(ToDoCategory.COLUMN_NAME) != null
+                    && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_all ) ) )
+                toDoCategory.setName( ContextHolder.getContext().getString(R.string.category_all_display ) );
+            else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                    && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_default ) ) )
+                toDoCategory.setName( ContextHolder.getContext().getString(R.string.category_default_display ) );
+            else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                    && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_working ) ) )
+                toDoCategory.setName( ContextHolder.getContext().getString(R.string.category_working_display ) );
+            else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                    && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_learning ) ) )
+                toDoCategory.setName( ContextHolder.getContext().getString(R.string.category_learning_display ) );
+            else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                    && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_meeting ) ) )
+                toDoCategory.setName( ContextHolder.getContext().getString(R.string.category_meeting_display ) );
+            else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                    && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_appointment ) ) )
+                toDoCategory.setName( ContextHolder.getContext().getString(R.string.category_appointment_display ) );
+            else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                    && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_shopping ) ) )
+                toDoCategory.setName( ContextHolder.getContext().getString(R.string.category_shopping_display ) );
+            else if( result.get(ToDoCategory.COLUMN_NAME) != null
+                    && result.get(ToDoCategory.COLUMN_NAME).equalsIgnoreCase( ContextHolder.getContext().getString(R.string.category_other ) ) )
+                toDoCategory.setName( ContextHolder.getContext().getString(R.string.category_other_display ) );
 
             toDoCategoryList.add( toDoCategory );
         }

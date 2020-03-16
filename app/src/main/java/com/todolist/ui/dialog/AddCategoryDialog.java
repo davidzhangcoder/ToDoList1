@@ -35,13 +35,13 @@ public class AddCategoryDialog extends AppCompatDialogFragment
         AlertDialog alertDialog = builder
                 .setView(view)
                 .setCancelable(true)
-                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString( R.string.done ), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         setResult(categoryNameEditText.getText().toString());
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString( R.string.cancel ), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
