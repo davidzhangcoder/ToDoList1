@@ -30,6 +30,16 @@
     <string name="category_shopping_display">Shopping</string>
     <string name="category_other_display">Other</string>
 
+    <string name="toDoItemName">What is going to be Done?</string>
+    <string name="toDoItemNameHint">Enter ToDo Task Name</string>
+    <string name="doneText">Done?</string>
+    <string name="dueDate">Due Date</string>
+    <string name="dueDateHint">Enter Due Date Here</string>
+    <string name="dueTime">Due Time</string>
+    <string name="repeatText">Repeat</string>
+    <string name="categoryText">Category</string>
+
+
 
     <string name="error_todo_name">Please enter a Name</string>
     <string name="error_todo_duedate">Please enter a Due Date</string>
@@ -56,6 +66,36 @@
     <string name="everyweek">Every Week</string>
     <string name="everymonth">Every Month</string>
     <string name="everyyear">Every Year</string>
+
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+
+    <!--<plurals comment="Text for a daily recurrence. The number argument is the frequency. The | character is required to separate the part the goes before the number and the part that goes after for user input labels, but it is never shown." name="rp_format_day">-->
+        <!--<item quantity="one">Every |day</item>-->
+        <!--<item quantity="few">Every |%d days</item>-->
+        <!--<item quantity="many">Every |%d days</item>-->
+        <!--<item quantity="other">Every |%d days</item>-->
+    <!--</plurals>-->
+    <!--<plurals comment="Text for a monthly recurrence. The number argument is the frequency. The | character is required to separate the part the goes before the number and the part that goes after for user input labels, but it is never shown." name="rp_format_month">-->
+        <!--<item quantity="one">Every |month</item>-->
+        <!--<item quantity="few">Every |%d months</item>-->
+        <!--<item quantity="many">Every |%d months</item>-->
+        <!--<item quantity="other">Every |%d months</item>-->
+    <!--</plurals>-->
+    <!--<plurals comment="Text for a weekly recurrence. The number argument is the frequency. The | character is required to separate the part the goes before the number and the part that goes after for user input labels, but it is never shown." name="rp_format_week">-->
+        <!--<item quantity="one">Every |week</item>-->
+        <!--<item quantity="few">Every |%d weeks</item>-->
+        <!--<item quantity="many">Every |%d weeks</item>-->
+        <!--<item quantity="other">Every |%d weeks</item>-->
+    <!--</plurals>-->
+    <!--<plurals comment="Text for a yearly recurrence. The number argument is the frequency. The | character is required to separate the part the goes before the number and the part that goes after for user input labels, but it is never shown." name="rp_format_year">-->
+        <!--<item quantity="one">Every |year</item>-->
+        <!--<item quantity="few">Every |%d years</item>-->
+        <!--<item quantity="many">Every |%d years</item>-->
+        <!--<item quantity="other">Every |%d years</item>-->
+    <!--</plurals>-->
+
+
 
     <string name="date_format">EEE, d MMM yyyy hh:mm aaa</string>
 
