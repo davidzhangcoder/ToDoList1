@@ -268,8 +268,11 @@ public class EditToDoItemActivity extends AppCompatActivity
                 }
                 toDoItem.setToDoImageList( imageDataList );
 
-                if( isdoneSwitchCompat != null  && isdoneSwitchCompat.getVisibility() == View.VISIBLE && isdoneSwitchCompat.isChecked()) {
-                    toDoItem.setDone(true);
+                if( isdoneSwitchCompat != null  && isdoneSwitchCompat.getVisibility() == View.VISIBLE ) {
+                    if( isdoneSwitchCompat.isChecked() )
+                        toDoItem.setDone(true);
+                    else
+                        toDoItem.setDone(false);
                 }
 
                 presenter.createOrUpdateToDoItem(toDoItem);
@@ -503,6 +506,7 @@ public class EditToDoItemActivity extends AppCompatActivity
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(year,monthOfYear,dayOfMonth);
+        calendar.set(Calendar.SECOND,0);
         String date = getDateString( calendar );
         selectedDate = calendar;
 
@@ -600,9 +604,26 @@ public class EditToDoItemActivity extends AppCompatActivity
 
     @Override
     public void showAfterCreateOrUpdateToDoItem(ToDoItem toDo) {
-        long diff = toDo.getDueTimestamp() - Calendar.getInstance().getTimeInMillis();
-        if( toDo.getDueTimestamp() != 0 && Math.abs(diff) <= 60 * 1000 ) {
-            AlarmUtil.doAlarm( toDoItem.getDueTimestamp() , toDoItem );
+        if( !toDo.isDone() ) {
+            if( Calendar.getInstance().getTimeInMillis() >= toDo.getDueDate().getTimeInMillis() && ((toDoItem.getRecurrencePeriod() == Recurrence.DAILY)
+                    || (toDoItem.getRecurrencePeriod() == Recurrence.WEEKLY)
+                    || (toDoItem.getRecurrencePeriod() == Recurrence.MONTHLY)
+                    || (toDoItem.getRecurrencePeriod() == Recurrence.YEARLY)) ) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, toDoItem.getDueDate().get(Calendar.HOUR_OF_DAY));
+                calendar.set(Calendar.MINUTE, toDoItem.getDueDate().get(Calendar.MINUTE));
+                calendar.set(Calendar.SECOND, toDoItem.getDueDate().get(Calendar.SECOND));
+
+                long diff = Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis();
+                if (toDo.getDueTimestamp() != 0 && diff <= 0 && Math.abs(diff) <= 60 * 1000) {
+                    AlarmUtil.doAlarm(calendar.getTimeInMillis(), toDo);
+                }
+            } else {
+                long diff = Calendar.getInstance().getTimeInMillis() - toDo.getDueTimestamp();
+                if (toDo.getDueTimestamp() != 0 && diff <= 0 && Math.abs(diff) <= 60 * 1000) {
+                    AlarmUtil.doAlarm(toDo.getDueTimestamp(), toDo);
+                }
+            }
         }
         finish();
     }
