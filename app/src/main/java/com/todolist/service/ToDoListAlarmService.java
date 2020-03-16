@@ -145,6 +145,7 @@ public class ToDoListAlarmService extends Service{
                             Calendar calendar = Calendar.getInstance();
                             calendar.set( Calendar.HOUR_OF_DAY , toDoItem.getDueDate().get( Calendar.HOUR_OF_DAY ) );
                             calendar.set( Calendar.MINUTE , toDoItem.getDueDate().get( Calendar.MINUTE ) );
+                            calendar.set( Calendar.SECOND , toDoItem.getDueDate().get( Calendar.SECOND ) );
                             AlarmUtil.doAlarm( calendar.getTimeInMillis() , toDoItem );
                         }
                     }
