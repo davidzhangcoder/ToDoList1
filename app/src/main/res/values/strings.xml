@@ -95,8 +95,6 @@
         <!--<item quantity="other">Every |%d years</item>-->
     <!--</plurals>-->
 
-
-
     <string name="date_format">EEE, d MMM yyyy hh:mm aaa</string>
 
     <!--sample Id : /6499/example/banner-->
