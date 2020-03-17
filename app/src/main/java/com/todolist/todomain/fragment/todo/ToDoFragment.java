@@ -28,11 +28,13 @@ import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
 import com.todolist.R;
 import com.todolist.TipListItemTouchHelperCallback;
+import com.todolist.app.App;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.TipHolder;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 import com.todolist.tododetail.EditToDoItemActivity;
+import com.todolist.todomain.DaggerToDoMainActivityComponent;
 import com.todolist.todomain.TestA;
 import com.todolist.todomain.ToDoMainActivity;
 import com.todolist.todomain.fragment.category.CategoryFragment;
@@ -136,12 +138,23 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 //                .build()
 //                .inject(this);
 
-        ((ToDoMainActivity)getActivity())
-                .getToDoMainActivityComponent()
+        //can not use this, because when switching the language, toDoFragmentComponent() returns null value
+//        ((ToDoMainActivity)getActivity())
+//                .getToDoMainActivityComponent()
+//                .toDoFragmentComponent()
+//                .setToDoFragmentModule(new ToDoFragmentModule(this))
+//                .build()
+//                .inject(this);
+
+        DaggerToDoMainActivityComponent
+                .builder()
+                .appComponent(((App)this.getActivity().getApplication()).getAppComponent())
+                .build()
                 .toDoFragmentComponent()
                 .setToDoFragmentModule(new ToDoFragmentModule(this))
                 .build()
                 .inject(this);
+
     }
 
     @Override
@@ -230,7 +243,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 
             ToDoCategory allToDoCategory = new ToDoCategory();
             allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
-            allToDoCategory.setName( ToDoCategory.CATEGORY_ALL_NAME );
+            allToDoCategory.setName( ToDoCategory.getAllCatrgoryName() );
             toDoCategorys.add( 0 , allToDoCategory );
 
 
@@ -261,7 +274,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         if( selectedToDoCategory == null ) {
             ToDoCategory allToDoCategory = new ToDoCategory();
             allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
-            allToDoCategory.setName( ToDoCategory.CATEGORY_ALL_NAME );
+            allToDoCategory.setName( ToDoCategory.getAllCatrgoryName() );
 
             selectedToDoCategory = allToDoCategory;
         }

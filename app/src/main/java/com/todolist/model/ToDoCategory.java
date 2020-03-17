@@ -24,7 +24,7 @@ public class ToDoCategory implements Serializable , IToDoItemType , IToDoCategor
     public static final String CATEGORY_ADD_NEW_NAME = "Add New Category";
 
     public static final int CATEGORY_ALL_ID = -2;
-    public static final String CATEGORY_ALL_NAME = ContextHolder.getContext().getResources().getString( R.string.category_all_display );
+//    public static final String CATEGORY_ALL_NAME = ContextHolder.getContext().getResources().getString( R.string.category_all_display );
 
 
 
@@ -44,6 +44,10 @@ public class ToDoCategory implements Serializable , IToDoItemType , IToDoCategor
     private long id;
 
     private String name;
+
+    public static String getAllCatrgoryName(){
+        return ContextHolder.getContext().getResources().getString( R.string.category_all_display );
+    }
 
     public ToDoCategory() {
     }

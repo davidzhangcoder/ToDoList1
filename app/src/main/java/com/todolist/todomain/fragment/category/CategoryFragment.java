@@ -143,7 +143,7 @@ public class CategoryFragment extends BottomSheetDialogFragment implements Categ
 
         ToDoCategory allToDoCategory = new ToDoCategory();
         allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
-        allToDoCategory.setName( ToDoCategory.CATEGORY_ALL_NAME );
+        allToDoCategory.setName( ToDoCategory.getAllCatrgoryName() );
         categoryList.add( allToDoCategory );
 
         categoryList.addAll( toDoCategoryList );

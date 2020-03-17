@@ -26,7 +26,13 @@ public class DateUtil
         if( cal1 == null || cal2 == null )
             return false;
 
-        if( cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) )
+        int cal1Month = cal1.get(Calendar.MONTH);
+        int cal2Month = cal2.get(Calendar.MONTH);
+
+        int cal1DayOfMonth = cal1.get(Calendar.DAY_OF_MONTH);
+        int cal2DayOfMonth = cal2.get(Calendar.DAY_OF_MONTH);
+
+        if( cal1Month == cal2Month && cal1DayOfMonth == cal2DayOfMonth )
             return true;
 
         return false;
