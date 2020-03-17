@@ -188,7 +188,7 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
 
             ToDoCategory allToDoCategory = new ToDoCategory();
             allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
-            allToDoCategory.setName( ToDoCategory.CATEGORY_ALL_NAME );
+            allToDoCategory.setName( ToDoCategory.getAllCatrgoryName() );
             toDoCategorys.add( 0 , allToDoCategory );
 
 
