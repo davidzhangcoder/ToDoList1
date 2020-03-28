@@ -1,11 +1,11 @@
 package com.todolist.model;
 
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.todolist.ui.adapter.CategoryListAdapter;
 import com.todolist.R;
+import com.todolist.ui.adapter.CategoryListAdapter;
 
 public class ToDoCategoryHodler extends BaseViewHolder<IToDoCategory , CategoryListAdapter>
 {
@@ -30,7 +30,7 @@ public class ToDoCategoryHodler extends BaseViewHolder<IToDoCategory , CategoryL
         if( ((ToDoCategory)adapter.getSelectedToDoCategory()) != null && ((ToDoCategory)adapter.getSelectedToDoCategory()).getId() == ((ToDoCategory)toDoCategory).getId() )
             getView(R.id.categoryImageCheck).setVisibility(View.VISIBLE);
 
-        ((ConstraintLayout)getView(R.id.categoryContainer)).setOnClickListener( itemOnClickListener );
+        ((RelativeLayout)getView(R.id.categoryContainer)).setOnClickListener( itemOnClickListener );
     }
 
 }
