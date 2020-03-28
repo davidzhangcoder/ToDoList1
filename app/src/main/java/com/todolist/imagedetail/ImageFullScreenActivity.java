@@ -33,7 +33,6 @@ public class ImageFullScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_full_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
         Intent i = getIntent();
         toDoImage = i.getParcelableExtra( KEY );

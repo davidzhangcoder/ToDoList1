@@ -20,19 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> implements TipListItemTouchHelperCallback.OnDragVHListener {
-//    private TextView content;
-//    private TextView tipDueDateAndTime;
-//    private TextView category;
-//    private CheckBox checkbox;
-//    private SwipeLayout swipeLayout;
+
     AnimatorSet upSet, downSet;
 
     public TipHolder(View itemView) {
         super(itemView);
-//        content = (TextView) itemView.findViewById(R.id.tip_content);
-//        tipDueDateAndTime = (TextView) itemView.findViewById(R.id.tip_dueDateAndTime);
-//        checkbox = (CheckBox) itemView.findViewById(R.id.tip_checkbox);
-//        swipeLayout = (SwipeLayout) itemView.findViewById(R.id.tip_layout);
 
         //创建动画
         ObjectAnimator scaleXAnim = ObjectAnimator.ofFloat(itemView, "scaleX", 1.05f);
@@ -58,7 +50,6 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
     @Override
     public void setUpView(ToDoItem toDoItem, int position , final TipListAdapter tipListAdapter) {
         ((TextView)getView(R.id.tip_content)).setText(toDoItem.getName().toString() + " - " + toDoItem.getToDoCategory().getName().toString());
-//        ((TextView)getView(R.id.tip_category)).setText(toDoItem.getToDoCategory().getName().toString());
 
         Calendar currentDate = Calendar.getInstance();
 
@@ -100,7 +91,6 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
 
 
         getView(R.id.tipCardView).setOnClickListener( tipListAdapter.getClickListener(position) );
-//        getView(R.id.tip_content).setOnClickListener(tipListAdapter.getClickListener(position));
 
         CheckBox checkBox = ((CheckBox)getView(R.id.tip_checkbox));
         checkBox.setChecked( toDoItem.isDone() );
@@ -112,17 +102,6 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
             }
         });
 
-//        ((SwipeLayout)getView(R.id.tip_layout)).setListener(new SwipeLayout.OperatorListener() {
-//            @Override
-//            public void onDelete() {
-//                tipListAdapter.deleteItem(TipHolder.this.getAdapterPosition());
-//            }
-//
-//            @Override
-//            public void onEdit() {
-//
-//            }
-//        });
     }
 
     @Override
@@ -136,46 +115,6 @@ public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> impleme
         itemView.clearAnimation();
         upSet.start();
     }
-
-//    public TextView getContent() {
-//        return content;
-//    }
-//
-//    public void setContent(TextView content) {
-//        this.content = content;
-//    }
-//
-//    public TextView getTipDueDateAndTime() {
-//        return tipDueDateAndTime;
-//    }
-//
-//    public void setTipDueDateAndTime(TextView tipDueDateAndTime) {
-//        this.tipDueDateAndTime = tipDueDateAndTime;
-//    }
-//
-//    public TextView getCategory() {
-//        return category;
-//    }
-//
-//    public void setCategory(TextView category) {
-//        this.category = category;
-//    }
-//
-//    public CheckBox getCheckbox() {
-//        return checkbox;
-//    }
-//
-//    public void setCheckbox(CheckBox checkbox) {
-//        this.checkbox = checkbox;
-//    }
-//
-//    public SwipeLayout getSwipeLayout() {
-//        return swipeLayout;
-//    }
-//
-//    public void setSwipeLayout(SwipeLayout swipeLayout) {
-//        this.swipeLayout = swipeLayout;
-//    }
 
     public AnimatorSet getUpSet() {
         return upSet;

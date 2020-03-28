@@ -26,7 +26,6 @@ public class ToDoCategoryHodlerForEdit extends BaseViewHolder<IToDoCategory , Ca
         {
             @Override
             public void onClick(View v) {
-//                adapter.setSelectedToDoCategory( toDoCategory );
                 adapter.getItemCallBack().doItemClickCallBack( toDoCategory );
             }
         };

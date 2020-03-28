@@ -75,8 +75,6 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 
     private Snackbar snackbar;
 
-//    private TextView categoryButton;
-//    private ImageView categoryButtonImage;
     private ToDoCategory selectedToDoCategory;
     private PublisherAdView mAdView;
 
@@ -177,16 +175,12 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         inflater.inflate(R.layout.toolbar_layout, toolbar, true);
         ((AppCompatActivity)this.getActivity()).setSupportActionBar(toolbar);
         categorySpinner = (Spinner) toolbar.findViewById(R.id.categorySpinner);
-//        categoryButton = (TextView)toolbar.findViewById(R.id.categoryButton);
-//        categoryButtonImage = (ImageView)toolbar.findViewById(R.id.categoryButtonImage);;
 
         //Ads View
         mAdView = view.findViewById(R.id.adView);
 
         //Initial
         initRecyclerView( recyclerView , floatingActionButton );
-//        initCategoryFragment();
-//        initialCategorySpinner();
 
         //Initial Menu ( comment out following if fragment need to append some menu item in, it is necessary to display menu in Fragment )
         //this.setHasOptionsMenu( true );
@@ -391,8 +385,6 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
             displayBannerAds(mAdView);
         }
 
-//        new ToDoFragmentPresenter(Injection.provideToDoItemRepository(),this);
-
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -419,12 +411,6 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
         if( isCreated && isVisible )
             mPresenter.start();
 
-//        if( categoryFilterID != ToDoCategory.CATEGORY_ADD_NEW_ID ) {
-//            toDoItemList.clear();
-//            toDoItemList.addAll(getDisplayToDoItemList(categoryFilterID));
-//
-//            tipListAdapter.notifyData(toDoItemList);
-//        }
     }
 
     @Override
@@ -452,13 +438,6 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        //我们根据requestCode判断是哪个子Fragment传回的数据
-//        //从data中拿到传回的数据
-//        if(resultCode == DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE) {
-//            selectedToDoCategory = (ToDoCategory) data.getExtras().get(CategoryFragment.KEY_SELECTED_TODOCATEGORY);
-//            categoryButton.setText(selectedToDoCategory.getName());
-//            mPresenter.doGetToDoItemsByCategory(selectedToDoCategory.getId());
-//        }
     }
 
     @Override
@@ -468,11 +447,8 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 
     public interface OnFragmentInteractionListener {
 
-//        void refresh();
     }
 
 
 }
 
-//a
-//b

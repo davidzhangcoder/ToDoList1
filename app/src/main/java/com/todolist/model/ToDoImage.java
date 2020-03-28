@@ -52,14 +52,6 @@ public class ToDoImage implements Parcelable {
         this.uri = uri;
     }
 
-//    public String getUriString() {
-//        return uriString;
-//    }
-//
-//    public void setUriString(String uriString) {
-//        this.uriString = uriString;
-//    }
-
     public long getId() {
         return id;
     }

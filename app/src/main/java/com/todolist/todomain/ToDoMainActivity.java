@@ -63,15 +63,11 @@ public class ToDoMainActivity extends AppCompatActivity
     private final int REQUEST_CODE_CHOOSE=0;
 
     protected Activity context;
-//    private Unbinder unbinder;
 
-//    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-//    @BindView(R.id.tabLayout)
     TabLayout tabLayout;
 
-//    @BindView(R.id.viewPager)
     ViewPager viewPager;
 
     AppBarLayout appBarLayout;
@@ -134,47 +130,6 @@ public class ToDoMainActivity extends AppCompatActivity
         rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
         rewardedVideoAd = AdsUtil.setupRewardedVideoAd(this , this );
     }
-
-    // test
-//    InterstitialAd interstitialAd = AdsUtil.setupInterstitialAd(this);
-//    Button button = new Button( this );
-//    button.setText("test button");
-//    button.setOnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            //Rewared Video
-////                if( rewardedVideoAd.isLoaded() ) {
-////                    rewardedVideoAd.show();
-////                }
-//
-//            //Rewarded Video Dialog
-////                RewardVideoAndPurchaseDialog rewardVideoAndPurchaseDialog = new RewardVideoAndPurchaseDialog();
-////                rewardVideoAndPurchaseDialog.show(ToDoMainActivity.this.getSupportFragmentManager(), "rewardVideoAndPurchaseDialog");
-//
-//            //Interstitial
-////                if( interstitialAd != null && interstitialAd.isLoaded() ) {
-////                    interstitialAd.show();
-////                }
-//
-//            //Matisse
-////                if(ContextCompat.checkSelfPermission(ToDoMainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-////                    ActivityCompat.requestPermissions(ToDoMainActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
-////                }else{
-////                    //执行逻辑
-////                    Matisse.from(ToDoMainActivity.this)
-////                            .choose(MimeType.ofAll())
-////                            .countable(true)
-////                            .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
-//////                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-////                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-////                            .thumbnailScale(0.85f)
-////                            .imageEngine(new GlideEngine())
-////                            .forResult(REQUEST_CODE_CHOOSE);
-////                }
-//
-//        }
-//    });
-//    toolbar.addView( button );
 
 }
 

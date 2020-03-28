@@ -49,7 +49,7 @@ import java.util.Locale;
 
 
 /**
- * Created by santa on 16/7/16.
+ * Created
  */
 public class EditToDoItemActivity extends AppCompatActivity
         implements
@@ -65,18 +65,6 @@ public class EditToDoItemActivity extends AppCompatActivity
     public static final int REQUEST_CODE_CHOOSE_MATISSE=0;
 
     public static final int MAX_IMAGE_COUNT = 6;
-
-//    @BindView(R.id.dueDate)
-//    PopuTextView dueDatePopuTextView;
-//
-//    @BindView(R.id.remindDate)
-//    PopuTextView remindDatePopuTextView;
-//
-//    @BindView(R.id.edit_addchild)
-//    EditText editAddChild;
-//
-//    @BindView(R.id.edit_addremark)
-//    EditText editAddRemark;
 
     private MaterialEditText materialEditTextDueDate;
     private MaterialEditText materialEditTextDueTime;
@@ -121,8 +109,6 @@ public class EditToDoItemActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tipedit);
 
-//        KnifeKit.bind(this);
-
         materialEditTextDueDate = findViewById(R.id.dueDate);
         materialEditTextDueTime = findViewById(R.id.dueTime);
         materialEditTextToDoItemName = findViewById(R.id.toDoItemName);
@@ -157,17 +143,12 @@ public class EditToDoItemActivity extends AppCompatActivity
             selectedDate = startDate;
             selectedRecurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
             toDoItem.setRecurrencePeriod( Recurrence.NONE );
-//            toDoItem.setToDoCategory( ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID ) );
             toDoItem.setDone(false);
-//            selectedToDoCategory = ToDoCategory.getToDoCategory( ToDoCategory.CATEGORY_DEFAULT_ID );
         }
         else {
             selectedDate = toDoItem.getDueDate();
             selectedRecurrence = new Recurrence( toDoItem.getDueDate().getTimeInMillis() , toDoItem.getRecurrencePeriod() );
             selectedToDoCategory = toDoItem.getToDoCategory();
-//            for( ToDoImage toDoImage : toDoItem.getToDoImageList() ) {
-//                toDoImage.setUri( Uri.parse( toDoImage.getUriString() ));
-//            }
             imageDataList.addAll( toDoItem.getToDoImageList() );
         }
 
@@ -246,8 +227,6 @@ public class EditToDoItemActivity extends AppCompatActivity
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                toDoItem.setName("");
-//                toDoItem.setDueTimestamp(0);
 
                 //Add item into "To Do" List
                 String name = materialEditTextToDoItemName.getText().toString();
@@ -276,22 +255,6 @@ public class EditToDoItemActivity extends AppCompatActivity
                 }
 
                 presenter.createOrUpdateToDoItem(toDoItem);
-
-//                ContentValues values = new ContentValues();
-//                values.put(ToDoItem.COLUMN_NAME, name);
-//                values.put(ToDoItem.COLUMN_DONE_INDICATOR, toDoItem.isDone());
-//                values.put(ToDoItem.COLUMN_DUE_TIMESTAMP, toDoItem.getDueTimestamp());
-//                values.put(ToDoItem.COLUMN_RECURRENCE_PERIOD, toDoItem.getRecurrencePeriod());
-//                values.put(ToDoItem.COLUMN_CATEGORY, toDoItem.getToDoCategory().getId() );
-//
-//                if( toDoItem.getId() == 0 ) {
-//                    long id = db.addContent(ToDoItem.TABLE_NAME, values);
-//                    toDoItem.setId(id);
-//                }
-//                else
-//                {
-//                    db.updateContent( ToDoItem.TABLE_NAME , values , ToDoItem.COLUMN_ID + " = ?" , new String[]{String.valueOf(toDoItem.getId())} );
-//                }
 
             }
         });
@@ -397,9 +360,6 @@ public class EditToDoItemActivity extends AppCompatActivity
 
             Calendar startDate = selectedDate;
 
-//            if( selectedRecurrence == null )
-//                selectedRecurrence = new Recurrence(startDate.getTimeInMillis(), Recurrence.NONE);  // Does not repeat
-
             // Set up dialog recurrence picker
             final RecurrencePickerDialog pickerDialog = new RecurrencePickerDialog();
             pickerDialog.setDateFormat(dateFormatShort, dateFormatLong);
@@ -500,7 +460,6 @@ public class EditToDoItemActivity extends AppCompatActivity
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         dueTimeContainer.setVisibility( View.VISIBLE );
-//        repeatContainer.setVisibility( View.VISIBLE );
         categoryContainer.setVisibility( View.VISIBLE );
         resetFocusFraction();
 
