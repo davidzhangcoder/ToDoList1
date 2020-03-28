@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.todolist.R;
 import com.todolist.model.BaseViewHolder;
-import com.todolist.model.ToDoCategoryHodler;
 import com.todolist.model.ToDoImage;
 import com.todolist.model.ToDoImageHolder;
 

@@ -17,7 +17,6 @@ public interface ToDoFragmentContract {
 
         void showToDoDetail();
 
-        void showCategoryDialog();
 
         void initialCategorySpinner( List<ToDoCategory> toDoCategorys );
     }
@@ -27,8 +26,6 @@ public interface ToDoFragmentContract {
         void doneAction(ToDoItem toDoItem);
 
         void forwardToToDoDetail();
-
-        void doDisplayCategoryDialog();
 
         void doGetToDoItemsByCategory(long categoryID);
     }

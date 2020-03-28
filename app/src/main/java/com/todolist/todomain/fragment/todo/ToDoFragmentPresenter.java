@@ -71,11 +71,6 @@ public class ToDoFragmentPresenter implements ToDoFragmentContract.Presenter {
     }
 
     @Override
-    public void doDisplayCategoryDialog() {
-        view.showCategoryDialog();
-    }
-
-    @Override
     public void doGetToDoItemsByCategory(long categoryID) {
         toDoItemRepository.loadToDoItems(categoryID, new ToDoItemDataSource.LoadToDoItemsCallBack() {
             @Override

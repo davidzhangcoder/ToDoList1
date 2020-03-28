@@ -1,6 +1,5 @@
 package com.todolist.todomain;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -9,40 +8,26 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.todolist.R;
 import com.todolist.app.App;
-import com.todolist.event.BusFactory;
 import com.todolist.todomain.fragment.category.CategoryFragment;
 import com.todolist.todomain.fragment.done.DoneFragment;
 import com.todolist.todomain.fragment.todo.ToDoFragment;
 import com.todolist.todomain.fragment.todo.ToDoFragmentAdapter;
 import com.todolist.ui.dialog.RewardVideoAndPurchaseDialog;
 import com.todolist.util.AdsUtil;
-import com.todolist.util.SharedPrefUtils;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -215,9 +200,6 @@ public class ToDoMainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        if (useEventBus()) {
-            BusFactory.getBus().register(this);
-        }
     }
 
     public boolean useEventBus() {
@@ -227,7 +209,6 @@ public class ToDoMainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        BusFactory.getBus().unregister(this);
     }
 
     public ToDoMainActivityComponent getToDoMainActivityComponent() {

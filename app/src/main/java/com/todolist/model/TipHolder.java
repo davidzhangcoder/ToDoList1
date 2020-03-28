@@ -10,10 +10,9 @@ import android.widget.TextView;
 
 import com.maltaisn.recurpicker.Recurrence;
 import com.todolist.R;
-import com.todolist.SwipeLayout;
+import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.app.App;
 import com.todolist.ui.adapter.TipListAdapter;
-import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.util.DateUtil;
 
 import java.text.SimpleDateFormat;

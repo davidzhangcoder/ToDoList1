@@ -430,13 +430,6 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     }
 
     @Override
-    public void showCategoryDialog() {
-        CategoryFragment categoryFragment = CategoryFragment.newInstance( selectedToDoCategory );
-        categoryFragment.setTargetFragment( this , DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE );
-        categoryFragment.show( this.getFragmentManager(), null);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 
