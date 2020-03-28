@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * Created by wanglei on 2016/12/9.
+ * Created
  */
 
 public class App extends Application {
