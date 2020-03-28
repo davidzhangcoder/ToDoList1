@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-
+//ToDoList-1.0
+//(1)All functionality is done
+//(2)One issue found and need to fix : "When switching the language, the previous selected Repeat and Category still display the language that used before switch"
 
 /**
  * Created by wanglei on 2016/12/9.
