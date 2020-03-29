@@ -1,6 +1,6 @@
 package com.todolist.todomain.fragment.todo;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.todolist.data.source.GenericDataSource;
 import com.todolist.data.source.ToDoItemDataSource;

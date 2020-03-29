@@ -25,7 +25,7 @@
         android:textSize="@dimen/textsize_normal"
         tools:text="Test" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/categoryImageCheck"
         style="@style/ToDoListOptionCheckStyleForEdit"
         android:layout_width="wrap_content"

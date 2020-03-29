@@ -1,11 +1,10 @@
 package com.todolist.todomain.fragment.category;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.todolist.data.source.ToDoItemDataSource;
 import com.todolist.data.source.ToDoItemRepository;
 import com.todolist.model.ToDoCategory;
-import com.todolist.todomain.fragment.category.CategoryContract;
 
 import java.util.List;
 

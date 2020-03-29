@@ -9,7 +9,7 @@
     tools:context=".imagedetail.ImageFullScreenActivityFragment"
     tools:showIn="@layout/activity_image_full_screen">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imagefullscreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

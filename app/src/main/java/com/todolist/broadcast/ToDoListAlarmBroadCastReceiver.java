@@ -7,16 +7,13 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,7 +21,6 @@ import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.R;
 import com.todolist.model.ToDoItem;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import static android.content.Context.NOTIFICATION_SERVICE;

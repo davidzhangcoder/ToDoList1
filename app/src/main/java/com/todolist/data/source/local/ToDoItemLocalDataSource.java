@@ -1,17 +1,14 @@
 package com.todolist.data.source.local;
 
-import android.content.ContentValues;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.todolist.data.source.ToDoItemDataSource;
-import com.todolist.db.GenericDao;
 import com.todolist.db.ToDoItemDao;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 import com.todolist.util.AppExecutors;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;

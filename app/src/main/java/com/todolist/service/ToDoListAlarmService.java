@@ -6,30 +6,20 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.maltaisn.recurpicker.Recurrence;
 import com.todolist.app.App;
 import com.todolist.db.ToDoItemDao;
-import com.todolist.tododetail.EditToDoItemActivity;
-import com.todolist.R;
-import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
-import com.todolist.db.GenericDao;
 import com.todolist.model.ToDoItem;
 import com.todolist.util.AlarmUtil;
 import com.todolist.util.DateUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 public class ToDoListAlarmService extends Service{
 

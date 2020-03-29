@@ -6,11 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.AppCompatImageView;
+
 import android.view.View;
 import android.widget.ImageView;
 
@@ -18,8 +17,6 @@ import com.bumptech.glide.Glide;
 import com.todolist.R;
 import com.todolist.imagedetail.ImageFullScreenActivity;
 import com.todolist.tododetail.EditToDoItemActivity;
-import com.todolist.todomain.ToDoMainActivity;
-import com.todolist.todomain.fragment.todo.ToDoFragment;
 import com.todolist.ui.adapter.ToDoImageAdapter;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;

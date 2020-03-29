@@ -10,12 +10,12 @@ import android.content.ContextWrapper;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 
 import com.todolist.R;
 
-import static android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT;
-import static android.support.v4.app.NotificationCompat.VISIBILITY_SECRET;
+import static androidx.core.app.NotificationCompat.PRIORITY_DEFAULT;
+import static androidx.core.app.NotificationCompat.VISIBILITY_SECRET;
 
 public class NotificationUtils extends ContextWrapper {
 

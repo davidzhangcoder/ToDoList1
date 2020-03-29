@@ -1,10 +1,9 @@
 package com.todolist.data.source.remote;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.todolist.data.source.ToDoItemDataSource;
 import com.todolist.data.source.local.ToDoItemLocalDataSource;
-import com.todolist.db.ToDoItemDao;
 import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoItem;
 import com.todolist.util.AppExecutors;

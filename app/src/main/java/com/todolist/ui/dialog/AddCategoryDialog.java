@@ -2,20 +2,16 @@ package com.todolist.ui.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialogFragment;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
 import com.todolist.R;
-import com.todolist.db.GenericDao;
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
 
 public class AddCategoryDialog extends AppCompatDialogFragment
 {

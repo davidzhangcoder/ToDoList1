@@ -16,7 +16,7 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Enabling multidex support.
         multiDexEnabled = true
@@ -62,6 +62,16 @@ dependencies {
     //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
+    // Room components
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
+    // Lifecycle components
+//    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
+//    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
+
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation rootProject.ext.dependencies["appcompat-v7"]
@@ -77,7 +87,7 @@ dependencies {
     implementation rootProject.ext.dependencies["recurpicker"]
 //    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
-    implementation 'com.android.support:support-annotations:28.0.0'
+    implementation 'androidx.annotation:annotation:1.0.0'
 
     implementation 'com.google.dagger:dagger:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11' //在 Java 中需要指定 Dagger 作为 annotationProcessor（或 apt）依赖
@@ -85,9 +95,9 @@ dependencies {
 
     //Unit Test
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:0.2'
-    androidTestImplementation 'com.android.support.test:rules:0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     testImplementation "org.mockito:mockito-core:$rootProject.ext.mockitoVersion"
 
     // "org.mockito:mockito-android:$rootProject.ext.mockitoVersion" cause AndroidTest compile error
