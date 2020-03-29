@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
@@ -52,6 +59,9 @@ dependencies {
 //        all*.exclude group: 'com.android.support', module: 'support-annotations'
 //    }
 
+    //Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation rootProject.ext.dependencies["appcompat-v7"]
@@ -70,7 +80,8 @@ dependencies {
     implementation 'com.android.support:support-annotations:28.0.0'
 
     implementation 'com.google.dagger:dagger:2.11'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11' //在 Java 中需要指定 Dagger 作为 annotationProcessor（或 apt）依赖
+    kapt "com.google.dagger:dagger-compiler:2.11" //在 Kotlin 中则需要添加 kotlin-kapt 插件激活 kapt，并使用 kapt 替换 annotationProcessor
 
     //Unit Test
     testImplementation 'junit:junit:4.12'
