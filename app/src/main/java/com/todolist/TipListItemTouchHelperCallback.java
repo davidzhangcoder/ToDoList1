@@ -1,12 +1,13 @@
 package com.todolist;
 
 import android.graphics.Canvas;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import androidx.recyclerview.widget.ItemTouchHelper;
 
 import com.todolist.ui.adapter.TipListAdapter;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 public class TipListItemTouchHelperCallback extends ItemTouchHelper.Callback {
 

@@ -1,12 +1,12 @@
 package com.todolist.todomain.fragment.category;
 
-import androidx.annotation.NonNull;
-
+import com.todolist.data.model.ToDoCategory;
 import com.todolist.data.source.ToDoItemDataSource;
 import com.todolist.data.source.ToDoItemRepository;
-import com.todolist.model.ToDoCategory;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 public class CategoryPresenter implements CategoryContract.Presenter {
 

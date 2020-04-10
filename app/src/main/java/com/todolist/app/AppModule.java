@@ -1,13 +1,13 @@
 package com.todolist.app;
 
+import android.content.Context;
+
 import com.todolist.data.Injection;
 import com.todolist.data.source.ToDoItemRepository;
 import com.todolist.todomain.TestA;
 import com.todolist.todomain.fragment.done.DoneFragment;
 import com.todolist.todomain.fragment.todo.ToDoFragment;
-import com.todolist.todomain.fragment.todo.ToDoFragmentComponent;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -15,6 +15,12 @@ import dagger.Provides;
 
 @Module//(subcomponents = {ToDoFragmentComponent.class} )
 public class AppModule {
+
+    private Context context;
+
+    public AppModule(Context context) {
+        this.context = context;
+    }
 
     @Provides
     @Singleton //Module的scope要和Component一致
@@ -25,7 +31,7 @@ public class AppModule {
     @Provides
     @Singleton
     ToDoItemRepository provideToDoItemRepository() {
-        return Injection.provideToDoItemRepository();
+        return Injection.provideToDoItemRepository( context );
     }
 
     @Provides

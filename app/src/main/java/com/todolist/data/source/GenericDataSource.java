@@ -1,7 +1,7 @@
 package com.todolist.data.source;
 
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoItem;
 
 public interface GenericDataSource {
 

@@ -1,6 +1,6 @@
 package com.todolist.todomain.fragment.category;
 
-import com.todolist.model.ToDoCategory;
+import com.todolist.data.model.ToDoCategory;
 import com.todolist.ui.BasePresenter;
 import com.todolist.ui.BaseView;
 

@@ -1,13 +1,13 @@
 package com.todolist.todomain.fragment.todo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ToDoFragmentAdapter extends FragmentPagerAdapter {
 

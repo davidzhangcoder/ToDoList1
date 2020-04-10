@@ -11,7 +11,6 @@ import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.todolist.R;
-import com.todolist.todomain.ToDoMainActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

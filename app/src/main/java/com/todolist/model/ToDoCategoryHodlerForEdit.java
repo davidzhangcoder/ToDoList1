@@ -1,23 +1,25 @@
 package com.todolist.model;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.todolist.ui.adapter.CategoryListAdapter;
 import com.todolist.R;
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.ui.adapter.CategoryListAdapter;
 
-public class ToDoCategoryHodlerForEdit extends BaseViewHolder<IToDoCategory , CategoryListAdapter> {
+import androidx.appcompat.widget.AppCompatImageView;
+
+public class ToDoCategoryHodlerForEdit extends BaseViewHolder<ToDoCategory, CategoryListAdapter> {
     public ToDoCategoryHodlerForEdit(View itemView) {
         super(itemView);
     }
 
     @Override
-    public void setUpView(IToDoCategory toDoCategory, int position, CategoryListAdapter adapter) {
+    public void setUpView(ToDoCategory toDoCategory, int position, CategoryListAdapter adapter) {
         ((TextView)getView(R.id.categoryName)).setText(toDoCategory.getName());
 
-        if( toDoCategory instanceof  ToDoCategory && ((ToDoCategory)toDoCategory).isSelected() )
+        if( toDoCategory instanceof  ToDoCategory && ((ToDoCategory)toDoCategory).getSelected() )
             ((AppCompatImageView)getView(R.id.categoryImageCheck)).setVisibility( View.VISIBLE );
         else
             ((AppCompatImageView)getView(R.id.categoryImageCheck)).setVisibility( View.INVISIBLE );

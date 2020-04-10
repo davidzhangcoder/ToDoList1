@@ -1,131 +1,122 @@
 package com.todolist.db;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+public class ToDoItemDatabase //extends SQLiteOpenHelper
+{
 
-import com.todolist.app.App;
-import com.todolist.R;
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoImage;
-import com.todolist.model.ToDoItem;
-
-public class ToDoItemDatabase extends SQLiteOpenHelper {
-
-    private final static String DB_NAME = "todo_list_db";
-
-
-    public final static int DB_VERSION = 1;
-
-
-
-    private static ToDoItemDatabase mInstance=null;
-    private ToDoItemDatabase(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
-    }
-
-    public static synchronized ToDoItemDatabase getInstance(Context context) {
-
-        if (mInstance == null) {
-            mInstance = new ToDoItemDatabase(context);
-        }
-        return mInstance;
-    }
-
-    @Override
-    public void onOpen(SQLiteDatabase db) {
-        super.onOpen(db);
-
-        if(!db.isReadOnly()) { // Enable foreign key constraints
-            db.execSQL("PRAGMA foreign_keys=ON;");
-        }
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        // create notes table
-
-        //Version 1
-        db.execSQL(ToDoItem.CREATE_TABLE);
-
-        //Version 2
-        db.execSQL(ToDoCategory.CREATE_TABLE);
-        initCategory( db );
-
-        //Version 3
-        db.execSQL(ToDoImage.CREATE_TABLE);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-//        // Drop older table if existed
-//        db.execSQL("DROP TABLE IF EXISTS " + ToDoItem.TABLE_NAME);
+//    private final static String DB_NAME = "todo_list_db";
 //
-//        db.execSQL("DROP TABLE IF EXISTS " + ToDoCategory.TABLE_NAME);
 //
-//        // Create tables again
-//        onCreate(db);
-
-        switch( oldVersion )
-        {
-            case 1: {
-                db.execSQL(ToDoCategory.CREATE_TABLE);
-                initCategory(db);
-                String addCategoryIDInToDoITemSQL = "ALTER TABLE " + ToDoItem.TABLE_NAME + " ADD COLUMN " + ToDoItem.COLUMN_CATEGORY + " INTEGER ";
-                db.execSQL(addCategoryIDInToDoITemSQL);
-                break;
-            }
-            case 2: {
-                db.execSQL(ToDoImage.CREATE_TABLE);
-                break;
-            }
-            default: {
-                try {
-                    db.beginTransaction();
-                    // Drop older table if existed
-                    db.execSQL("DROP TABLE IF EXISTS " + ToDoItem.TABLE_NAME);
-
-                    db.execSQL("DROP TABLE IF EXISTS " + ToDoCategory.TABLE_NAME);
-
-                    // Create tables again
-                    onCreate(db);
-                    db.setTransactionSuccessful();
-                }
-                finally
-                {
-                    db.endTransaction();
-                }
-            }
-        }
-    }
-
-    private void initCategory(SQLiteDatabase db)
-    {
-        //Inital category
+//    public final static int DB_VERSION = 1;
+//
+//
+//
+//    private static ToDoItemDatabase mInstance=null;
+//    private ToDoItemDatabase(Context context) {
+//        super(context, DB_NAME, null, DB_VERSION);
+//    }
+//
+//    public static synchronized ToDoItemDatabase getInstance(Context context) {
+//
+//        if (mInstance == null) {
+//            mInstance = new ToDoItemDatabase(context);
+//        }
+//        return mInstance;
+//    }
+//
+//    @Override
+//    public void onOpen(SQLiteDatabase db) {
+//        super.onOpen(db);
+//
+//        if(!db.isReadOnly()) { // Enable foreign key constraints
+//            db.execSQL("PRAGMA foreign_keys=ON;");
+//        }
+//    }
+//
+//    @Override
+//    public void onCreate(SQLiteDatabase db) {
+//        // create notes table
+//
+//        //Version 1
+//        db.execSQL(ToDoItem.CREATE_TABLE);
+//
+//        //Version 2
+//        db.execSQL(ToDoCategory.CREATE_TABLE);
+//        initCategory( db );
+//
+//        //Version 3
+//        db.execSQL(ToDoImage.CREATE_TABLE);
+//    }
+//
+//    @Override
+//    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+////        // Drop older table if existed
+////        db.execSQL("DROP TABLE IF EXISTS " + ToDoItem.TABLE_NAME);
+////
+////        db.execSQL("DROP TABLE IF EXISTS " + ToDoCategory.TABLE_NAME);
+////
+////        // Create tables again
+////        onCreate(db);
+//
+//        switch( oldVersion )
+//        {
+//            case 1: {
+//                db.execSQL(ToDoCategory.CREATE_TABLE);
+//                initCategory(db);
+//                String addCategoryIDInToDoITemSQL = "ALTER TABLE " + ToDoItem.TABLE_NAME + " ADD COLUMN " + ToDoItem.COLUMN_CATEGORY + " INTEGER ";
+//                db.execSQL(addCategoryIDInToDoITemSQL);
+//                break;
+//            }
+//            case 2: {
+//                db.execSQL(ToDoImage.CREATE_TABLE);
+//                break;
+//            }
+//            default: {
+//                try {
+//                    db.beginTransaction();
+//                    // Drop older table if existed
+//                    db.execSQL("DROP TABLE IF EXISTS " + ToDoItem.TABLE_NAME);
+//
+//                    db.execSQL("DROP TABLE IF EXISTS " + ToDoCategory.TABLE_NAME);
+//
+//                    // Create tables again
+//                    onCreate(db);
+//                    db.setTransactionSuccessful();
+//                }
+//                finally
+//                {
+//                    db.endTransaction();
+//                }
+//            }
+//        }
+//    }
+//
+//    private void initCategory(SQLiteDatabase db)
+//    {
+//        //Inital category
+////        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+////                + ") Values( null ,'" + App.getContext().getString(R.string.category_all) + "')");
+//
+////        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+////                + ") Values( " + ToDoCategory.CATEGORY_DEFAULT_ID + " ,'" + App.getContext().getString(R.string.category_default) + "')");
+//
 //        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
-//                + ") Values( null ,'" + App.getContext().getString(R.string.category_all) + "')");
-
+//                + ") Values( null ,'" + App.getContext().getString(R.string.category_working) + "')");
+//
 //        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
-//                + ") Values( " + ToDoCategory.CATEGORY_DEFAULT_ID + " ,'" + App.getContext().getString(R.string.category_default) + "')");
-
-        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
-                + ") Values( null ,'" + App.getContext().getString(R.string.category_working) + "')");
-
-        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
-                + ") Values( null ,'" + App.getContext().getString(R.string.category_learning) + "')");
-
-        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
-                + ") Values( null ,'" + App.getContext().getString(R.string.category_meeting) + "')");
-
-        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
-                + ") Values( null ,'" + App.getContext().getString(R.string.category_appointment) + "')");
-
-        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
-                + ") Values( null ,'" + App.getContext().getString(R.string.category_shopping) + "')");
-
-        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
-                + ") Values( null ,'" + App.getContext().getString(R.string.category_other) + "')");
-    }
+//                + ") Values( null ,'" + App.getContext().getString(R.string.category_learning) + "')");
+//
+//        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+//                + ") Values( null ,'" + App.getContext().getString(R.string.category_meeting) + "')");
+//
+//        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+//                + ") Values( null ,'" + App.getContext().getString(R.string.category_appointment) + "')");
+//
+//        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+//                + ") Values( null ,'" + App.getContext().getString(R.string.category_shopping) + "')");
+//
+//        db.execSQL("insert into " + ToDoCategory.TABLE_NAME + "( " + ToDoCategory.COLUMN_ID + "," + ToDoCategory.COLUMN_NAME
+//                + ") Values( null ,'" + App.getContext().getString(R.string.category_other) + "')");
+//    }
 
 }
 

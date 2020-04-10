@@ -2,12 +2,11 @@ package com.todolist.ui;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.View;
 
 
 public class GridItemDecoration extends RecyclerView.ItemDecoration{

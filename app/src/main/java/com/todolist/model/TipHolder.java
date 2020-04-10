@@ -12,13 +12,14 @@ import com.maltaisn.recurpicker.Recurrence;
 import com.todolist.R;
 import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.app.App;
+import com.todolist.data.model.ToDoItem;
 import com.todolist.ui.adapter.TipListAdapter;
 import com.todolist.util.DateUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class TipHolder extends BaseViewHolder<ToDoItem , TipListAdapter> implements TipListItemTouchHelperCallback.OnDragVHListener {
+public class TipHolder extends BaseViewHolder<ToDoItem, TipListAdapter> implements TipListItemTouchHelperCallback.OnDragVHListener {
 
     AnimatorSet upSet, downSet;
 

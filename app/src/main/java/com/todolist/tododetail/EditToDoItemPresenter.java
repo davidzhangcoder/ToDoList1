@@ -1,8 +1,12 @@
 package com.todolist.tododetail;
 
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoItem;
 import com.todolist.data.source.GenericDataSource;
+import com.todolist.data.source.ToDoItemDataSource;
 import com.todolist.data.source.ToDoItemRepository;
-import com.todolist.model.ToDoItem;
+
+import java.util.List;
 
 public class EditToDoItemPresenter implements EditToDoItemContract.Presenter {
     private ToDoItemRepository toDoItemRepository;
@@ -16,7 +20,17 @@ public class EditToDoItemPresenter implements EditToDoItemContract.Presenter {
 
     @Override
     public void start() {
+        toDoItemRepository.loadToDoCategorys(new ToDoItemDataSource.LoadToDoCategorysCallBack() {
+            @Override
+            public void onToDoCategorysLoaded(List<ToDoCategory> toDoCategorys) {
+                view.initialToDoCategoryList( toDoCategorys );
+            }
 
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
     }
 
     @Override

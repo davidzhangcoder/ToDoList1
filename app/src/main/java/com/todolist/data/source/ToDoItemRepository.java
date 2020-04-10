@@ -1,14 +1,14 @@
 package com.todolist.data.source;
 
-import androidx.annotation.NonNull;
-
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoItem;
 import com.todolist.data.source.local.ToDoItemLocalDataSource;
 import com.todolist.data.source.remote.ToDoItemRemoteDataReSource;
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
 
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -37,6 +37,10 @@ public class ToDoItemRepository implements ToDoItemDataSource
             INSTANCE = new ToDoItemRepository(localDataSource , remoteDataReSource);
         }
         return INSTANCE;
+    }
+
+    public void getToDoItemsForAlarm( long from , long to , long isDone , long recurrencePeriod , ToDoItemDataSource.LoadToDoItemsCallBack callBack ) {
+        mLocalDataSource.getToDoItemsForAlarm( from , to , isDone , recurrencePeriod , callBack );
     }
 
     @Override

@@ -9,7 +9,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.todolist.R;
-import com.todolist.model.ToDoCategory;
+import com.todolist.data.model.ToDoCategory;
 
 import java.util.List;
 

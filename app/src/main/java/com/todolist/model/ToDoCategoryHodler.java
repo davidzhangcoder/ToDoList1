@@ -5,16 +5,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.todolist.R;
+import com.todolist.data.model.ToDoCategory;
 import com.todolist.ui.adapter.CategoryListAdapter;
 
-public class ToDoCategoryHodler extends BaseViewHolder<IToDoCategory , CategoryListAdapter>
+public class ToDoCategoryHodler extends BaseViewHolder<ToDoCategory, CategoryListAdapter>
 {
     public ToDoCategoryHodler(View itemView) {
         super(itemView);
     }
 
     @Override
-    public void setUpView(IToDoCategory toDoCategory, int position, CategoryListAdapter adapter) {
+    public void setUpView(ToDoCategory toDoCategory, int position, CategoryListAdapter adapter) {
         ((TextView)getView(R.id.categoryName)).setText(toDoCategory.getName());
 
         View.OnClickListener itemOnClickListener = new View.OnClickListener()

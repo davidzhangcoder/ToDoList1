@@ -8,18 +8,24 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
-import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.maltaisn.recurpicker.Recurrence;
 import com.todolist.app.App;
+import com.todolist.data.Injection;
+import com.todolist.data.model.ToDoItem;
+import com.todolist.data.model.ToDoItemDatabase;
+import com.todolist.data.source.GenericDataSource;
+import com.todolist.data.source.ToDoItemDataSource;
+import com.todolist.data.source.ToDoItemRepository;
 import com.todolist.db.ToDoItemDao;
-import com.todolist.model.ToDoItem;
 import com.todolist.util.AlarmUtil;
 import com.todolist.util.DateUtil;
 
 import java.util.Calendar;
 import java.util.List;
+
+import androidx.annotation.Nullable;
 
 public class ToDoListAlarmService extends Service{
 
@@ -91,28 +97,58 @@ public class ToDoListAlarmService extends Service{
                         current.get( Calendar.SECOND )
                     );
 
-                ToDoItemDao toDoItemDao = new ToDoItemDao();
-                String sql = " ( ( " + ToDoItem.COLUMN_DUE_TIMESTAMP + " between ? and ? )  or ( " + ToDoItem.COLUMN_DUE_TIMESTAMP + " < ? and  " + ToDoItem.COLUMN_RECURRENCE_PERIOD + " != ? ) ) " +
-                        " and " + ToDoItem.COLUMN_DONE_INDICATOR + " == ? ";
-                String[] parameter = new String[]{ String.valueOf(from) , String.valueOf(to) , String.valueOf(from) , String.valueOf( Recurrence.NONE ) , String.valueOf( 0 )};
-                List<ToDoItem> toDoItemList = toDoItemDao.loadToDoItems( sql , parameter );
-
-                for( ToDoItem toDoItem : toDoItemList ) {
-                    if( toDoItem.getDueDate() != null && toDoItem.getDueTimestamp() != 0 && DateUtil.isHourAndMinutesInRange( toDoItem.getDueDate() , fromCalendar , toCalendar ) ) {
-                        if( DateUtil.sameDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
-                            AlarmUtil.doAlarm( toDoItem.getDueTimestamp() , toDoItem );
-                        else if( ( toDoItem.getRecurrencePeriod() == Recurrence.DAILY )
-                                || ( toDoItem.getRecurrencePeriod() == Recurrence.WEEKLY && DateUtil.isSameWeekDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
-                                || ( toDoItem.getRecurrencePeriod() == Recurrence.MONTHLY && DateUtil.isSameMonthDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
-                                || ( toDoItem.getRecurrencePeriod() == Recurrence.YEARLY && DateUtil.isSameYearDay( toDoItem.getDueDate() , Calendar.getInstance() ) ) ) {
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.set( Calendar.HOUR_OF_DAY , toDoItem.getDueDate().get( Calendar.HOUR_OF_DAY ) );
-                            calendar.set( Calendar.MINUTE , toDoItem.getDueDate().get( Calendar.MINUTE ) );
-                            calendar.set( Calendar.SECOND , toDoItem.getDueDate().get( Calendar.SECOND ) );
-                            AlarmUtil.doAlarm( calendar.getTimeInMillis() , toDoItem );
+                ToDoItemDatabase.Companion.getInstance( ToDoListAlarmService.this ).getOpenHelper().getReadableDatabase();
+                ToDoItemRepository toDoItemRepository = Injection.provideToDoItemRepository(App.getContext());
+                ToDoItemDataSource.LoadToDoItemsCallBack callBack = new ToDoItemDataSource.LoadToDoItemsCallBack(){
+                    @Override
+                    public void onToDoItemsLoaded(List<ToDoItem> toDoItemList) {
+                        for( ToDoItem toDoItem : toDoItemList ) {
+                            if( toDoItem.getDueDate() != null && toDoItem.getDueTimestamp() != 0 && DateUtil.isHourAndMinutesInRange( toDoItem.getDueDate() , fromCalendar , toCalendar ) ) {
+                                if( DateUtil.sameDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
+                                    AlarmUtil.doAlarm( toDoItem.getDueTimestamp() , toDoItem );
+                                else if( ( toDoItem.getRecurrencePeriod() == Recurrence.DAILY )
+                                        || ( toDoItem.getRecurrencePeriod() == Recurrence.WEEKLY && DateUtil.isSameWeekDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
+                                        || ( toDoItem.getRecurrencePeriod() == Recurrence.MONTHLY && DateUtil.isSameMonthDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
+                                        || ( toDoItem.getRecurrencePeriod() == Recurrence.YEARLY && DateUtil.isSameYearDay( toDoItem.getDueDate() , Calendar.getInstance() ) ) ) {
+                                    Calendar calendar = Calendar.getInstance();
+                                    calendar.set( Calendar.HOUR_OF_DAY , toDoItem.getDueDate().get( Calendar.HOUR_OF_DAY ) );
+                                    calendar.set( Calendar.MINUTE , toDoItem.getDueDate().get( Calendar.MINUTE ) );
+                                    calendar.set( Calendar.SECOND , toDoItem.getDueDate().get( Calendar.SECOND ) );
+                                    AlarmUtil.doAlarm( calendar.getTimeInMillis() , toDoItem );
+                                }
+                            }
                         }
                     }
-                }
+
+                    @Override
+                    public void onDataNotAvailable() {
+
+                    }
+                };
+                toDoItemRepository.getToDoItemsForAlarm( from , to , 0 , Recurrence.NONE , callBack );
+
+//                ToDoItemDao toDoItemDao = new ToDoItemDao();
+//                String sql = " ( ( " + ToDoItem.COLUMN_DUE_TIMESTAMP + " between ? and ? )  or ( " + ToDoItem.COLUMN_DUE_TIMESTAMP + " < ? and  " + ToDoItem.COLUMN_RECURRENCE_PERIOD + " != ? ) ) " +
+//                        " and " + ToDoItem.COLUMN_DONE_INDICATOR + " == ? ";
+//                String[] parameter = new String[]{ String.valueOf(from) , String.valueOf(to) , String.valueOf(from) , String.valueOf( Recurrence.NONE ) , String.valueOf( 0 )};
+//                List<ToDoItem> toDoItemList = toDoItemDao.loadToDoItems( sql , parameter );
+
+//                for( ToDoItem toDoItem : toDoItemList ) {
+//                    if( toDoItem.getDueDate() != null && toDoItem.getDueTimestamp() != 0 && DateUtil.isHourAndMinutesInRange( toDoItem.getDueDate() , fromCalendar , toCalendar ) ) {
+//                        if( DateUtil.sameDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
+//                            AlarmUtil.doAlarm( toDoItem.getDueTimestamp() , toDoItem );
+//                        else if( ( toDoItem.getRecurrencePeriod() == Recurrence.DAILY )
+//                                || ( toDoItem.getRecurrencePeriod() == Recurrence.WEEKLY && DateUtil.isSameWeekDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
+//                                || ( toDoItem.getRecurrencePeriod() == Recurrence.MONTHLY && DateUtil.isSameMonthDay( toDoItem.getDueDate() , Calendar.getInstance() ) )
+//                                || ( toDoItem.getRecurrencePeriod() == Recurrence.YEARLY && DateUtil.isSameYearDay( toDoItem.getDueDate() , Calendar.getInstance() ) ) ) {
+//                            Calendar calendar = Calendar.getInstance();
+//                            calendar.set( Calendar.HOUR_OF_DAY , toDoItem.getDueDate().get( Calendar.HOUR_OF_DAY ) );
+//                            calendar.set( Calendar.MINUTE , toDoItem.getDueDate().get( Calendar.MINUTE ) );
+//                            calendar.set( Calendar.SECOND , toDoItem.getDueDate().get( Calendar.SECOND ) );
+//                            AlarmUtil.doAlarm( calendar.getTimeInMillis() , toDoItem );
+//                        }
+//                    }
+//                }
 
             }
         };

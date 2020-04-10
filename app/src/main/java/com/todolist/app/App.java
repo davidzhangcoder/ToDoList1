@@ -49,7 +49,10 @@ public class App extends Application {
 
         context = getApplicationContext();
 
-        appComponent = DaggerAppComponent.create();
+        appComponent = DaggerAppComponent
+                .builder()
+                .appModule( new AppModule( this ) )
+                .build();
 
         //Test
         Log.i("App", "================================" + appComponent.getTestA());

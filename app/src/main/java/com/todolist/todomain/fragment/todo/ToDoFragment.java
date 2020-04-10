@@ -3,16 +3,6 @@ package com.todolist.todomain.fragment.todo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,13 +16,15 @@ import android.widget.SpinnerAdapter;
 
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.doubleclick.PublisherAdView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.todolist.R;
 import com.todolist.TipListItemTouchHelperCallback;
 import com.todolist.app.App;
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoItem;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.TipHolder;
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
 import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.todomain.DaggerToDoMainActivityComponent;
 import com.todolist.todomain.TestA;
@@ -48,12 +40,22 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.View {
 
     public static final String NAME = ToDoFragment.class.getName();
     public static final int DISPLAY_CATEGORY_FRAGMENT_REQUEST_CODE = 1;
+    private static final String CATEGORY_FILTER_ID = "categoryFilterID";
 
 
     private RecyclerView recyclerView;
@@ -68,7 +70,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
 
     private TipListAdapter tipListAdapter;
 
-    private long categoryFilterID = ToDoCategory.CATEGORY_ALL_ID;
+    private long categoryFilterID = ToDoCategory.Companion.getCATEGORY_ALL_ID();
     private List<ToDoCategory> toDoCategorys = new ArrayList<ToDoCategory>();
 
     private Snackbar snackbar;
@@ -101,7 +103,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     public static ToDoFragment newInstance( long categoryID ) {
         ToDoFragment fragment = new ToDoFragment();
         Bundle args = new Bundle();
-        args.putLong(ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID , categoryID);
+        args.putLong(CATEGORY_FILTER_ID , categoryID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -110,8 +112,8 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            if( getArguments().getLong( ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID , Integer.MIN_VALUE ) != Integer.MIN_VALUE )
-                categoryFilterID = getArguments().getLong( ToDoCategory.TABLE_NAME+ToDoCategory.COLUMN_ID );
+            if( getArguments().getLong( CATEGORY_FILTER_ID , Integer.MIN_VALUE ) != Integer.MIN_VALUE )
+                categoryFilterID = getArguments().getLong( CATEGORY_FILTER_ID );
         }
 
 //        DaggerToDoFragmentComponent
@@ -233,9 +235,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     public void initialCategorySpinner( List<ToDoCategory> toDoCategorys ) {
         if( categorySpinner != null && toDoCategorys != null ) {
 
-            ToDoCategory allToDoCategory = new ToDoCategory();
-            allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
-            allToDoCategory.setName( ToDoCategory.getAllCatrgoryName() );
+            ToDoCategory allToDoCategory = new ToDoCategory( ToDoCategory.Companion.getCATEGORY_ALL_ID() , ToDoCategory.Companion.getAllCatrgoryName() );
             toDoCategorys.add( 0 , allToDoCategory );
 
 
@@ -264,9 +264,7 @@ public class ToDoFragment extends LazyFragment implements ToDoFragmentContract.V
     private void initCategoryFragment()
     {
         if( selectedToDoCategory == null ) {
-            ToDoCategory allToDoCategory = new ToDoCategory();
-            allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
-            allToDoCategory.setName( ToDoCategory.getAllCatrgoryName() );
+            ToDoCategory allToDoCategory = new ToDoCategory( ToDoCategory.Companion.getCATEGORY_ALL_ID() , ToDoCategory.Companion.getAllCatrgoryName() );
 
             selectedToDoCategory = allToDoCategory;
         }

@@ -6,15 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.AppCompatImageView;
-
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.todolist.R;
+import com.todolist.data.model.ToDoImage;
 import com.todolist.imagedetail.ImageFullScreenActivity;
 import com.todolist.tododetail.EditToDoItemActivity;
 import com.todolist.ui.adapter.ToDoImageAdapter;
@@ -22,6 +19,11 @@ import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 
 public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> {
 
@@ -102,7 +104,7 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
                             && adapter.getData().size() > 0
                             && !adapter.getData().get( 0 ).isAdd()
                             && adapter.getData().size() < EditToDoItemActivity.MAX_IMAGE_COUNT ) {
-                        ToDoImage toDoImage = new ToDoImage();
+                        com.todolist.data.model.ToDoImage toDoImage = new com.todolist.data.model.ToDoImage();
                         toDoImage.setAdd(true);
                         adapter.addElement( toDoImage , 0 );
                     }

@@ -1,8 +1,9 @@
 package com.todolist.model;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class BaseViewHolder<T,V> extends RecyclerView.ViewHolder {
 

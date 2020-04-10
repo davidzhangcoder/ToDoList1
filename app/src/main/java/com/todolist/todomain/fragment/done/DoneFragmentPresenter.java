@@ -1,10 +1,10 @@
 package com.todolist.todomain.fragment.done;
 
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoItem;
 import com.todolist.data.source.GenericDataSource;
 import com.todolist.data.source.ToDoItemDataSource;
 import com.todolist.data.source.ToDoItemRepository;
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class DoneFragmentPresenter implements DoneFragmentContract.Presenter {
 
     @Override
     public void start() {
-        toDoItemRepository.loadDoneItems(ToDoCategory.CATEGORY_ALL_ID , new ToDoItemDataSource.LoadToDoItemsCallBack() {
+        toDoItemRepository.loadDoneItems(ToDoCategory.Companion.getCATEGORY_ALL_ID() , new ToDoItemDataSource.LoadToDoItemsCallBack() {
             @Override
             public void onToDoItemsLoaded(List<ToDoItem> toDos) {
                 view.showToDoItems( toDos );

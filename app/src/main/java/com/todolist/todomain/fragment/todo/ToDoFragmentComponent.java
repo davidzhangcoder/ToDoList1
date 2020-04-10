@@ -1,6 +1,5 @@
 package com.todolist.todomain.fragment.todo;
 
-import com.todolist.di.ActivityScoped;
 import com.todolist.di.FragmentScoped;
 
 import dagger.Subcomponent;

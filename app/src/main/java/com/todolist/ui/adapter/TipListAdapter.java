@@ -2,18 +2,16 @@ package com.todolist.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.todolist.R;
 import com.todolist.TipListItemTouchHelperCallback;
+import com.todolist.data.model.ToDoItem;
 import com.todolist.model.BaseViewHolder;
 import com.todolist.model.IToDoItem;
 import com.todolist.model.TipHolder;
-import com.todolist.model.ToDoItem;
 import com.todolist.model.ToDoItemTitle;
 import com.todolist.model.ToDoItemTitleHolder;
 import com.todolist.model.TypeFactoryForToDoItemlist;
@@ -22,6 +20,9 @@ import com.todolist.tododetail.EditToDoItemActivity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

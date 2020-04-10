@@ -1,15 +1,15 @@
 package com.todolist.todomain.fragment.todo;
 
-import androidx.annotation.NonNull;
-
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoItem;
 import com.todolist.data.source.GenericDataSource;
 import com.todolist.data.source.ToDoItemDataSource;
 import com.todolist.data.source.ToDoItemRepository;
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 public class ToDoFragmentPresenter implements ToDoFragmentContract.Presenter {
 
@@ -24,7 +24,7 @@ public class ToDoFragmentPresenter implements ToDoFragmentContract.Presenter {
 
     @Override
     public void start() {
-        toDoItemRepository.loadToDoItems(ToDoCategory.CATEGORY_ALL_ID, new ToDoItemDataSource.LoadToDoItemsCallBack() {
+        toDoItemRepository.loadToDoItems(ToDoCategory.Companion.getCATEGORY_ALL_ID(), new ToDoItemDataSource.LoadToDoItemsCallBack() {
             @Override
             public void onToDoItemsLoaded(List<ToDoItem> toDos) {
                 view.showToDoItems(toDos);

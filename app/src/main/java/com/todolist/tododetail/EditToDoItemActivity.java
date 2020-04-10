@@ -4,11 +4,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SwitchCompat;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,9 +21,9 @@ import com.maltaisn.recurpicker.RecurrencePickerDialog;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.todolist.R;
 import com.todolist.data.Injection;
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoImage;
-import com.todolist.model.ToDoItem;
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoImage;
+import com.todolist.data.model.ToDoItem;
 import com.todolist.ui.GridItemDecoration;
 import com.todolist.ui.adapter.ToDoImageAdapter;
 import com.todolist.ui.dialog.CategorySelectionDialog;
@@ -45,6 +40,12 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
@@ -100,8 +101,9 @@ public class EditToDoItemActivity extends AppCompatActivity
 
     private InterstitialAd interstitialAd;
 
-    private List<ToDoImage> imageDataList = new ArrayList<ToDoImage>();
+    private ArrayList<ToDoImage> imageDataList = new ArrayList<ToDoImage>();
     private ToDoImageAdapter toDoImageAdapter;
+    private List<ToDoCategory> toDoCategoryList = new ArrayList<ToDoCategory>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -160,7 +162,7 @@ public class EditToDoItemActivity extends AppCompatActivity
         dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy", locale);  // Sun Dec 31, 2017
         formatter = new RecurrenceFormat(this, dateFormatLong);
 
-        new EditToDoItemPresenter(Injection.provideToDoItemRepository(),this);
+        new EditToDoItemPresenter(Injection.provideToDoItemRepository( this ),this);
 
         init();
 
@@ -401,7 +403,7 @@ public class EditToDoItemActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
 
-                    CategorySelectionDialog categorySelectionDialog = new CategorySelectionDialog();
+                    CategorySelectionDialog categorySelectionDialog = new CategorySelectionDialog( toDoCategoryList );
                     categorySelectionDialog.show(getSupportFragmentManager(), "categoryDialog");
 
                 }
@@ -558,6 +560,10 @@ public class EditToDoItemActivity extends AppCompatActivity
     @Override
     public void setPresenter(EditToDoItemContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    public void initialToDoCategoryList( List<ToDoCategory> toDoCategoryList ) {
+        this.toDoCategoryList = toDoCategoryList;
     }
 
     @Override

@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.todolist.R;
 import com.todolist.app.App;
 import com.todolist.broadcast.ToDoListAlarmBroadCastReceiver;
-import com.todolist.model.ToDoItem;
+import com.todolist.data.model.ToDoItem;
 import com.todolist.tododetail.EditToDoItemActivity;
 
 import java.text.SimpleDateFormat;

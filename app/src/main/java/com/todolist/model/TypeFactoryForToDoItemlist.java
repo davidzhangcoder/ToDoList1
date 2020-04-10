@@ -2,6 +2,8 @@ package com.todolist.model;
 
 
 import com.todolist.R;
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoItem;
 
 public class TypeFactoryForToDoItemlist implements ITypeFactory {
     @Override
@@ -25,10 +27,7 @@ public class TypeFactoryForToDoItemlist implements ITypeFactory {
 
     @Override
     public int getType(ToDoCategory toDoCategory) {
-        if( toDoCategory.getWorkflow().equals( ToDoCategory.WORKFLOW.LIST ) )
             return R.layout.item_category;
-        else
-            return R.layout.item_category_for_edit;
     }
 
 }

@@ -10,9 +10,10 @@ import android.content.ContextWrapper;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
-import androidx.core.app.NotificationCompat;
 
 import com.todolist.R;
+
+import androidx.core.app.NotificationCompat;
 
 import static androidx.core.app.NotificationCompat.PRIORITY_DEFAULT;
 import static androidx.core.app.NotificationCompat.VISIBILITY_SECRET;

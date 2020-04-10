@@ -3,26 +3,26 @@ package com.todolist.todomain.fragment.category;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.todolist.app.App;
-import com.todolist.ui.adapter.CategoryListAdapter;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.todolist.R;
-import com.todolist.model.IToDoCategory;
-import com.todolist.model.ToDoCategory;
+import com.todolist.app.App;
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.ui.adapter.CategoryListAdapter;
 import com.todolist.ui.dialog.AddCategoryDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CategoryFragment extends BottomSheetDialogFragment implements CategoryContract.View
 {
@@ -38,7 +38,7 @@ public class CategoryFragment extends BottomSheetDialogFragment implements Categ
     @Inject
     CategoryContract.Presenter presenter;
 
-    private List<IToDoCategory> categoryList = new ArrayList<IToDoCategory>();
+    private List<ToDoCategory> categoryList = new ArrayList<ToDoCategory>();
 
     private CategoryListAdapter categoryListAdapter;
 
@@ -94,9 +94,9 @@ public class CategoryFragment extends BottomSheetDialogFragment implements Categ
         categoryListAdapter = new CategoryListAdapter( this.getContext(), categoryList , selectedToDoCategory );
         CategoryListAdapter.ItemCallBack itemCallBack = new CategoryListAdapter.ItemCallBack() {
             @Override
-            public void doItemClickCallBack(IToDoCategory iToDoCategory) {
+            public void doItemClickCallBack(ToDoCategory iToDoCategory) {
                 CategoryFragment.this.dismiss();
-                if( ((ToDoCategory)iToDoCategory).getId() != ToDoCategory.CATEGORY_ADD_NEW_ID ) {
+                if( ((ToDoCategory)iToDoCategory).getId() != ToDoCategory.Companion.getCATEGORY_ALL_ID() ) {
                     setResult((ToDoCategory) iToDoCategory);
                 }
                 else
@@ -140,20 +140,19 @@ public class CategoryFragment extends BottomSheetDialogFragment implements Categ
     public void showToDoCategorys(List<ToDoCategory> toDoCategoryList) {
         categoryList.clear();
 
-        ToDoCategory allToDoCategory = new ToDoCategory();
-        allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
-        allToDoCategory.setName( ToDoCategory.getAllCatrgoryName() );
+        ToDoCategory allToDoCategory = new ToDoCategory( ToDoCategory.Companion.getCATEGORY_ALL_ID() , ToDoCategory.Companion.getAllCatrgoryName() );
         categoryList.add( allToDoCategory );
 
         categoryList.addAll( toDoCategoryList );
-        for( IToDoCategory toDoCategory : categoryList )
-            ((ToDoCategory)toDoCategory).setWorkflow( ToDoCategory.WORKFLOW.LIST );
 
-        ToDoCategory toDoCategoryAddNew = new ToDoCategory();
-        toDoCategoryAddNew.setId( ToDoCategory.CATEGORY_ADD_NEW_ID );
-        toDoCategoryAddNew.setName( ToDoCategory.CATEGORY_ADD_NEW_NAME );
-        toDoCategoryAddNew.setWorkflow( ToDoCategory.WORKFLOW.LIST );
-        categoryList.add( toDoCategoryAddNew );
+//        for( ToDoCategory toDoCategory : categoryList )
+//            ((ToDoCategory)toDoCategory).setWorkflow( ToDoCategory.WORKFLOW.LIST );
+//
+//        ToDoCategory toDoCategoryAddNew = new ToDoCategory();
+//        toDoCategoryAddNew.setId( ToDoCategory.CATEGORY_ADD_NEW_ID );
+//        toDoCategoryAddNew.setName( ToDoCategory.CATEGORY_ADD_NEW_NAME );
+//        toDoCategoryAddNew.setWorkflow( ToDoCategory.WORKFLOW.LIST );
+//        categoryList.add( toDoCategoryAddNew );
 
         categoryListAdapter.replaceData( categoryList);
     }
@@ -169,8 +168,7 @@ public class CategoryFragment extends BottomSheetDialogFragment implements Categ
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == ADD_NEW_CATEGORY_REQUEST_CODE) {
             String newCategoryName = (String) data.getExtras().get(AddCategoryDialog.KEY_NEW_ADDED_CATEGORY);
-            ToDoCategory toDoCategory = new ToDoCategory();
-            toDoCategory.setName(newCategoryName);
+            ToDoCategory toDoCategory = new ToDoCategory( newCategoryName );
             presenter.saveCategory(toDoCategory);
         }
     }

@@ -2,8 +2,6 @@ package com.todolist.todomain.fragment.todo;
 
 import com.todolist.data.source.ToDoItemRepository;
 import com.todolist.di.FragmentScoped;
-import com.todolist.todomain.TestA;
-import com.todolist.todomain.fragment.done.DoneFragment;
 
 import dagger.Module;
 import dagger.Provides;

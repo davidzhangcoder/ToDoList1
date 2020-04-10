@@ -10,18 +10,18 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.todolist.R;
+import com.todolist.data.model.ToDoItem;
+import com.todolist.tododetail.EditToDoItemActivity;
+
+import java.text.SimpleDateFormat;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.todolist.tododetail.EditToDoItemActivity;
-import com.todolist.R;
-import com.todolist.model.ToDoItem;
-
-import java.text.SimpleDateFormat;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 

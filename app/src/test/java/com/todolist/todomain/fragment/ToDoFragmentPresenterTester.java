@@ -1,10 +1,9 @@
 package com.todolist.todomain.fragment;
 
+import com.todolist.data.model.ToDoItem;
 import com.todolist.data.source.GenericDataSource;
 import com.todolist.data.source.ToDoItemDataSource;
 import com.todolist.data.source.ToDoItemRepository;
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
 import com.todolist.todomain.fragment.todo.ToDoFragmentContract;
 import com.todolist.todomain.fragment.todo.ToDoFragmentPresenter;
 
@@ -12,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -99,7 +97,7 @@ public class ToDoFragmentPresenterTester {
         //put Mocked toDoItemRepository and view into ToDoFragmentPresenter
         toDoFragmentPresenter = new ToDoFragmentPresenter( toDoItemRepository , view );
 
-        toDoFragmentPresenter.doGetToDoItemsByCategory(ToDoCategory.CATEGORY_DEFAULT_ID);
+//        toDoFragmentPresenter.doGetToDoItemsByCategory(ToDoCategory.CATEGORY_DEFAULT_ID);
 
         verify(toDoItemRepository , times(1)).loadToDoItems(longArgumentCaptor.capture(),loadToDoItemsCallBackArgumentCaptor.capture());
 

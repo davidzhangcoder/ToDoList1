@@ -3,25 +3,31 @@ package com.todolist.ui.dialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+
+import com.todolist.R;
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.ui.adapter.CategoryListAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-
-import com.todolist.ui.adapter.CategoryListAdapter;
-import com.todolist.R;
-import com.todolist.model.IToDoCategory;
-import com.todolist.model.ToDoCategory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CategorySelectionDialog extends AppCompatDialogFragment
 {
     private RecyclerView recyclerView;
+
+    private List<ToDoCategory> toDoCategoryList = new ArrayList<ToDoCategory>();
+
+    public CategorySelectionDialog( List<ToDoCategory> toDoCategoryList ) {
+        this.toDoCategoryList = toDoCategoryList;
+    }
 
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
@@ -60,23 +66,23 @@ public class CategorySelectionDialog extends AppCompatDialogFragment
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setHasFixedSize(true);
 
-        List<IToDoCategory> categoryList = new ArrayList<IToDoCategory>();
-        categoryList.addAll( ToDoCategory.getToDoCategorys() );
+        List<ToDoCategory> categoryList = new ArrayList<ToDoCategory>();
+        categoryList.addAll( toDoCategoryList );
 
         CategoryListAdapter categoryListAdapter = new CategoryListAdapter( this.getContext(), categoryList , null );
-        for (IToDoCategory toDoCategory : categoryList) {
+        for (ToDoCategory toDoCategory : categoryList) {
             if (CategorySelectionDialog.this.getCallback().getSelectedCategory() != null
-                    && ((ToDoCategory) toDoCategory).getId() == CategorySelectionDialog.this.getCallback().getSelectedCategory().getId()
+                    && toDoCategory.getId() == CategorySelectionDialog.this.getCallback().getSelectedCategory().getId()
                     ) {
-                ((ToDoCategory) toDoCategory).setSelected(true);
+                toDoCategory.setSelected(true);
                 categoryListAdapter.setSelectedToDoCategory(toDoCategory);
             }
-            ((ToDoCategory) toDoCategory).setWorkflow(ToDoCategory.WORKFLOW.EDIT);
+//            ((ToDoCategory) toDoCategory).setWorkflow(ToDoCategory.WORKFLOW.EDIT);
         }
 
         CategoryListAdapter.ItemCallBack itemCallBack = new CategoryListAdapter.ItemCallBack() {
             @Override
-            public void doItemClickCallBack(IToDoCategory iToDoCategory) {
+            public void doItemClickCallBack(ToDoCategory iToDoCategory) {
                 if( categoryListAdapter.getSelectedToDoCategory() != null )
                     ((ToDoCategory)categoryListAdapter.getSelectedToDoCategory()).setSelected( false );
                 ((ToDoCategory)iToDoCategory).setSelected( true );

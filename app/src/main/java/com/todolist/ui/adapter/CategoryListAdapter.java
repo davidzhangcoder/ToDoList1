@@ -1,16 +1,13 @@
 package com.todolist.ui.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.todolist.R;
+import com.todolist.data.model.ToDoCategory;
 import com.todolist.model.BaseViewHolder;
-import com.todolist.model.IToDoCategory;
-import com.todolist.model.ToDoCategory;
 import com.todolist.model.ToDoCategoryHodler;
 import com.todolist.model.ToDoCategoryHodlerForEdit;
 import com.todolist.model.TypeFactoryForToDoItemlist;
@@ -18,19 +15,22 @@ import com.todolist.model.TypeFactoryForToDoItemlist;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class CategoryListAdapter extends RecyclerView.Adapter<BaseViewHolder>
 {
     private Context mContext;
 
-    private List<IToDoCategory> mData = new ArrayList<IToDoCategory>();
+    private List<ToDoCategory> mData = new ArrayList<ToDoCategory>();
 
-    private IToDoCategory selectedToDoCategory;
+    private ToDoCategory selectedToDoCategory;
 
     private ItemCallBack itemCallBack;
     
-    public CategoryListAdapter(Context mContext, List<IToDoCategory> mData , ToDoCategory selectedToDoCategory ) {
+    public CategoryListAdapter(Context mContext, List<ToDoCategory> mData , ToDoCategory selectedToDoCategory ) {
         this.mContext = mContext;
         this.mData = mData;
         this.selectedToDoCategory = selectedToDoCategory;
@@ -67,23 +67,23 @@ public class CategoryListAdapter extends RecyclerView.Adapter<BaseViewHolder>
         }
     }
 
-    public void replaceData( @NonNull List<IToDoCategory> toDoCategoryList ) {
+    public void replaceData( @NonNull List<ToDoCategory> toDoCategoryList ) {
         mData = checkNotNull( toDoCategoryList );
         notifyDataSetChanged();
     }
 
 
-    public IToDoCategory getSelectedToDoCategory() {
+    public ToDoCategory getSelectedToDoCategory() {
         return selectedToDoCategory;
     }
 
-    public void setSelectedToDoCategory(IToDoCategory selectedToDoCategory) {
+    public void setSelectedToDoCategory(ToDoCategory selectedToDoCategory) {
         this.selectedToDoCategory = selectedToDoCategory;
     }
 
     public interface ItemCallBack
     {
-        public void doItemClickCallBack( IToDoCategory iToDoCategory );
+        public void doItemClickCallBack( ToDoCategory iToDoCategory );
     }
 
     public ItemCallBack getItemCallBack() {

@@ -1,15 +1,15 @@
 package com.todolist.data.source.local;
 
-import androidx.annotation.NonNull;
-
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoItem;
+import com.todolist.data.model.ToDoItemDao;
 import com.todolist.data.source.ToDoItemDataSource;
-import com.todolist.db.ToDoItemDao;
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
 import com.todolist.util.AppExecutors;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -41,6 +41,32 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
     }
 
 
+    public void getToDoItemsForAlarm( long from , long to , long isDone , long recurrencePeriod , ToDoItemDataSource.LoadToDoItemsCallBack callBack ) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                final List<ToDoItem> toDoItems = new ArrayList<ToDoItem>();
+
+                toDoItems.addAll( mToDoItemDao.getToDoItemsForAlarm( from , to , isDone , recurrencePeriod ) );
+
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (toDoItems.isEmpty()) {
+                            // This will be called if the table is new or just empty.
+                            callBack.onDataNotAvailable();
+                        } else {
+                            callBack.onToDoItemsLoaded(toDoItems);
+                        }
+                    }
+                });
+            }
+        };
+
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
     @Override
     public void loadToDoItems(@NonNull long categoryID , @NonNull LoadToDoItemsCallBack callBack) {
         checkNotNull( categoryID );
@@ -48,13 +74,15 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+
                 final List<ToDoItem> toDoItems = new ArrayList<ToDoItem>();
-                if( categoryID == ToDoCategory.CATEGORY_ALL_ID )
-                    toDoItems.addAll( mToDoItemDao.loadToDoItems( ToDoItem.COLUMN_DONE_INDICATOR + "<=?" , new String[]{"0"} ) );
+                if( categoryID == ToDoCategory.Companion.getCATEGORY_ALL_ID() ) {
+                    toDoItems.addAll(mToDoItemDao.getToDoItemViews(0 ));
+                }
                 else {
-                    String selection = ToDoItem.COLUMN_DONE_INDICATOR + "<=? and " + ToDoItem.COLUMN_CATEGORY + " == ?" ;
-                    String[] parameter = new String[]{ "0" , categoryID+"" };
-                    toDoItems.addAll( mToDoItemDao.loadToDoItems( selection , parameter ) );
+                    List<Long> temp = new ArrayList<>();
+                    temp.add( categoryID );
+                    toDoItems.addAll( mToDoItemDao.getToDoItemViewsByToDoCategory( 0 , temp ) );
                 }
                 mAppExecutors.mainThread().execute(new Runnable() {
                     @Override
@@ -79,10 +107,13 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
             @Override
             public void run() {
                 final List<ToDoItem> toDoItems = new ArrayList<ToDoItem>();
-                if( categoryID == ToDoCategory.CATEGORY_ALL_ID )
-                    toDoItems.addAll( mToDoItemDao.loadToDoItems( ToDoItem.COLUMN_DONE_INDICATOR + ">?" , new String[]{"0"} ) );
-                else
-                    toDoItems.addAll( mToDoItemDao.loadToDoItems( ToDoItem.COLUMN_DONE_INDICATOR + ">? and " + ToDoItem.COLUMN_CATEGORY + " == ? " , new String[]{"0" , categoryID+""} ) );
+                if( categoryID == ToDoCategory.Companion.getCATEGORY_ALL_ID() )
+                    toDoItems.addAll( mToDoItemDao.getToDoItemViews( 1 ) );
+                else {
+                    List<Long> temp = new ArrayList<>();
+                    temp.add( categoryID );
+                    toDoItems.addAll(mToDoItemDao.getToDoItemViewsByToDoCategory(1 , temp ) );
+                }
                 mAppExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -108,7 +139,7 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
 		Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                final ToDoItem toDoItem = mToDoItemDao.getToDoItem( toDoItemID );
+                final ToDoItem toDoItem = mToDoItemDao.getToDoItemViewByID( toDoItemID );
                 mAppExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -159,11 +190,11 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                boolean done = mToDoItemDao.updateToDoItem(toDoItem);
+                long done = mToDoItemDao.updateToDoItem(toDoItem);
                 mAppExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
-                        if ( done ) {
+                        if ( done != 0 ) {
                             callBack.onCompleted(toDoItem);
                         } else {
                             callBack.onError();
@@ -202,7 +233,7 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
             @Override
             public void run() {
                 final List<ToDoCategory> toDoCategorys = new ArrayList<ToDoCategory>();
-                toDoCategorys.addAll( mToDoItemDao.loadToDoCategorys() );
+                toDoCategorys.addAll( mToDoItemDao.getToDoCategory() );
                 mAppExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -222,26 +253,26 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
 
     @Override
     public void saveToDoCategory(@NonNull ToDoCategory toDoCategory , @NonNull GenericToDoCategoryCallBack callBack) {
-        checkNotNull( toDoCategory );
-        checkNotNull( callBack );
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                long id = mToDoItemDao.insertToDoCategory(toDoCategory);
-                mAppExecutors.mainThread().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        if ( id != -1 ) {
-                            callBack.onCompleted(toDoCategory);
-                        } else {
-                            callBack.onError();
-                        }
-                    }
-                });
-            }
-        };
-
-        mAppExecutors.diskIO().execute(runnable);
+//        checkNotNull( toDoCategory );
+//        checkNotNull( callBack );
+//
+//        Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                long id = mToDoItemDao.insertToDoCategory(toDoCategory);
+//                mAppExecutors.mainThread().execute(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if ( id != -1 ) {
+//                            callBack.onCompleted(toDoCategory);
+//                        } else {
+//                            callBack.onError();
+//                        }
+//                    }
+//                });
+//            }
+//        };
+//
+//        mAppExecutors.diskIO().execute(runnable);
     }
 }

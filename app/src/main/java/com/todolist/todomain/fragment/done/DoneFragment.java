@@ -2,12 +2,6 @@ package com.todolist.todomain.fragment.done;
 
 import android.content.Context;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,22 +13,29 @@ import android.widget.SpinnerAdapter;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.material.snackbar.Snackbar;
 import com.todolist.R;
 import com.todolist.app.App;
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoItem;
+import com.todolist.model.IToDoItem;
 import com.todolist.model.TipHolder;
-import com.todolist.model.ToDoCategory;
 import com.todolist.todomain.TestA;
 import com.todolist.ui.LazyFragment;
 import com.todolist.ui.adapter.CategoryAdapter;
 import com.todolist.ui.adapter.TipListAdapter;
-import com.todolist.model.IToDoItem;
-import com.todolist.model.ToDoItem;
 import com.todolist.util.AdsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
@@ -182,9 +183,7 @@ public class DoneFragment extends LazyFragment implements DoneFragmentContract.V
     public void initialCategorySpinner( List<ToDoCategory> toDoCategorys ) {
         if( categorySpinner != null && toDoCategorys != null ) {
 
-            ToDoCategory allToDoCategory = new ToDoCategory();
-            allToDoCategory.setId( ToDoCategory.CATEGORY_ALL_ID );
-            allToDoCategory.setName( ToDoCategory.getAllCatrgoryName() );
+            ToDoCategory allToDoCategory = new ToDoCategory( ToDoCategory.Companion.getCATEGORY_ALL_ID() , ToDoCategory.Companion.getAllCatrgoryName() );
             toDoCategorys.add( 0 , allToDoCategory );
 
 

@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/tipCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,8 +13,7 @@
         android:layout_marginRight="@dimen/recyclerview_todoitem_list_marginright"
         android:layout_marginTop="@dimen/recyclerview_todoitem_list_margintop"
         android:layout_marginBottom="@dimen/recyclerview_todoitem_list_marginbottom"
-        android:descendantFocusability="afterDescendants"
-        >
+        android:descendantFocusability="afterDescendants">
 
         <!--<com.todolist.SwipeLayout-->
             <!--android:id="@+id/tip_layout"-->

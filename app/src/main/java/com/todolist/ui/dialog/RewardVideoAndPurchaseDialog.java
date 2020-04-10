@@ -2,8 +2,6 @@ package com.todolist.ui.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +9,9 @@ import android.widget.ImageView;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.todolist.R;
 import com.todolist.util.AdsUtil;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class RewardVideoAndPurchaseDialog extends AppCompatDialogFragment {
 

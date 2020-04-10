@@ -1,11 +1,11 @@
 package com.todolist.data.source;
 
-import androidx.annotation.NonNull;
-
-import com.todolist.model.ToDoCategory;
-import com.todolist.model.ToDoItem;
+import com.todolist.data.model.ToDoCategory;
+import com.todolist.data.model.ToDoItem;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 public interface ToDoItemDataSource extends GenericDataSource{
 

@@ -1,19 +1,20 @@
 package com.todolist.ui.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.todolist.R;
+import com.todolist.data.model.ToDoImage;
 import com.todolist.model.BaseViewHolder;
-import com.todolist.model.ToDoImage;
 import com.todolist.model.ToDoImageHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ToDoImageAdapter extends RecyclerView.Adapter<BaseViewHolder>
     implements
