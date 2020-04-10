@@ -40,6 +40,8 @@ abstract class ToDoItemDatabase : RoomDatabase() {
         private val roomCallBack : RoomDatabase.Callback = object : Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
+
+                initCategory();
             }
 
             override fun onOpen(db: SupportSQLiteDatabase) {
@@ -50,7 +52,6 @@ abstract class ToDoItemDatabase : RoomDatabase() {
                 super.onDestructiveMigration(db)
             }
         }
-    }
 
         private fun initCategory()
         {
@@ -78,5 +79,6 @@ abstract class ToDoItemDatabase : RoomDatabase() {
             }
         }
 
+    }
 
 }
