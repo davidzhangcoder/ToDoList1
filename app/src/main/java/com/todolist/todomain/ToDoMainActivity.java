@@ -28,6 +28,7 @@ import com.todolist.util.AdsUtil;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
+import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +44,6 @@ public class ToDoMainActivity extends AppCompatActivity
         DoneFragment.OnFragmentInteractionListener
 {
     private static final String TAG = ToDoMainActivity.class.getName();
-
-
-    private final int REQUEST_CODE_CHOOSE=0;
 
     protected Activity context;
 
@@ -127,30 +125,6 @@ public class ToDoMainActivity extends AppCompatActivity
     @Override
     public RewardedVideoAd getRewardedVideoAd() {
         return rewardedVideoAd;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //执行逻辑
-                    Matisse.from(ToDoMainActivity.this)
-                            .choose(MimeType.ofAll())
-                            .countable(true)
-                            .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
-//                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                            .thumbnailScale(0.85f)
-                            .imageEngine(new GlideEngine())
-                            .forResult(REQUEST_CODE_CHOOSE);
-                } else {
-                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
-                }
-
-                break;
-            default:
-        }
     }
 
     private void initViewPagerFragments() {

@@ -49,7 +49,7 @@ public class AlarmUtil {
                     public void run() {
                         SimpleDateFormat dateFormatLong = new SimpleDateFormat("EEE MMM dd, yyyy hh:mm:ss", App.getContext().getResources().getConfiguration().locale);
                         String date = dateFormatLong.format( time );
-                        Toast.makeText(App.getContext(), toDoItem + " " + pendingIntent +" " + date , Toast.LENGTH_LONG).show();
+                        //Toast.makeText(App.getContext(), toDoItem + " " + pendingIntent +" " + date , Toast.LENGTH_LONG).show();
                     }
                 }
         );

@@ -8,6 +8,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+<!--    相机权限 - 如果我们通过调用现有的相机应用程序来使用相机，则应用程序不需要请求此权限，反之如果是自定义相机则我们的应用程序必须要求使用设备摄像头的权限。-->
+<!--    <uses-permission android:name="android.permission.CAMERA"/>-->
+
+    <uses-feature android:name = "android.hardware.camera" android:required="false" />
+    <uses-feature android:name = "android.hardware.camera.autofocus" />
+
     <!-- <application -->
     <!-- android:allowBackup="true" -->
     <!-- android:icon="@mipmap/ic_launcher" -->
@@ -26,6 +32,16 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.zhihu.matisse.sample.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_public"></meta-data>
+        </provider>
 
         <activity
             android:name=".todomain.ToDoMainActivity"
