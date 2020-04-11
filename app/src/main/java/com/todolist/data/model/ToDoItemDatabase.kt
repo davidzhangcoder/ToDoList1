@@ -41,7 +41,7 @@ abstract class ToDoItemDatabase : RoomDatabase() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
 
-                initCategory();
+//                initCategory();
             }
 
             override fun onOpen(db: SupportSQLiteDatabase) {

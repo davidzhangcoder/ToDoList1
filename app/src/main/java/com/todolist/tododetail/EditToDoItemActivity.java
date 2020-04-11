@@ -1,6 +1,8 @@
 package com.todolist.tododetail;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -32,6 +35,9 @@ import com.todolist.util.AlarmUtil;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
+import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,6 +47,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -65,6 +72,8 @@ public class EditToDoItemActivity extends AppCompatActivity
     public static final int REQUEST_CODE_CHOOSE_MATISSE=0;
 
     public static final int MAX_IMAGE_COUNT = 6;
+
+    private final int REQUEST_CODE_CHOOSE=0;
 
     private MaterialEditText materialEditTextDueDate;
     private MaterialEditText materialEditTextDueTime;
@@ -560,6 +569,32 @@ public class EditToDoItemActivity extends AppCompatActivity
     @Override
     public void setPresenter(EditToDoItemContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if ( grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED ) {
+                    //执行逻辑
+                    Matisse.from(EditToDoItemActivity.this)
+                            .choose(MimeType.ofAll())
+                            .capture(true)
+                            .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
+                            .countable(true)
+                            .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
+//                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                            .thumbnailScale(0.85f)
+                            .imageEngine(new GlideEngine())
+                            .forResult(REQUEST_CODE_CHOOSE);
+                } else {
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+            default:
+        }
     }
 
     public void initialToDoCategoryList( List<ToDoCategory> toDoCategoryList ) {
