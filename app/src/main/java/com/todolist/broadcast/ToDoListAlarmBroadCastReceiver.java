@@ -42,7 +42,7 @@ public class ToDoListAlarmBroadCastReceiver extends BroadcastReceiver{
         if( context.getResources().getString(R.string.alarmAction).equals(intent.getAction()) )
         {
             Log.i("AlarmBroadCastReceiver", "Run at: " );
-            Toast.makeText(context, "ToDoListAlarmBroadCastReceiver - Alarm - 开启", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, "ToDoListAlarmBroadCastReceiver - Alarm - 开启", Toast.LENGTH_LONG).show();
 
             Bundle data = intent.getBundleExtra("data");
             ToDoItem toDoItem = (ToDoItem)data.get(EditToDoItemActivity.EDITTODOITEMACTIVITY_TODOITEM);

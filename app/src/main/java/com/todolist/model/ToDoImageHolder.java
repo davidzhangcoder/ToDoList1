@@ -43,22 +43,25 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
             appCompatImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Matisse
-                    if (ContextCompat.checkSelfPermission(adapter.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions((Activity) adapter.getContext(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                    } else {
-                        //执行逻辑
-                        Matisse.from((Activity) adapter.getContext())
-                                .choose(MimeType.ofAll())
-                                .capture(true)
-                                .captureStrategy(new CaptureStrategy(true, "cache path"))
-                                .countable(true)
-//                                .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
-//                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-                                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                                .thumbnailScale(0.85f)
-                                .imageEngine(new GlideEngine())
-                                .forResult(EditToDoItemActivity.REQUEST_CODE_CHOOSE_MATISSE);
+                    if( Build.VERSION.SDK_INT >= 23 ) {
+                        // Marshmallow+
+
+                        //Matisse
+                        if (
+                                ContextCompat.checkSelfPermission(adapter.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                                        || ContextCompat.checkSelfPermission(adapter.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            ActivityCompat.requestPermissions(
+                                    (Activity) adapter.getContext(),
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    1);
+                        } else {
+                            doSelectImage(adapter);
+                        }
+                    }
+                    else {
+                        // Pre-Marshmallow
+                        doSelectImage(adapter);
                     }
                 }
             });
@@ -111,6 +114,21 @@ public class ToDoImageHolder extends BaseViewHolder<ToDoImage,ToDoImageAdapter> 
                 }
             });
         }
+    }
+
+    private void doSelectImage(ToDoImageAdapter adapter) {
+        //执行逻辑
+        Matisse.from((Activity) adapter.getContext())
+                .choose(MimeType.ofAll())
+                .capture(true)
+                .captureStrategy(new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider"))
+                .countable(true)
+//                                .maxSelectable(1)//由于这里我只需要一张照片，所以最多选择设置为1
+//                        .gridExpectedSize(App.getContext().getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f)
+                .imageEngine(new GlideEngine())
+                .forResult(EditToDoItemActivity.REQUEST_CODE_CHOOSE_MATISSE);
     }
 
     private int getImageResize(Context context) {

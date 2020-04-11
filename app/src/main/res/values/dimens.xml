@@ -33,4 +33,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <!--4dp-->
 
+    <dimen name="grid_expected_size">120dp</dimen>
+
 </resources>
