@@ -8,6 +8,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!--    相机权限 - 如果我们通过调用现有的相机应用程序来使用相机，则应用程序不需要请求此权限，反之如果是自定义相机则我们的应用程序必须要求使用设备摄像头的权限。-->
+    <!--    <uses-permission android:name="android.permission.CAMERA"/>-->
+
+    <uses-feature android:name = "android.hardware.camera" android:required="false" />
+    <uses-feature android:name = "android.hardware.camera.autofocus" />
+
     <!-- <application -->
     <!-- android:allowBackup="true" -->
     <!-- android:icon="@mipmap/ic_launcher" -->
