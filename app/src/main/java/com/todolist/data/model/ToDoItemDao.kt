@@ -1,6 +1,7 @@
 package com.todolist.data.model
 
 import androidx.room.*
+import com.todolist.util.ToDoItemUtil
 import java.util.*
 
 @Dao
@@ -50,6 +51,17 @@ abstract class ToDoItemDao {
             toDoItemList.add( it.toDoItem );
         }
         return toDoItemList;
+    }
+
+    @Transaction
+    open fun getToDoCategoryWithLocalizedName(): List<ToDoCategory> {
+        val toDoCategoryList: List<ToDoCategory> = getToDoCategory();
+        toDoCategoryList.forEach(
+                { a: ToDoCategory ->
+                    a.name = ToDoItemUtil.getCategoryName(a.name);
+                }
+        );
+        return toDoCategoryList;
     }
 
 

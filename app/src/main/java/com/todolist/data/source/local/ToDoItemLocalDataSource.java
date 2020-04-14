@@ -233,7 +233,7 @@ public class ToDoItemLocalDataSource implements ToDoItemDataSource {
             @Override
             public void run() {
                 final List<ToDoCategory> toDoCategorys = new ArrayList<ToDoCategory>();
-                toDoCategorys.addAll( mToDoItemDao.getToDoCategory() );
+                toDoCategorys.addAll( mToDoItemDao.getToDoCategoryWithLocalizedName() );
                 mAppExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {

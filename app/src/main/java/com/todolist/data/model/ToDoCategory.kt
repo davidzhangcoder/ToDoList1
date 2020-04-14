@@ -13,7 +13,7 @@ import java.io.Serializable
 
 @Entity(tableName = "todo_category")
 //The reason not using data class here is it need to add some logic in get/set name()
-class ToDoCategory( _name: String)
+class ToDoCategory( )
     : IToDoItemType,
         Serializable {
 
@@ -22,17 +22,22 @@ class ToDoCategory( _name: String)
     var id: Long = 0;
 
     @ColumnInfo(name = "name")
-    var name: String = _name
-        set(value) {
-            field = ToDoItemUtil.getCategoryName(value);
-        }
+    var name: String = ""
+//        set(value) {
+//            field = ToDoItemUtil.getCategoryName(value);
+//        }
 
     init {
 
     }
 
-    constructor(id: Long, name: String) : this( name ) {
+    constructor( name: String) : this(  ) {
+        this.name = name;
+    }
+
+    constructor(id: Long, name: String) : this(  ) {
         this.id = id
+        this.name = name;
     }
 
     @Ignore

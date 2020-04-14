@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.todolist.R
 import com.todolist.app.App
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 @Database(
         entities = [
@@ -25,6 +27,10 @@ abstract class ToDoItemDatabase : RoomDatabase() {
 
         private val lock = Any()
 
+        private val NUMBER_OF_THREADS : Int = 4;
+
+        private val executer : ExecutorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+
         fun getInstance(context: Context): ToDoItemDatabase {
             synchronized(lock) {
                 if (INSTANCE == null) {
@@ -41,7 +47,18 @@ abstract class ToDoItemDatabase : RoomDatabase() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
 
-//                initCategory();
+                executer.execute(
+                        {
+                            ->
+                            db.beginTransaction();
+                            try {
+                                initCategory();
+                                db.setTransactionSuccessful();
+                            } finally {
+                                db.endTransaction();
+                            }
+                        }
+                );
             }
 
             override fun onOpen(db: SupportSQLiteDatabase) {
