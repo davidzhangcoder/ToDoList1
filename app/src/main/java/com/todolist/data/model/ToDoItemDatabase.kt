@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.todolist.R
 import com.todolist.app.App
+import java.util.ArrayList
+import java.util.List
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -47,18 +49,18 @@ abstract class ToDoItemDatabase : RoomDatabase() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
 
-                executer.execute(
-                        {
-                            ->
-                            db.beginTransaction();
-                            try {
-                                initCategory();
-                                db.setTransactionSuccessful();
-                            } finally {
-                                db.endTransaction();
-                            }
-                        }
-                );
+                executer.execute {
+                    ->
+
+                    //SQLite looks actually not support nested transaction, although the doc said it does
+//                    db.beginTransaction();
+//                    try {
+                        initCategory();
+//                        db.setTransactionSuccessful();
+//                    } finally {
+//                        db.endTransaction();
+//                    }
+                };
             }
 
             override fun onOpen(db: SupportSQLiteDatabase) {
@@ -75,23 +77,27 @@ abstract class ToDoItemDatabase : RoomDatabase() {
             if( INSTANCE != null ) {
                 val toDoItemDao : ToDoItemDao = INSTANCE!!.getToDoItemDao();
 
+                val toToDoCategoryList = ArrayList<ToDoCategory>();
+
                 val toDoCategory1 : ToDoCategory = ToDoCategory( App.getContext().getString(R.string.category_working) );
-                toDoItemDao.insertToDoCategory( toDoCategory1 );
+                toToDoCategoryList.add( toDoCategory1 );
 
                 val toDoCategory2 : ToDoCategory = ToDoCategory( App.getContext().getString(R.string.category_learning) );
-                toDoItemDao.insertToDoCategory( toDoCategory2 );
+                toToDoCategoryList.add( toDoCategory2 );
 
                 val toDoCategory3 : ToDoCategory = ToDoCategory( App.getContext().getString(R.string.category_meeting) );
-                toDoItemDao.insertToDoCategory( toDoCategory3 );
+                toToDoCategoryList.add( toDoCategory3 );
 
                 val toDoCategory4 : ToDoCategory = ToDoCategory( App.getContext().getString(R.string.category_appointment) );
-                toDoItemDao.insertToDoCategory( toDoCategory4 );
+                toToDoCategoryList.add( toDoCategory4 );
 
                 val toDoCategory5 : ToDoCategory = ToDoCategory( App.getContext().getString(R.string.category_shopping) );
-                toDoItemDao.insertToDoCategory( toDoCategory5 );
+                toToDoCategoryList.add( toDoCategory5 );
 
                 val toDoCategory6 : ToDoCategory = ToDoCategory( App.getContext().getString(R.string.category_other) );
-                toDoItemDao.insertToDoCategory( toDoCategory6 );
+                toToDoCategoryList.add( toDoCategory6 );
+
+                toDoItemDao.insertToDoCategory( toToDoCategoryList );
 
             }
         }

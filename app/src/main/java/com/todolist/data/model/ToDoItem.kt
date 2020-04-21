@@ -5,6 +5,7 @@ import androidx.room.*
 import com.todolist.model.IToDoItem
 import com.todolist.model.IToDoItemType
 import com.todolist.model.ITypeFactory
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
@@ -53,6 +54,7 @@ data class ToDoItem(
         IToDoItem,
         Parcelable {
 
+    @IgnoredOnParcel
     @Ignore
     var dueDate : Calendar? = null
     get() {

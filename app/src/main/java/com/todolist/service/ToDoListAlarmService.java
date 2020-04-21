@@ -97,7 +97,9 @@ public class ToDoListAlarmService extends Service{
                         current.get( Calendar.SECOND )
                     );
 
-                ToDoItemDatabase.Companion.getInstance( ToDoListAlarmService.this ).getOpenHelper().getReadableDatabase();
+//                ToDoItemDatabase.Companion.getInstance( ToDoListAlarmService.this ).getOpenHelper().getReadableDatabase();
+//                ToDoItemDatabase.Companion.getInstance( ToDoListAlarmService.this ).beginTransaction();
+
                 ToDoItemRepository toDoItemRepository = Injection.provideToDoItemRepository(App.getContext());
                 ToDoItemDataSource.LoadToDoItemsCallBack callBack = new ToDoItemDataSource.LoadToDoItemsCallBack(){
                     @Override

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.facebook.stetho.Stetho;
 import com.google.android.gms.ads.MobileAds;
 import com.todolist.R;
 import com.todolist.context.ContextHolder;
@@ -46,6 +47,8 @@ public class App extends Application {
 //                .build();
 //
 //        OkHttpUtils.initClient(okHttpClient);
+
+        Stetho.initializeWithDefaults(this);
 
         context = getApplicationContext();
 

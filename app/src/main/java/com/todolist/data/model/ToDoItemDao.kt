@@ -77,6 +77,9 @@ abstract class ToDoItemDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     abstract fun insertToDoCategory( toDoCategory: ToDoCategory ) : Long;
 
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    abstract fun insertToDoCategory( toDoCategoryList : List<ToDoCategory> );
+
 
     @Transaction
     @Query(" select * from TODO_ITEM where done_indicator = :isDone order by due_timestamp ASC ")
