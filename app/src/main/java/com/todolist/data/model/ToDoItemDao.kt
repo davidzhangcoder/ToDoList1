@@ -5,7 +5,38 @@ import com.todolist.util.ToDoItemUtil
 import java.util.*
 
 @Dao
-abstract class ToDoItemDao {
+abstract class ToDoItemDao ( var toDoItemDatabase: ToDoItemDatabase)  {
+
+    init{
+
+    }
+
+
+    @Transaction
+    open fun insertToDoItem( toDoItem: ToDoItem ) : Long {
+        val id : Long = _insertToDoItem( toDoItem );
+
+        toDoItem.toDoImageList.forEach {
+            it.toDoItemId = id;
+        };
+        _insertToDoImages( toDoItem.toDoImageList );
+        return id;
+    }
+
+    @Transaction
+    open fun updateToDoItem( toDoItem: ToDoItem ) : Int {
+        val toDoItemView : ToDoItemView = getToDoItemByID( toDoItem.id );
+        _deleteToDoImages( toDoItemView.toDoImageList );
+
+        toDoItem.toDoImageList.forEach( {
+            a : ToDoImage ->
+            a.toDoItemId = toDoItem.id
+        }
+        );
+        _insertToDoImages( toDoItem.toDoImageList );
+        return _updateToDoItem( toDoItem );
+    }
+
 
     @Transaction
     open fun getToDoItemsForAlarm( from: Long , to: Long , isDone: Long , recurrencePeriod: Long ) : List<ToDoItem> {
@@ -69,10 +100,16 @@ abstract class ToDoItemDao {
     abstract fun getToDoCategory() : List<ToDoCategory>;
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    abstract fun insertToDoItem( toDoItem: ToDoItem ) : Long;
+    abstract fun _insertToDoItem( toDoItem: ToDoItem ) : Long;
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    abstract fun _insertToDoImages( toDoImageList : List<ToDoImage> );
+
+    @Delete
+    abstract fun _deleteToDoImages( toDoImageList : List<ToDoImage> );
 
     @Update
-    abstract fun updateToDoItem( toDoItem: ToDoItem ) : Int;
+    abstract fun _updateToDoItem( toDoItem: ToDoItem ) : Int;
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     abstract fun insertToDoCategory( toDoCategory: ToDoCategory ) : Long;
