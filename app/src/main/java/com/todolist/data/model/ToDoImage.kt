@@ -28,13 +28,13 @@ data class ToDoImage(
         var url: String = "",
 
         @ColumnInfo(name = "todoitem_id")
-        var toDoItemId: Long = 0
+        var toDoItemId: Long = 0,
+
+        @Ignore
+        var isAdd : Boolean = false,
+
+        @Ignore
+        var uri : Uri? = null
 ) : Parcelable {
-
-    @Ignore
-    var isAdd : Boolean = false;
-
-    @Ignore
-    lateinit var uri : Uri;
 
 }

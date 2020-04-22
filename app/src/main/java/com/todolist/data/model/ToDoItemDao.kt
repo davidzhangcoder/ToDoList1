@@ -1,11 +1,12 @@
 package com.todolist.data.model
 
+import android.net.Uri
 import androidx.room.*
 import com.todolist.util.ToDoItemUtil
 import java.util.*
 
 @Dao
-abstract class ToDoItemDao ( var toDoItemDatabase: ToDoItemDatabase)  {
+abstract class ToDoItemDao ( var toDoItemDatabase: ToDoItemDatabase )  {
 
     init{
 
@@ -18,6 +19,7 @@ abstract class ToDoItemDao ( var toDoItemDatabase: ToDoItemDatabase)  {
 
         toDoItem.toDoImageList.forEach {
             it.toDoItemId = id;
+            it.url = it.uri.toString();
         };
         _insertToDoImages( toDoItem.toDoImageList );
         return id;
@@ -28,11 +30,11 @@ abstract class ToDoItemDao ( var toDoItemDatabase: ToDoItemDatabase)  {
         val toDoItemView : ToDoItemView = getToDoItemByID( toDoItem.id );
         _deleteToDoImages( toDoItemView.toDoImageList );
 
-        toDoItem.toDoImageList.forEach( {
+        toDoItem.toDoImageList.forEach {
             a : ToDoImage ->
-            a.toDoItemId = toDoItem.id
-        }
-        );
+            a.toDoItemId = toDoItem.id;
+            a.url = a.uri.toString();
+        };
         _insertToDoImages( toDoItem.toDoImageList );
         return _updateToDoItem( toDoItem );
     }
@@ -52,10 +54,15 @@ abstract class ToDoItemDao ( var toDoItemDatabase: ToDoItemDatabase)  {
         val toDoItemView : ToDoItemView = getToDoItemByID( id );
         toDoItemView.let {
             it.toDoItem.toDoCategory = getToDoCategorybyID( it.toDoItem.toDoCategoryID );
-            it.toDoItem.toDoImageList.clear();
-            it.toDoItem.toDoImageList.addAll( it.toDoImageList );
+            setToDoImageUri(it)
         };
         return toDoItemView.toDoItem;
+    }
+
+    private fun setToDoImageUri(it: ToDoItemView): Boolean {
+        it.toDoItem.toDoImageList.clear();
+        it.toDoImageList.forEach { it.uri = Uri.parse(it.url) }
+        return it.toDoItem.toDoImageList.addAll(it.toDoImageList);
     }
 
     @Transaction
@@ -64,8 +71,10 @@ abstract class ToDoItemDao ( var toDoItemDatabase: ToDoItemDatabase)  {
         val toDoItemList = ArrayList<ToDoItem>();
         toDoItemViewList.forEach {
             it.toDoItem.toDoCategory = getToDoCategorybyID( it.toDoItem.toDoCategoryID );
-            it.toDoItem.toDoImageList.clear();
-            it.toDoItem.toDoImageList.addAll( it.toDoImageList );
+            setToDoImageUri(it);
+//            it.toDoItem.toDoImageList.clear();
+//            it.toDoImageList.forEach { it.uri = Uri.parse( it.url) }
+//            it.toDoItem.toDoImageList.addAll( it.toDoImageList );
             toDoItemList.add( it.toDoItem );
         }
         return toDoItemList;
@@ -77,8 +86,10 @@ abstract class ToDoItemDao ( var toDoItemDatabase: ToDoItemDatabase)  {
         val toDoItemList = ArrayList<ToDoItem>();
         toDoItemViewList.forEach {
             it.toDoItem.toDoCategory = getToDoCategorybyID( it.toDoItem.toDoCategoryID );
-            it.toDoItem.toDoImageList.clear();
-            it.toDoItem.toDoImageList.addAll( it.toDoImageList );
+            setToDoImageUri(it)
+//            it.toDoItem.toDoImageList.clear();
+//            it.toDoImageList.forEach { it.uri = Uri.parse( it.url) }
+//            it.toDoItem.toDoImageList.addAll( it.toDoImageList );
             toDoItemList.add( it.toDoItem );
         }
         return toDoItemList;
