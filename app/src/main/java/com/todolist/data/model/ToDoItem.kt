@@ -48,7 +48,13 @@ data class ToDoItem(
         var recurrencePeriod: Int = 0,
 
         @ColumnInfo(name = "category_id")
-        var toDoCategoryID: Long = 0
+        var toDoCategoryID: Long = 0,
+
+        @Ignore
+        var toDoCategory : ToDoCategory? = null,
+
+        @Ignore
+        var toDoImageList : ArrayList<ToDoImage> = ArrayList<ToDoImage>()
  ) :
         IToDoItemType,
         IToDoItem,
@@ -77,11 +83,11 @@ data class ToDoItem(
         return field;
     }
 
-    @Ignore
-    var toDoCategory : ToDoCategory? = null;
+//    @Ignore
+//    var toDoCategory : ToDoCategory? = null;
 
-    @Ignore
-    var toDoImageList : ArrayList<ToDoImage> = ArrayList<ToDoImage>();
+//    @Ignore
+//    var toDoImageList : ArrayList<ToDoImage> = ArrayList<ToDoImage>();
 
     override fun type(typeFactory: ITypeFactory): Int {
         return typeFactory.getType(this);

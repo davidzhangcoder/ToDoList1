@@ -559,6 +559,7 @@ public class EditToDoItemActivity extends AppCompatActivity
         category.setText( toDoCategory.getName() );
 
         toDoItem.setToDoCategory( toDoCategory );
+        toDoItem.setToDoCategoryID( toDoCategory.getId() );
     }
 
     @Override
