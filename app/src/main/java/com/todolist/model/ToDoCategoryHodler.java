@@ -30,6 +30,8 @@ public class ToDoCategoryHodler extends BaseViewHolder<ToDoCategory, CategoryLis
 
         if( ((ToDoCategory)adapter.getSelectedToDoCategory()) != null && ((ToDoCategory)adapter.getSelectedToDoCategory()).getId() == ((ToDoCategory)toDoCategory).getId() )
             getView(R.id.categoryImageCheck).setVisibility(View.VISIBLE);
+        else
+            getView(R.id.categoryImageCheck).setVisibility(View.INVISIBLE);
 
         ((RelativeLayout)getView(R.id.categoryContainer)).setOnClickListener( itemOnClickListener );
     }
